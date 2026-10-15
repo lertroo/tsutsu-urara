@@ -3181,9 +3181,18 @@ async function xSave() {
     msg.classList.add('err'); msg.textContent = why + '下の画像を長押しして保存してください。';
     try { $('x-fb').innerHTML = '<img class="xfb" alt="足あとカード" src="' + cv.toDataURL('image/png') + '">'; } catch (e) {}
   };
-  if (!dlNs) { fallback('この画面では、ファイルへの保存が使えません。'); return; }
   const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
   if (!blob) { fallback('画像を作れませんでした。'); return; }
+  /* claude.ai の外（GitHub Pages など）では、ふつうのダウンロードで名前をつけて保存する */
+  if (!dlNs) {
+    try {
+      const url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = xFileName(); document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      msg.textContent = '保存しました。';
+    } catch (e) { fallback('この画面では、ファイルへの保存が使えません。'); }
+    return;
+  }
   try { await dlNs.save({ filename: xFileName(), data: blob }); msg.textContent = '保存しました。'; }
   catch (e) { if (e && e.code === 'declined') msg.textContent = '保存をやめました。'; else fallback('保存できませんでした。'); }
 }
