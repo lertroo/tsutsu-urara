@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Tsutsu-Uraura</title>
+<title>Tsutsu-Urara</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
 /* 配置:左に日本地図、右に詳細と一覧。スマホでは地図→詳細→一覧の順に積む。 */
@@ -500,7 +500,7 @@ body.xopen { overflow: hidden; }
 <main class="app">
   <header>
     <div class="head">
-      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>々</span></span><h1>Tsutsu-Uraura<small>津々浦々</small></h1></div>
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ら</span></span><h1>Tsutsu-Urara<small>ツツウララ</small></h1></div>
       <div class="topbar" role="group" aria-label="表示の設定">
         <button type="button" id="fsm" aria-label="文字を小さく">A−</button>
         <button type="button" id="fsp" aria-label="文字を大きく">A＋</button>
@@ -601,9 +601,9 @@ body.xopen { overflow: hidden; }
         <b>出典と免責</b>
         <ul>
           <li>© OpenStreetMap contributors（ODbL）：施設の区域と位置。面積はこの区域から計算した概算です。</li>
-          <li>出典：国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Uraura が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
-          <li>新幹線の駅：国土交通省「国土数値情報（鉄道データ N02-20）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-v3_1.html）をもとに、Tsutsu-Uraura が駅の抽出と位置の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
-          <li>県の形：japonyol.net「47都道府県のGeoJSON」（https://japonyol.net/editor/article/47-prefectures-geojson.html）をもとに、Tsutsu-Uraura が投影と簡略化をして作成しています。配布元のファイルには「出典も明示する必要も利用制限もありません」と記載されています（元のデータの出典は記載されていません）。</li>
+          <li>出典：国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Urara が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
+          <li>新幹線の駅：国土交通省「国土数値情報（鉄道データ N02-20）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-v3_1.html）をもとに、Tsutsu-Urara が駅の抽出と位置の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
+          <li>県の形：japonyol.net「47都道府県のGeoJSON」（https://japonyol.net/editor/article/47-prefectures-geojson.html）をもとに、Tsutsu-Urara が投影と簡略化をして作成しています。配布元のファイルには「出典も明示する必要も利用制限もありません」と記載されています（元のデータの出典は記載されていません）。</li>
           <li>動物園・水族館・植物園・テーマパーク・博物・美術館：位置と区域は OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取り、Wikipedia 日本語版（CC BY-SA 4.0）で補っています。一部は手で調べて入れています。</li>
           <li>博物・美術館：館の一覧、登録博物館・指定施設の区分、設置者は、文化庁「全国の博物館」（https://museum.bunka.go.jp/guide/ ）の一覧（2026年10月8日版）をもとにしています。</li>
           <li>道の駅：駅名と都道府県は、mach-tools「道の駅オープンデータ」（CC BY 4.0）をもとにしています。位置は、OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取っています。</li>
@@ -2070,7 +2070,7 @@ function renderStatic() {
   } else if (mode === 'airports') {
     $('legend').innerHTML = [1, 2, 3].map(c => '<span><i style="background:var(--t-' + ({ 1:'n', 2:'k', 3:'a' })[c] + ')"></i>' + AIR_FL_SHORT[c] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
     $('mapnote').textContent = '位置は標点で、「定期便」はデータ作成時点の区分です。';
-    $('src').innerHTML = '<b>出典</b><p>国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Uraura が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</p>';
+    $('src').innerHTML = '<b>出典</b><p>国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Urara が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</p>';
   } else if (mode === 'stations') {
     $('legend').innerHTML = '<span><i style="background:var(--t-s)"></i>道の駅</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
     $('mapnote').textContent = '順位は付けていません。一覧は都道府県の標準的な順、その中は五十音順です。駅名の読みは作業側で付けたため、並びに誤りが混じる可能性があります。改名した駅は「旧名 → 新名」、閉鎖した駅は（○年閉鎖）を付けて残しています。設備が分からない項目は「未確認」です。';
@@ -2978,12 +2978,12 @@ function xDraw(cv, D) {
   c.save(); c.translate(pad + 38, pad + 38); c.rotate(-0.07);
   c.strokeStyle = P.stamp; c.lineWidth = 4; xRR(c, -38, -38, 76, 76, 12); c.stroke();
   c.fillStyle = P.stamp; c.font = XHEAD(30, 700); c.textAlign = 'center';
-  ['津', '々', '浦', '々'].forEach((ch, i) => c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)));
+  ['津', '々', '浦', 'ら'].forEach((ch, i) => c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)));
   c.restore();
   c.textAlign = 'left'; c.fillStyle = P.ink; c.font = XFONT(54, 700);
   const rightTxt = xPeriodLabel();
   c.font = XFONT(28, 400); const rw = c.measureText(rightTxt).width;
-  c.font = XHEAD(54, 700); c.fillText(xFit(c, XS.title || 'Tsutsu-Uraura', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
+  c.font = XHEAD(54, 700); c.fillText(xFit(c, XS.title || 'Tsutsu-Urara', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
   if (XS.who) { c.font = XFONT(28, 400); c.fillStyle = P.muted; c.fillText(xFit(c, curNameOf(XPID), W - pad * 2 - 100 - rw - 24), pad + 100, pad + 82); }
   c.font = XFONT(28, 400); c.fillStyle = P.muted; c.textAlign = 'right'; c.fillText(rightTxt, W - pad, pad + 40); c.textAlign = 'left';
   c.fillStyle = P.line; c.fillRect(pad, pad + 108, W - pad * 2, 2);
@@ -3133,13 +3133,13 @@ function xOptsHTML() {
   h += '<fieldset><legend>期間</legend><select data-x="period"><option value="all"' + (XS.period === 'all' ? ' selected' : '') + '>全期間</option><option value="year"' + (XS.period === 'year' ? ' selected' : '') + '>今年</option><option value="d30"' + (XS.period === 'd30' ? ' selected' : '') + '>直近30日</option><option value="since"' + (XS.period === 'since' ? ' selected' : '') + '>指定した日から</option></select>' +
     (XS.period === 'since' ? ' <input type="date" data-x="since" value="' + esc(XS.since) + '">' : '') + '<p class="xnote">期間を決めると、日付のある記録だけが対象です。</p></fieldset>';
   h += '<fieldset><legend>見た目</legend><div class="xrow">' + rd('size', 'tall', '縦長', XS.size) + rd('size', 'square', '正方形', XS.size) + rd('size', 'wide', '横長', XS.size) + '</div><div class="xrow">' + rd('theme', 'light', 'ライト', XS.theme) + rd('theme', 'dark', 'ダーク', XS.theme) + '</div></fieldset>';
-  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="Tsutsu-Uraura" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="行ったところを記録しよう。" value="' + esc(XS.note) + '"></label></fieldset>';
+  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="Tsutsu-Urara" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="行ったところを記録しよう。" value="' + esc(XS.note) + '"></label></fieldset>';
   return h;
 }
 let xFontsOK = false;
 async function xRender() {
   if (!xEl || xEl.hidden) return;
-  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦々あア漢'), document.fonts.load(XFONT(30, 400), '津々浦々あア漢'), document.fonts.load(XHEAD(30, 700), '津々浦々あア漢')]); } catch (e) {} xFontsOK = true; }
+  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦らあア漢'), document.fonts.load(XFONT(30, 400), '津々浦らあア漢'), document.fonts.load(XHEAD(30, 700), '津々浦らあア漢')]); } catch (e) {} xFontsOK = true; }
   const D = xCollect(); xData = D;
   xDraw($('x-cv'), D);
   $('x-save').disabled = !D.nv;
@@ -3173,7 +3173,7 @@ document.addEventListener('change', e => { if (xEl && xEl.contains(e.target)) xO
 document.addEventListener('input', e => { if (xEl && xEl.contains(e.target) && e.target.type === 'text') xOnChange(e); });
 function xFileName() {
   const per = XS.period === 'all' ? '全期間' : XS.period === 'year' ? xToday().slice(0, 4) + '年' : XS.period === 'd30' ? '直近30日' : (XS.since || '全期間') + '以降';
-  return 'tsutsu-uraura_' + xToday() + '_' + per + (XS.names ? '' : '_施設名なし') + '.png';
+  return 'tsutsu-urara_' + xToday() + '_' + per + (XS.names ? '' : '_施設名なし') + '.png';
 }
 async function xSave() {
   const msg = $('x-msg'), cv = $('x-cv'); msg.classList.remove('err'); $('x-fb').innerHTML = '';
