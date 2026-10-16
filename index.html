@@ -2979,7 +2979,7 @@ function xDraw(cv, D) {
   c.save(); c.translate(pad + 38, pad + 38); c.rotate(-0.07);
   c.strokeStyle = P.stamp; c.lineWidth = 4; xRR(c, -38, -38, 76, 76, 12); c.stroke();
   c.fillStyle = P.stamp; c.font = XHEAD(30, 700); c.textAlign = 'center';
-  ['津', '々', '浦', 'ら'].forEach((ch, i) => c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)));
+  ['津', '々', '浦', 'ラ'].forEach((ch, i) => { c.fillStyle = i === 3 ? P.accent : P.stamp; c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)); });
   c.restore();
   c.textAlign = 'left'; c.fillStyle = P.ink; c.font = XFONT(54, 700);
   const rightTxt = xPeriodLabel();
