@@ -663,8 +663,8 @@ const REGIONS = ['北海道','東北','関東','中部','近畿','中国','四�
 
 const TYPE_LABEL = { N:'現存天守・国宝', k:'現存天守・重要文化財', s:'復元・復興などの天守', a:'城跡など（天守なし）' };
 const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
-  const [n, pf, lo, la, t] = ln.split('|');
-  return { id:'c' + (i + 1), no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf] };
+  const [n, pf, lo, la, t, rm] = ln.split('|');
+  return { id:'c' + (i + 1), no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '' };
 });
 const PARK_PFREGION = p => REGION_OF[p.pf];
 
@@ -1767,7 +1767,7 @@ function renderDetail0() {
       '<div class="kicker"><span class="badge">日本100名城 No.' + it.no + '</span><span class="badge outline">' + TYPE_LABEL[it.t] + '</span></div>' +
       '<h2 class="place">' + esc(it.n) + '</h2>' +
       '<p class="sub">' + esc(prefFull(it.pf)) + '（' + esc(it.rg) + '）</p>' +
-      '<dl class="facts"><div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
+      '<dl class="facts"><div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div>' + (it.rm ? '<div class="row"><dt>備考</dt><dd>' + esc(it.rm) + '</dd></div>' : '') + '</dl>';
   }
   const nbS = nearItems(it, 5, true), nbO = nearItems(it, 5, false);
   const nbRow = o => '<button type="button" class="nbr" data-id="' + esc(o.it.id) + '" data-m="' + o.m + '"><span>' + (o.m !== mode ? '<i class="nbk">' + MODE_LABEL[o.m] + '</i>' : '') + esc(o.m === 'stations' ? dn(o.it) : o.it.n) + '</span><span class="nbd">' + (o.d < 10 ? o.d.toFixed(1) : Math.round(o.d)) + ' km</span></button>';
