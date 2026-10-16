@@ -1688,7 +1688,7 @@ function renderDetail0() {
   } else if (mode === 'ik') {
     const ll = typeof it.la === 'number' ? [it.la, it.lo] : it.ll;
     box.innerHTML =
-      '<div class="kicker"><span class="badge">行けない日本</span><span class="badge outline">' + esc(it.ky) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
+      '<div class="kicker"><span class="badge">レアスポット</span><span class="badge outline">' + esc(it.ky) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
       '<h2 class="place">' + esc(it.n) + '</h2>' +
       '<p class="sub">' + esc(it.ps) + '</p>' +
       '<dl class="facts">' +
@@ -1855,7 +1855,7 @@ function photoHTML(it) {
   const lk = (u, t) => /^https:\/\//.test(u || '') ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
   return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '') + '</figcaption></figure>';
 }
-const MODE_LABEL = { themes:'テーマパーク', castles:'城', zoos:'動物園', aquas:'水族館', bots:'植物園', museums:'博物・美術館', airports:'空港', stations:'道の駅', capitals:'県庁所在地', whs:'世界遺産', scenic:'日本百景', biwa:'琵琶湖', ik:'行けない日本', shin:'新幹線の駅', koei:'公営競技場', my:'マイスポット' };
+const MODE_LABEL = { themes:'テーマパーク', castles:'城', zoos:'動物園', aquas:'水族館', bots:'植物園', museums:'博物・美術館', airports:'空港', stations:'道の駅', capitals:'県庁所在地', whs:'世界遺産', scenic:'日本百景', biwa:'琵琶湖', ik:'レアスポット', shin:'新幹線の駅', koei:'公営競技場', my:'マイスポット' };
 const KOEI_OF = { koei:KOEI };
 const KIND = new Map(), ALLX = [];
 function initAll() {
@@ -2466,7 +2466,7 @@ $('bk-copy').onclick = () => {
   } else fallback();
 };
 /* 年表の書き出し（いま選んでいる人の記録） */
-const KIND_OF = [['城', CASTLES], ['公営競技場', KOEI], ['動物園', ZOOS], ['水族館', AQUAS], ['植物園', BOTS], ['テーマパーク', TPARKS], ['博物・美術館', MUSEUMS], ['空港', AIRPORTS], ['道の駅', STATIONS], ['県庁所在地', CAPS], ['世界遺産', WHS], ['日本百景', SCN], ['琵琶湖', BIWA], ['新幹線の駅', SHIN], ['行けない日本', IKENAI], ['マイスポット', MYS]];
+const KIND_OF = [['城', CASTLES], ['公営競技場', KOEI], ['動物園', ZOOS], ['水族館', AQUAS], ['植物園', BOTS], ['テーマパーク', TPARKS], ['博物・美術館', MUSEUMS], ['空港', AIRPORTS], ['道の駅', STATIONS], ['県庁所在地', CAPS], ['世界遺産', WHS], ['日本百景', SCN], ['琵琶湖', BIWA], ['新幹線の駅', SHIN], ['レアスポット', IKENAI], ['マイスポット', MYS]];
 function timelineRows() {
   const idx = {};
   KIND_OF.forEach(([k, arr]) => arr.forEach(it => { idx[it.id] = { it, k }; }));
