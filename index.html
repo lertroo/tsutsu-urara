@@ -84,6 +84,8 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .rk { font-size: 11px; font-weight: 700; fill: var(--accent-ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
 .dim { opacity: 0.18; pointer-events: none; } .dim .hit { pointer-events: none; }
 .on .mk { stroke: var(--ink); stroke-width: 2.4px; }
+.speed { fill: var(--ink); opacity: .5; pointer-events: none; animation: spdin .45s ease-out; }
+@keyframes spdin { from { opacity: 0; } }
 .labbg { fill: var(--halo); stroke: var(--ink); stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .95; pointer-events: none; }
 .nbrs { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 8px; }
 .nbh { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); padding-bottom: 4px; }
@@ -510,7 +512,7 @@ body.xopen { overflow: hidden; }
       </div>
     </div>
     <p class="lede">行ったところを記録しよう。</p>
-    <p class="upd">データ更新：2026年10月15日　<a href="changelog.html">更新履歴</a></p>
+    <p class="upd">データ更新：2026年10月16日　<a href="changelog.html">更新履歴</a></p>
   </header>
 
 
@@ -525,6 +527,7 @@ body.xopen { overflow: hidden; }
           <g id="g-tky" class="tky"></g>
           <g id="g-lake" class="lakes"></g>
           <g id="g-tkyl"></g>
+          <g id="g-speed" class="speed" aria-hidden="true"></g>
           <g id="g-lab"></g>
           <g id="g-dots"></g>
           <g id="g-clu"></g>
@@ -763,17 +766,23 @@ function loadCity(code) {
   sc.onerror = () => { cityState[code] = 3; };
   document.head.appendChild(sc);
 }
-/* いま見えている範囲にある県（県を選んでいないとき）。県の簡略な形（簡略版の座標）に、中心と四隅寄りの点を当てて決める */
+/* いま見えている範囲にある県。県の簡略な形（簡略版の座標）に、範囲全体に敷いた格子点（縁の少し外まで）を当てて決める。
+   県を選んでいるときも、その県を先頭に、隣の県のうち見えているものを足す（足さないと、隣の県は別の出典の県の外形のままで、境界線が二重にずれて見える） */
 var PCP = {}, PBB = {}, pCtx = null;
+const VC_N = 15, VC_M = 0.05;
 function viewCodes() {
   if (vb.w >= TKY_IN) return [];
-  if (flt.pfk) { const c = cityCode(flt.pfk); return c ? [c] : []; }
+  const sel = flt.pfk ? cityCode(flt.pfk) : null;
+  if (flt.pfk && !sel) return [];
+  if (tkyOn()) return [sel];   /* 都内モードは、都外の県を消しているので、都内だけ */
   if (!pCtx) pCtx = document.createElement('canvas').getContext('2d');
-  const pts = [[.5, .5], [.2, .2], [.8, .2], [.2, .8], [.8, .8]].map(a => [vb.x + vb.w * a[0], vb.y + vb.h * a[1]]), out = [];
+  const pts = [], out = sel ? [sel] : [];
+  for (let i = 0; i < VC_N; i++) for (let j = 0; j < VC_N; j++) pts.push([vb.x + vb.w * (-VC_M + (1 + 2 * VC_M) * i / (VC_N - 1)), vb.y + vb.h * (-VC_M + (1 + 2 * VC_M) * j / (VC_N - 1))]);
+  const x0 = vb.x - vb.w * VC_M, x1 = vb.x + vb.w * (1 + VC_M), y0 = vb.y - vb.h * VC_M, y1 = vb.y + vb.h * (1 + VC_M);
   Object.keys(GEO_PREFS).forEach(k => {
-    const c = cityCode(k); if (!c) return;
+    const c = cityCode(k); if (!c || c === sel) return;
     if (!PBB[k]) { const t = el('path', { d:GEO_PREFS[k] }, gLand), b = t.getBBox(); t.remove(); PBB[k] = { x:b.x, y:b.y, x2:b.x + b.width, y2:b.y + b.height }; PCP[k] = new Path2D(GEO_PREFS[k]); }
-    const bb = PBB[k]; if (bb.x2 < vb.x || bb.x > vb.x + vb.w || bb.y2 < vb.y || bb.y > vb.y + vb.h) return;
+    const bb = PBB[k]; if (bb.x2 < x0 || bb.x > x1 || bb.y2 < y0 || bb.y > y1) return;
     if (pts.some(p => pCtx.isPointInPath(PCP[k], p[0], p[1]))) out.push(c);
   });
   return out;
@@ -842,6 +851,7 @@ function applyVB() {
   updateFine();
   updateTky();
   updateSizes();
+  drawSpeed();
 }
 function zoomAt(f, cx, cy) {
   const nw = Math.max(MINW, Math.min(maxW(), vb.w * f));
@@ -2110,6 +2120,7 @@ function refresh() {
   if (tkyOn() && vb.w > TKY_MAXW) fitAll();   /* 都内を選んだとき、全国のように引いていたら、都内の最大の引きに寄せる */
   $('tkysrc').hidden = !tkyOn(); $('citysrc').hidden = !(flt.pfk && !tkyOn() && cityCode(flt.pfk)); updateTky();
   $('mapwrap').classList.toggle('tkyonly', tkyOn());   /* 都内モードでは、都外の県の形を消す */
+  drawSpeed();
 }
 let mvInit = false;
 function setMode(m, keepQ, keepView) {
@@ -2641,6 +2652,28 @@ function focusBiwa() {
   flyTo(b.x + b.width / 2, b.y + b.height / 2, Math.max(b.width * 1.5, b.height * 1.5 / ASPECT));
 }
 
+/* 種類「琵琶湖」だけのとき：湖に向かう集中線（マンガの効果線）。線の太さや湖まわりの余白が画面上で同じに見えるよう、表示範囲が変わるたびに描き直す */
+let biwaBB = null;
+const SPEED = (() => { let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647; return Array.from({ length:110 }, (_, i) => ({ a:(i + rnd() * 0.8) / 110 * Math.PI * 2, f:1 + rnd() * 0.9, w:0.35 + rnd() * rnd() * 1.4 })); })();
+function drawSpeed() {
+  const g = document.getElementById('g-speed'); if (!g) return;
+  const on = mode === 'all' && flt.kinds && flt.kinds.size === 1 && flt.kinds.has('biwa');
+  if (!on) { if (g.firstChild) g.textContent = ''; return; }
+  if (!biwaBB) { const p = gLake.querySelector('path[data-lake="琵琶湖"]'); if (!p) return; const b = p.getBBox(); if (!(b.width > 0)) return; biwaBB = b; }
+  const b = biwaBB, cx = b.x + b.width / 2, cy = b.y + b.height / 2, m = vb.w * 0.05;
+  const rx = b.width * 0.75 + m, ry = b.height * 0.62 + m;   /* 湖のまわりは空けておく（縦長の楕円） */
+  const R = Math.hypot(Math.max(cx - vb.x, vb.x + vb.w - cx), Math.max(cy - vb.y, vb.y + vb.h - cy)) + vb.w * 0.1;
+  let d = '';
+  SPEED.forEach(s => {
+    const c = Math.cos(s.a), n = Math.sin(s.a), k = s.f / Math.hypot(c / rx, n / ry);
+    if (k >= R) return;
+    const hw = vb.w * 0.0045 * s.w, ox = cx + c * R, oy = cy + n * R;
+    d += 'M' + (cx + c * k).toFixed(2) + ' ' + (cy + n * k).toFixed(2) + 'L' + (ox - n * hw).toFixed(2) + ' ' + (oy + c * hw).toFixed(2) + 'L' + (ox + n * hw).toFixed(2) + ' ' + (oy - c * hw).toFixed(2) + 'Z';
+  });
+  let p = g.firstChild; if (!p) p = el('path', {}, g);
+  p.setAttribute('d', d);
+}
+
 /* 地図のなめらかな移動 */
 let flyRaf = 0;
 /* 施設へ移動：倍率はそのまま、選んだ施設を地図の中央に */
@@ -2656,7 +2689,7 @@ function flyTo(cx, cy, w) {
     if (ptrs && ptrs.size > 0) { applyVB(); return; }
     const t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3);
     const cur = { x:from.x + (to.x - from.x) * e, y:from.y + (to.y - from.y) * e, w:from.w + (to.w - from.w) * e, h:from.h + (to.h - from.h) * e };
-    if (t < 1) { vb = cur; svg.setAttribute('viewBox', cur.x + ' ' + cur.y + ' ' + cur.w + ' ' + cur.h); flyRaf = requestAnimationFrame(step); }
+    if (t < 1) { vb = cur; svg.setAttribute('viewBox', cur.x + ' ' + cur.y + ' ' + cur.w + ' ' + cur.h); drawSpeed(); flyRaf = requestAnimationFrame(step); }
     else { vb = to; applyVB(); }
   };
   flyRaf = requestAnimationFrame(step);
@@ -3205,6 +3238,6 @@ buildTabs();
 { const h = location.hash.slice(1); setMode('all'); flt.kinds = new Set(KORDER.includes(h) ? [h] : []); refresh(); }
 </script>
 
-
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6a9785a6be45493e8bb2444c231bae65"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body></html>
