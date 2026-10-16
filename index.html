@@ -1050,7 +1050,7 @@ function currentItems0() {
   }
   if (mode === 'museums') {
     let a = MUSEUMS.slice();
-    if (flt.type === 'pref') a = a.filter(x => x.kb === '都道府県立'); else if (flt.type === 'nat') a = a.filter(x => x.kb !== '都道府県立'); else if (flt.type === 'reg') a = a.filter(x => x.rj === '登録博物館'); else if (flt.type === 'des') a = a.filter(x => x.rj === '指定施設'); else if (flt.type === 'nopos') a = a.filter(x => typeof x.la !== 'number');
+    if (flt.type === 'pref') a = a.filter(x => x.kb === '都道府県立'); else if (flt.type === 'nat') a = a.filter(x => x.kb === '国立' || x.kb === '国立大学'); else if (flt.type === 'reg') a = a.filter(x => x.rj === '登録博物館'); else if (flt.type === 'des') a = a.filter(x => x.rj === '指定施設'); else if (flt.type === 'nopos') a = a.filter(x => typeof x.la !== 'number');
     if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
     if (flt.q) a = a.filter(qm);
     a = a.filter(visOK);
@@ -2000,7 +2000,7 @@ function renderControls() {
   if (mode === 'museums') {
     add('すべて', 'all', 'type', MUSEUMS.length);
     add('県立', 'pref', 'type', MUSEUMS.filter(x => x.kb === '都道府県立').length);
-    add('国立（大学を含む）', 'nat', 'type', MUSEUMS.filter(x => x.kb !== '都道府県立').length);
+    add('国立（大学を含む）', 'nat', 'type', MUSEUMS.filter(x => x.kb === '国立' || x.kb === '国立大学').length);
     add('登録博物館', 'reg', 'type', MUSEUMS.filter(x => x.rj === '登録博物館').length);
     add('指定施設', 'des', 'type', MUSEUMS.filter(x => x.rj === '指定施設').length);
     add('地図に未表示', 'nopos', 'type', MUSEUMS.filter(x => typeof x.la !== 'number').length);
@@ -2076,7 +2076,7 @@ function renderStatic() {
     $('src').innerHTML = '<b>出典</b><p>© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）のカテゴリと座標をもとに作成しています。一部の位置は手で調べて入れています。他の区分と合体した施設は、名称で主な区分を決めて注釈に書いています。</p>';
   } else if (mode === 'museums') {
     $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '国や国立大学、都道府県が設置した博物館と美術館です。位置がまだ入っていない館は、一覧には出ますが地図には出ません。';
+    $('mapnote').textContent = '国や国立大学、都道府県が設置した博物館と美術館です。ほかに、それ以外の館をサイトの作者の基準で選んだ「lertroo基準」の館があります。位置がまだ入っていない館は、一覧には出ますが地図には出ません。';
     $('src').innerHTML = '<b>出典</b><p>登録博物館・指定施設の区分と設置者は、文化庁「全国の博物館」（https://museum.bunka.go.jp/guide/ ）の一覧（2026年10月8日版）をもとにしています。「一覧に掲載なし」は、その版の登録・指定の一覧に載っていない館です。国立・国立大学の館は、法律上、登録博物館にはならず、指定施設までです。「登録は未確認」の館は、文化庁の一覧と照らし合わせておらず、設置者を Wikipedia 日本語版（CC BY-SA 4.0）の記述で確かめて載せています。位置は、© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）をもとにしています。</p>';
   } else if (mode === 'airports') {
     $('legend').innerHTML = [1, 2, 3].map(c => '<span><i style="background:var(--t-' + ({ 1:'n', 2:'k', 3:'a' })[c] + ')"></i>' + AIR_FL_SHORT[c] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
