@@ -47,7 +47,8 @@ h1{font-family:var(--font-display);font-weight:700;font-size:1.5rem;margin:6px 0
 .lead{margin:0 0 18px;color:var(--muted);font-size:.85rem}
 .day{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:14px}
 .day h2{margin:0 0 4px;font-family:var(--font-display);font-size:1.05rem}
-.note{margin:0 0 8px;color:var(--muted);font-size:.8rem}
+.note{margin:0 0 8px;padding:2px 0 2px 10px;border-left:3px solid var(--accent);color:var(--muted);font-size:.8rem}
+.note::before{content:'この日のまとめ';display:block;font-size:.68rem;font-weight:700;letter-spacing:.08em;color:var(--accent)}
 ul{list-style:none;margin:0;padding:0}
 li{display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline;padding:8px 0;border-top:1px solid var(--line)}
 li:first-child{border-top:0}
@@ -58,7 +59,7 @@ li:first-child{border-top:0}
 .hand{font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--stamp);color:var(--accent-ink);white-space:nowrap}
 .hl{font-weight:700}
 .kd{font-size:.72rem;color:var(--muted);white-space:nowrap}
-.tx{flex:1 1 16em;min-width:0;overflow-wrap:anywhere}
+.tx{flex:1 1 100%;min-width:0;overflow-wrap:anywhere}
 </style></head><body>
 <div class="wrap">
 <div class="top"><a class="back" href="index.html">← 地図に戻る</a>
