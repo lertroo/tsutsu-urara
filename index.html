@@ -63,6 +63,17 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .maph:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 .crowd { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 5; max-width: calc(100% - 90px); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; text-align: center; color: #fff; background: #c8372d; border: 2px dashed #ffd9d4; box-shadow: var(--shadow); pointer-events: none; opacity: 0; transition: opacity .25s; }
 .crowd.on { opacity: .95; }
+/* 地図の範囲外の施設（南鳥島など）を選んだときに、左上に出す小窓 */
+.farbox { position: absolute; top: 10px; left: 10px; z-index: 4; width: 150px; padding: 6px 8px 7px; border-radius: 10px; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 0.72rem; line-height: 1.4; pointer-events: none; }
+.farbox[hidden] { display: none; }
+.farbox b { display: block; font-size: 0.66rem; letter-spacing: 0.08em; color: var(--muted); font-weight: 700; }
+.farbox svg { display: block; width: 100%; height: auto; margin: 3px 0; border-radius: 6px; }
+.farbox .fsea { fill: var(--sea); }
+.farbox .fgrid { stroke: var(--coast); stroke-width: 0.6; opacity: .45; }
+.farbox .fdot { fill: var(--kc, var(--accent)); stroke: var(--ink); stroke-width: 1.6; }
+@media (prefers-reduced-motion: no-preference) { .farbox .fdot { animation: mkpulse 1.7s ease-in-out infinite; } }
+.farbox .fn { font-weight: 700; color: var(--ink); }
+.farbox .fd { color: var(--muted); }
 .mapwrap { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--sea); overflow: hidden; }
 #svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
 .mapwrap.unlocked #svg { touch-action: none; }
@@ -547,6 +558,7 @@ body.xopen { overflow: hidden; }
         <div id="clum" role="group" aria-label="円と数字に省略する強さ"><span id="clul">省略：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="省略の強さ（左ほど多く省略、右ほど省略しない）"></div>
         <div class="legend" id="legend" aria-hidden="true"></div>
         <div class="ll" id="ll" aria-hidden="true"></div>
+        <div class="farbox" id="farbox" hidden></div>
         <button type="button" id="legtog" class="legtog" aria-expanded="false" aria-controls="legend">凡例</button>
       </div>
       <div class="maph" id="maph" role="separator" aria-orientation="horizontal" aria-label="地図の高さ（上下にドラッグ、ダブルタップで元に戻す）" tabindex="0"><i></i></div>
@@ -1548,6 +1560,7 @@ function renderDetail() {
   const it0 = selId && findItem(selId), m0 = mode;
   if (m0 === 'all' && it0 && KIND.get(it0.id)) { mode = KIND.get(it0.id); try { renderDetail0(); } finally { mode = m0; } } else renderDetail0();
   decorateNote();
+  drawFarBox();
 }
 /* ===== 注釈の編集（アーティファクトの共有データベース notes/）=====
    読めるのは、ログインして開いた人。書けるのは、アーティファクトのオーナーだけ（公開時の rules で固定）。
@@ -1601,6 +1614,28 @@ function decorateNote() {
     }, () => {});
   } catch (e) { /* データベースが使えない表示（ログインしていないなど）では、元の注釈だけを出す */ }
 })();
+/* 地図の範囲外の施設（lo/la がなく、ll［北緯, 東経］だけある）を選んでいるときだけ、左上に小窓を出す。
+   小窓には、点と名前、東京（東京駅）からの方角と距離を出す */
+const DIR16 = ['北', '北北東', '北東', '東北東', '東', '東南東', '南東', '南南東', '南', '南南西', '南西', '西南西', '西', '西北西', '北西', '北北西'];
+function drawFarBox() {
+  const box = $('farbox'); if (!box) return;
+  const it = selId && findItem(selId);
+  if (!it || typeof it.la === 'number' || !Array.isArray(it.ll)) { if (!box.hidden) { box.hidden = true; box.innerHTML = ''; } return; }
+  const R = Math.PI / 180, la1 = 35.681 * R, lo1 = 139.767 * R, la2 = it.ll[0] * R, lo2 = it.ll[1] * R;
+  const d = 2 * 6371 * Math.asin(Math.sqrt(Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2));
+  const br = (Math.atan2(Math.sin(lo2 - lo1) * Math.cos(la2), Math.cos(la1) * Math.sin(la2) - Math.sin(la1) * Math.cos(la2) * Math.cos(lo2 - lo1)) / R + 360) % 360;
+  const km = d >= 100 ? Math.round(d / 10) * 10 : Math.round(d);
+  box.style.setProperty('--kc', KCOL[KIND.get(it.id)] || 'var(--accent)');
+  box.innerHTML = '<b>地図の範囲外</b>' +
+    '<svg viewBox="0 0 120 64" aria-hidden="true"><rect class="fsea" width="120" height="64"/>' +
+    [15, 45, 75, 105].map(x => '<line class="fgrid" x1="' + x + '" y1="0" x2="' + x + '" y2="64"/>').join('') +
+    [12, 32, 52].map(y => '<line class="fgrid" x1="0" y1="' + y + '" x2="120" y2="' + y + '"/>').join('') +
+    '<rect class="fdot" x="55" y="27" width="10" height="10" rx="2"/></svg>' +
+    '<div class="fn">' + esc(it.n) + '</div>' +
+    '<div class="fd">北緯 ' + it.ll[0].toFixed(2) + '、東経 ' + it.ll[1].toFixed(2) + '</div>' +
+    '<div class="fd">東京から' + DIR16[Math.round(br / 22.5) % 16] + 'へ 約' + km.toLocaleString('ja-JP') + 'km</div>';
+  box.hidden = false;
+}
 function renderDetail0() {
   const box = $('detail');
   const it = selId && findItem(selId);
