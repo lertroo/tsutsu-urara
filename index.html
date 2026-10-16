@@ -255,6 +255,7 @@ body { background: var(--bg); background-image: radial-gradient(color-mix(in srg
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .logo { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; width: 38px; height: 38px; padding: 3px; box-sizing: border-box; border: 2px solid var(--stamp); border-radius: 8px; color: var(--stamp); font-family: var(--font-display); font-weight: 700; font-size: 14px; line-height: 1; transform: rotate(-4deg); background: color-mix(in srgb, var(--stamp) 6%, transparent); }
 .logo span { display: grid; place-items: center; }
+.logo span:last-child { color: var(--accent); }
 h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.05em; font-size: clamp(1.25rem, 5.4vw, 2rem); white-space: nowrap; line-height: 1.15; }
 h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.32em; color: var(--muted); margin-top: 2px; }
 .lede { font-family: var(--font-display); letter-spacing: 0.08em; }
@@ -500,7 +501,7 @@ body.xopen { overflow: hidden; }
 <main class="app">
   <header>
     <div class="head">
-      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ら</span></span><h1>Tsutsu-Urara<small>ツツウララ</small></h1></div>
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><h1>Tsutsu-Urara<small>ツツウララ</small></h1></div>
       <div class="topbar" role="group" aria-label="表示の設定">
         <button type="button" id="fsm" aria-label="文字を小さく">A−</button>
         <button type="button" id="fsp" aria-label="文字を大きく">A＋</button>
@@ -3139,7 +3140,7 @@ function xOptsHTML() {
 let xFontsOK = false;
 async function xRender() {
   if (!xEl || xEl.hidden) return;
-  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦らあア漢'), document.fonts.load(XFONT(30, 400), '津々浦らあア漢'), document.fonts.load(XHEAD(30, 700), '津々浦らあア漢')]); } catch (e) {} xFontsOK = true; }
+  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦ラあア漢'), document.fonts.load(XFONT(30, 400), '津々浦ラあア漢'), document.fonts.load(XHEAD(30, 700), '津々浦ラあア漢')]); } catch (e) {} xFontsOK = true; }
   const D = xCollect(); xData = D;
   xDraw($('x-cv'), D);
   $('x-save').disabled = !D.nv;
