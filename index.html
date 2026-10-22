@@ -1,5 +1,18 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Tsutsu-Urara</title>
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.lertroo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <style>
 /* 配置:左に日本地図、右に詳細と一覧。スマホでは地図→詳細→一覧の順に積む。 */
@@ -648,6 +661,7 @@ body.xopen { overflow: hidden; }
           <li>閉園・閉館・改名した施設が含まれることがあります。新しくできた施設は反映されていないことがあります。</li>
           <li>読み仮名と並び順は作業側で付けたため、誤りが混じる可能性があります。</li>
           <li>このページの利用で生じた損害について、責任は負いません。</li>
+          <li>このページは、アクセスの日時・IPアドレス・おおよその地域・ブラウザの種類などを記録しています。</li>
         </ul>
       </div>
     </section>
