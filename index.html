@@ -145,7 +145,21 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .legend i.lg.lv2 { background: color-mix(in srgb, var(--accent) 55%, transparent); }
 .legend i.lg.lv3 { background: color-mix(in srgb, var(--accent) 82%, transparent); }
 .lhit { fill: transparent; pointer-events: none; }
-.ctrl #zfill[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.ctrl #zfill[aria-pressed="true"], .ctrl #zbg[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+/* 背景の地図（地理院タイル）を出しているときは、県の塗りと湖を透かす。暗い表示では、タイルの明暗を反転して色合いを戻す */
+#g-tile { pointer-events: none; }
+.mapwrap.bgmap .landp { fill-opacity: 0; }
+.mapwrap.bgmap .lakes path { fill: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #g-tile:not(.photo) { filter: url(#tdark); } }
+:root[data-theme="dark"] #g-tile:not(.photo) { filter: url(#tdark); }   /* 航空写真は反転しない */
+.bgmenu { position: absolute; right: 58px; z-index: 5; display: flex; flex-direction: column; min-width: 9em; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+.bgmenu button { font: inherit; font-size: 0.8125rem; text-align: left; color: var(--ink); background: none; border: 0; border-radius: 6px; padding: 7px 10px 7px 26px; cursor: pointer; position: relative; white-space: nowrap; }
+.bgmenu button:hover, .bgmenu button:focus-visible { background: color-mix(in srgb, var(--accent) 14%, transparent); outline: none; }
+.bgmenu button[aria-checked="true"] { font-weight: 700; color: var(--accent); }
+.bgmenu button[aria-checked="true"]::before { content: '✓'; position: absolute; left: 9px; }
+@media (max-width: 600px) { .bgmenu { right: 50px; } }
+#tattr { position: absolute; right: 10px; bottom: 52px; font-size: 0.625rem; line-height: 1.3; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 5px; }
+#tattr a { color: inherit; }
 #tab-all { font-weight: 800; letter-spacing: 0.06em; }
 #tab-all[aria-selected="false"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
 .ctrl .lock { font-size: 0.7rem; line-height: 1.2; padding: 4px 6px; }
@@ -154,7 +168,8 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .legend { position: absolute; left: 10px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 5px 10px; font-size: 0.75rem; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; max-width: calc(100% - 70px); }
 .legend { bottom: 56px; } .legend.off { display: none; }
 .legtog { position: absolute; left: 10px; bottom: 10px; font: inherit; font-size: 0.75rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
-.ll { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; white-space: nowrap; font-size: 0.6875rem; line-height: 1.35; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 6px; pointer-events: none; font-variant-numeric: tabular-nums; text-align: center; }
+.ll { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; white-space: nowrap; font-size: 0.6875rem; line-height: 1.35; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 6px; pointer-events: none; font-variant-numeric: tabular-nums; display: grid; grid-template-columns: auto auto; column-gap: 0.5em; }
+.ll span:nth-child(even) { text-align: right; }   /* 緯度経度は右揃え */
 @media (max-width: 599px) { .ll { left: 66px; transform: none; font-size: 0.625rem; } }
 .legtog[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
@@ -216,6 +231,11 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .src { font-size: 0.78rem; color: var(--muted); }
 .tky path { fill: none; stroke: var(--coast); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: .85; pointer-events: none; }
 .mapwrap.cityshown .tky path { fill: var(--tkyfill, var(--land)); opacity: 1; }
+.mapwrap.bgmap.cityshown .tky path { fill: var(--tkyfillbg, transparent); }   /* 背景の地図を出しているときは、行った県の塗りだけを透かして重ねる */
+/* 航空写真の上では、境界線を白くして黒い縁取りをつけ、どこでも見えるようにする */
+.mapwrap.bgphoto .landp, .mapwrap.bgphoto .lakes path { stroke: #fff; stroke-width: 1.4px; }
+.mapwrap.bgphoto .tky path { stroke: #fff; stroke-width: 1.1px; opacity: 1; }
+.mapwrap.bgphoto #g-land, .mapwrap.bgphoto .lakes, .mapwrap.bgphoto #g-tky { filter: drop-shadow(0 0 1px rgba(0,0,0,.9)) drop-shadow(0 0 .5px #000); }
 .tkylab { font-family: var(--font-body); font-weight: 700; fill: var(--muted); stroke: var(--halo); paint-order: stroke fill; stroke-linejoin: round; text-anchor: middle; dominant-baseline: central; pointer-events: none; opacity: .55; }
 .src ul { margin: 4px 0 0; padding-left: 1.2em; }
 .src a { color: var(--accent); }
@@ -548,7 +568,7 @@ body.xopen { overflow: hidden; }
       </div>
     </div>
     <p class="lede">行ったところを記録しよう。</p>
-    <p class="upd">データ更新：2026年10月20日　<a href="changelog.html">更新履歴</a></p>
+    <p class="upd">データ更新：2026年10月23日　<a href="changelog.html">更新履歴</a></p>
   </header>
 
 
@@ -556,7 +576,9 @@ body.xopen { overflow: hidden; }
     <section class="left" aria-label="分布図">
       <div class="mapwrap" id="mapwrap">
         <svg id="svg" viewBox="120 0 680 880" role="img" aria-label="日本列島の分布図">
+          <defs><filter id="tdark" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"></feColorMatrix><feColorMatrix type="hueRotate" values="180"></feColorMatrix><feColorMatrix type="matrix" values="0.8 0 0 0 0  0 0.8 0 0 0  0 0 0.8 0 0  0 0 0 1 0"></feColorMatrix></filter></defs>
           <rect class="seabg" x="-3000" y="-3000" width="7000" height="7000"></rect>
+          <g id="g-tile"></g>
           <g id="g-land"></g>
           <g id="g-fill"></g>
           <g id="g-sel"></g>
@@ -573,12 +595,15 @@ body.xopen { overflow: hidden; }
           <button type="button" id="zout" aria-label="縮小">－</button>
           <button type="button" id="zfull" aria-label="全国を表示">全国</button>
           <button type="button" id="zfill" aria-pressed="false" aria-label="行った都道府県を塗って表示（点との切り替え）">塗り</button>
+          <button type="button" id="zbg" aria-pressed="false" aria-haspopup="menu" aria-expanded="false" aria-controls="bgmenu" aria-label="背景の地図を選ぶ">背景</button>
           <button type="button" id="labm" aria-label="地図の名前の文字を小さく">字−</button>
           <button type="button" id="labp" aria-label="地図の名前の文字を大きく">字＋</button>
         </div>
         <div id="clum" role="group" aria-label="円と数字に省略する強さ"><span id="clul">省略：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="省略の強さ（左ほど多く省略、右ほど省略しない）"></div>
         <div class="legend" id="legend" aria-hidden="true"></div>
         <div class="ll" id="ll" aria-hidden="true"></div>
+        <div id="bgmenu" class="bgmenu" role="menu" aria-label="背景の地図" hidden></div>
+        <div id="tattr" hidden></div>
         <div class="farbox" id="farbox" hidden></div>
         <div class="fararrow" id="fararrow" hidden aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M3 17h25V6l17 18-17 18V31H3z"/></svg></div>
         <button type="button" id="legtog" class="legtog" aria-expanded="false" aria-controls="legend">凡例</button>
@@ -653,6 +678,7 @@ body.xopen { overflow: hidden; }
           <li>日本百景（日本新八景・日本二十五勝を含む）：一覧は Wikipedia（CC BY-SA 4.0）の表をもとにしています。位置は、各景勝地を代表する地点の概算です。</li>
           <li>自然：場所は Wikipedia 日本語版（CC BY-SA 4.0）の各国立公園の記事などをもとに選んでいます。位置は、各地の記事の座標（ないものは Wikidata（CC0）の座標か、地図で調べた位置）をもとにした目安です。</li>
           <li>市区町村の境界（東京都以外）：国土交通省「国土数値情報（行政区域データ）」（2021年1月1日時点）を、スマートニュース メディア研究所が簡素化したもの（https://github.com/smartnews-smri/japan-topography）をもとに作成しています。国土交通省が作成したものではありません。</li>
+          <li>背景の地図（「背景」ボタン）：国土地理院「地理院タイル」の淡色地図・標準地図・航空写真（全国最新写真（シームレス））（https://maps.gsi.go.jp/development/ichiran.html ）と、© OpenStreetMap contributors（ODbL、https://www.openstreetmap.org/copyright ）の地図タイルから選べます。この地図の投影に合わせて引き伸ばして表示しています。暗い表示では、航空写真のほかは色を反転しています。</li>
           <li>Wikipedia・Wikidata：施設の選定、位置の補い、記事へのリンクに使っています。</li>
         </ul>
         <ul>
@@ -858,6 +884,7 @@ function updateTky() {
     const pf_ = document.querySelector('#g-fill .pfill[data-k="' + names[i] + '"]');
     const lv_ = pf_ ? (pf_.getAttribute('class').match(/lv(\d)/) || [])[1] : '';
     cityGrp[code].p.style.setProperty('--tkyfill', lv_ ? 'color-mix(in srgb, var(--accent) ' + [30, 55, 82][lv_ - 1] + '%, var(--land))' : 'var(--land)');
+    cityGrp[code].p.style.setProperty('--tkyfillbg', lv_ ? 'color-mix(in srgb, var(--accent) ' + [30, 55, 82][lv_ - 1] + '%, transparent)' : 'transparent');
   });
   if (!shown.length) return;
   const s = (svgSz().width / vb.w) || 1, fs = 11 / s;
@@ -902,8 +929,8 @@ function showLL() {
   const e = $('ll'); if (!e) return;
   const c = unproj(vb.x + vb.w / 2, vb.y + vb.h / 2), f = a => a.map(v => v.toFixed(2));
   const [clo, cla] = f(c);
-  let t = '中心 ' + cla + '°N ' + clo + '°E';
-  if (llPtr) { const [plo, pla] = f(unproj(llPtr[0], llPtr[1])); t = '指す ' + pla + '°N ' + plo + '°E<br>' + t; }
+  let t = '<span>中心</span><span>' + cla + '°N ' + clo + '°E</span>';
+  if (llPtr) { const [plo, pla] = f(unproj(llPtr[0], llPtr[1])); t = '<span>カーソル</span><span>' + pla + '°N ' + plo + '°E</span>' + t; }
   e.innerHTML = t;
 }
 function applyVB() {
@@ -912,6 +939,7 @@ function applyVB() {
   showLL();
   updateFine();
   updateTky();
+  updateTiles();
   updateSizes();
   drawSpeed();
   drawFarArrow();
@@ -926,6 +954,104 @@ $('zin').onclick = () => zoomAt(0.6, vb.x + vb.w / 2, vb.y + vb.h / 2);
 $('zout').onclick = () => zoomAt(1 / 0.6, vb.x + vb.w / 2, vb.y + vb.h / 2);
 $('zfull').onclick = () => fitAll();
 $('zfill').onclick = () => setMapView(mapView === 'fill' ? 'dots' : 'fill');
+
+/* ===== 背景の地図（地理院タイルの淡色地図・標準地図・航空写真と、OpenStreetMap から選ぶ）=====
+   タイルはウェブメルカトルなので、1枚を横長の帯に切り分け、帯ごとに上下の緯度をこの地図の投影に置いて引き伸ばす（帯は緯度0.5度ほど。1枚のまま引き伸ばすと、全国表示では真ん中が南北に数ピクセルずれる）。
+   縦横の比は緯度で少し変わる（北海道では縦に縮み、沖縄では縦に伸びる）。拡大の段階を変えたときは、新しいタイルがそろうまで前の段階のタイルを下に残す。 */
+const TILE_SRC = {
+  pale:  { n:'淡色地図', url:'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', zmax:18, gsi:true },
+  std:   { n:'標準地図', url:'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', zmax:18, gsi:true },
+  photo: { n:'航空写真', url:'https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', zmax:18, gsi:true, photo:true },
+  osm:   { n:'OpenStreetMap', url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png', zmax:19 },
+};
+const TILE_ZMIN = 5, TILE_MAX = 120;
+const gTile = $('g-tile');
+let tileSrc = '', tileRaf = 0, tileZ = -1, tileWant = new Set();   /* tileSrc：TILE_SRC のキー。'' は背景なし */
+try { const v = localStorage.getItem('jp-bgmap'); tileSrc = v === '1' ? 'pale' : TILE_SRC[v] ? v : ''; } catch (e) {}
+const tileLo = (x, n) => x / n * 360 - 180;
+const tileLa = (y, n) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
+function updateTiles() { if (!tileRaf) tileRaf = requestAnimationFrame(drawTiles); }
+function drawTiles() {
+  tileRaf = 0;
+  if (!tileSrc) { gTile.replaceChildren(); tileZ = -1; tileWant = new Set(); return; }
+  const src = TILE_SRC[tileSrc];
+  const sz = svgSz(); if (!(sz.width > 0)) return;
+  const [lo0, la1] = unproj(vb.x, vb.y), [lo1, la0] = unproj(vb.x + vb.w, vb.y + vb.h);
+  const px = sz.width * Math.min(window.devicePixelRatio || 1, 1.5);
+  let z = Math.max(TILE_ZMIN, Math.min(src.zmax, Math.round(Math.log2(360 * px / (256 * (lo1 - lo0))))));
+  let n, x0, x1, y0, y1;
+  for (;;) {   /* 日本の周り（経度122〜154度、緯度20〜46度）だけ。枚数が多すぎるときは段階を下げる */
+    n = 2 ** z;
+    const tx = lo => Math.floor((lo + 180) / 360 * n);
+    const ty = la => { const r = la * Math.PI / 180; return Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n); };
+    x0 = tx(Math.max(lo0, 122)); x1 = tx(Math.min(lo1, 154)); y0 = ty(Math.min(la1, 46)); y1 = ty(Math.max(la0, 20));
+    if ((x1 - x0 + 1) * (y1 - y0 + 1) <= TILE_MAX || z <= TILE_ZMIN) break;
+    z--;
+  }
+  const have = {};
+  Array.from(gTile.children).forEach(g => { have[g.__k] = g; });
+  const want = new Set();
+  for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++) {
+    const k = tileSrc + '/' + z + '/' + x + '/' + y; want.add(k);
+    if (have[k]) continue;
+    const ax = proj(tileLo(x, n), 0)[0], bx = proj(tileLo(x + 1, n), 0)[0];
+    const ns = Math.max(1, Math.min(16, Math.ceil((tileLa(y, n) - tileLa(y + 1, n)) * 2)));
+    const ov = (bx - ax) * 0.004;   /* 継ぎ目が透けないよう、少し重ねる */
+    const url = src.url.replace('{z}', z).replace('{x}', x).replace('{y}', y);
+    const g = el('g', {}, gTile);
+    g.__k = k; g.__z = z; g.__ok = false;
+    for (let i = 0; i < ns; i++) {   /* 帯 i：タイルの画素の行 256*i/ns 〜 256*(i+1)/ns を、その上下の緯度の位置に置く */
+      const sy0 = proj(0, tileLa(y + i / ns, n))[1], sy1 = proj(0, tileLa(y + (i + 1) / ns, n))[1];
+      const sv = el('svg', { x:ax, y:sy0, width:bx - ax + ov, height:sy1 - sy0 + ov, viewBox:'0 ' + (256 * i / ns) + ' 256 ' + (256 / ns), preserveAspectRatio:'none' }, g);
+      const im = el('image', { width:256, height:256 }, sv);
+      if (i === 0) {
+        im.addEventListener('load', () => { g.__ok = true; tileSweep(); });
+        im.addEventListener('error', () => { g.__ok = true; g.style.visibility = 'hidden'; tileSweep(); });
+      }
+      im.setAttribute('href', url);
+    }
+  }
+  tileZ = z; tileWant = want; tileSweep();
+}
+/* 要らなくなったタイルを外す。同じ段階で画面から出たものはすぐ、前の段階のものは、いまの段階のタイルがそろってから */
+function tileSweep() {
+  const ims = Array.from(gTile.children);
+  const done = ims.every(im => !tileWant.has(im.__k) || im.__ok);
+  ims.forEach(im => { if (!tileWant.has(im.__k) && (done || im.__z === tileZ || ims.length > TILE_MAX * 3)) im.remove(); });
+}
+function applyTileOn() {
+  const src = TILE_SRC[tileSrc];
+  $('zbg').setAttribute('aria-pressed', String(!!src));
+  $('mapwrap').classList.toggle('bgmap', !!src);
+  gTile.classList.toggle('photo', !!(src && src.photo));
+  $('mapwrap').classList.toggle('bgphoto', !!(src && src.photo));
+  $('tattr').hidden = !src;
+  if (src) $('tattr').innerHTML = src.gsi
+    ? '背景：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル（' + src.n + '）</a>'
+    : '背景：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+  $('bgmenu').querySelectorAll('button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.bg === tileSrc)));
+  updateTiles();
+}
+function setTileSrc(k) {
+  if (k !== tileSrc) { tileSrc = k; gTile.replaceChildren(); tileZ = -1; tileWant = new Set(); }
+  try { localStorage.setItem('jp-bgmap', k); } catch (e) {}
+  applyTileOn();
+}
+/* 「背景」ボタンで、選ぶ枠を開く（ボタンの左に出す） */
+function bgMenu(open) {
+  const m = $('bgmenu'), b = $('zbg');
+  if (open) m.style.top = (b.offsetTop + b.parentNode.offsetTop) + 'px';
+  m.hidden = !open; b.setAttribute('aria-expanded', String(open));
+  if (open) (m.querySelector('[aria-checked="true"]') || m.querySelector('button')).focus();
+}
+$('bgmenu').innerHTML = [['', 'なし']].concat(Object.keys(TILE_SRC).map(k => [k, TILE_SRC[k].n]))
+  .map(([k, n]) => '<button type="button" role="menuitemradio" data-bg="' + k + '">' + esc(n) + '</button>').join('');
+$('bgmenu').onclick = e => { const b = e.target.closest('button'); if (!b) return; setTileSrc(b.dataset.bg); bgMenu(false); $('zbg').focus(); };
+$('zbg').onclick = e => { e.stopPropagation(); bgMenu($('bgmenu').hidden); };
+document.addEventListener('click', e => { if (!$('bgmenu').hidden && !e.target.closest('#bgmenu')) bgMenu(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('bgmenu').hidden) { bgMenu(false); $('zbg').focus(); } });
+window.addEventListener('resize', updateTiles);
+applyTileOn();
 $('labm').onclick = () => setLabs(LABS - 0.1);
 $('labp').onclick = () => setLabs(LABS + 0.1);
 $('clus').addEventListener('input', e => setClu(+e.target.value));
@@ -2280,7 +2406,8 @@ $('legtog').onclick = () => { legOpen = !legOpen; store.set('jp-legend', legOpen
 applyLegend();
 /* 画面の表示設定を初期状態に戻す（行った記録・自分の地点・書き出しの設定は、そのまま） */
 $('prefreset').onclick = () => {
-  ['jp-fs', 'jp-theme', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  ['jp-fs', 'jp-theme', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  tileSrc = ''; gTile.replaceChildren(); bgMenu(false); applyTileOn();
   fsPct = 100; theme = 'auto'; applyPrefs();
   legOpen = window.innerWidth >= 700; applyLegend();
   $('list').style.maxHeight = '';
