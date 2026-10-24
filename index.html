@@ -643,7 +643,7 @@ body.xopen { overflow: hidden; }
           </div>
           <p class="note">行った所を、きれいな一枚の画像にします。見せる範囲は、書き出す前に選べます。</p>
           <div class="line">
-            <button type="button" class="btn primary" id="bk-save" hidden>ファイルに書き出す</button>
+            <button type="button" class="btn primary" id="bk-save">ファイルに書き出す</button>
             <button type="button" class="btn" id="bk-copy">書き出しをコピー</button>
           </div>
           <div class="line">
@@ -2650,13 +2650,24 @@ let dlNs = null;
 (async () => {
   try {
     const dl = (window.claude && window.claude.use) ? await window.claude.use('downloads') : null;
-    if (dl) { dlNs = dl; $('bk-save').hidden = false; }
+    if (dl) dlNs = dl;
   } catch (e) {}
 })();
+/* ファイルに保存する。claude.ai の外（GitHub Pages など）では、ふつうのダウンロードにする */
+function saveFile(name, data, type) {
+  if (dlNs) return dlNs.save({ filename:name, data });
+  return new Promise((ok, ng) => {
+    try {
+      const url = URL.createObjectURL(new Blob([data], { type })), a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      ok();
+    } catch (e) { ng(e); }
+  });
+}
 $('bk-save').onclick = () => {
-  if (!dlNs) return;
-  const name = 'castle-park-records-' + new Date().toLocaleDateString('sv-SE') + '.json';
-  dlNs.save({ filename:name, data:exportText() })
+  const name = 'tsutsu-urara-' + new Date().toLocaleDateString('sv-SE') + '.json';
+  saveFile(name, exportText(), 'application/json')
     .then(() => { markExported(); bkMsg('書き出しました。'); })
     .catch(e => { if (e && e.code === 'declined') bkMsg('書き出しをやめました。'); else bkMsg('ファイルに書き出せませんでした。「書き出しをコピー」を使ってください。', true); });
 };
@@ -2708,8 +2719,7 @@ function tlOut(csv) {
     const done = () => bkMsg('下の欄に年表を出しました' + (csv ? '（カンマ区切り。表計算ソフトに貼り付けられます）' : '') + '。コピーして保存してください。');
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(() => bkMsg('年表をコピーしました。下の欄にも出しています。'), done); else done();
   };
-  if (!dlNs) { fallback(); return; }
-  dlNs.save({ filename:name, data:text })
+  saveFile(name, text, csv ? 'text/csv' : 'text/plain')
     .then(() => bkMsg('年表を書き出しました' + (csv ? '（Excelで開けます）' : '') + '。'))
     .catch(e => { if (e && e.code === 'declined') bkMsg('書き出しをやめました。'); else fallback(); });
 }
