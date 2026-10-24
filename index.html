@@ -1634,11 +1634,11 @@ function detailHTML(it, k) {
     return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
       facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
   }
-  if (k === 'koei') return dHead(badge(it.sh) + badge(it.kb, 1), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+  if (k === 'koei') return dHead(badge(it.sh) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
   if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
-    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), fPos(it, rp));
+    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, fPos(it, rp));
   if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
@@ -1759,7 +1759,7 @@ const ROW_SUB = {
   scenic: it => esc(it.ps) + ' / ' + esc(it.ty) + '・' + esc(it.cl),
   nature: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.pk || it.sl ? '・' + esc(it.pk || it.sl) : ''),
   shin: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ln.map(l => l.replace('新幹線', '')).join('・')) + noPos(it),
-  koei: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + '・' + esc(it.kb),
+  koei: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + (it.kb ? '・' + esc(it.kb) : '') + (it.st ? '・' + esc(it.st) : ''),
   ik: it => esc(it.ps) + ' / ' + esc(it.ky) + noPos(it),
   biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
   whs: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録',
@@ -1947,6 +1947,8 @@ STATIONS.forEach(s => { ID_ALIAS['ms:' + s.no] = s.id; });
 { const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */
 const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'bw:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
+  'wh:姫路城':'cs:姫路城', 'bt:国立科学博物館附属自然教育園':'mu:国立科学博物館 自然教育園', 'ms:デンパーク安城':'bt:安城産業文化公園デンパーク',
+  'ms:マイントピア別子':'th:マイントピア別子', 'ms:小豆島オリーブ公園':'th:小豆島オリーブ公園', 'ms:燕趙園':'th:燕趙園', 'ms:青洲の里':'th:青洲の里', 'ms:神戸フルーツ・フラワーパーク大沢':'th:神戸 フルーツ・フラワーパーク', 'ms:美ヶ原高原':'th:美ヶ原高原美術館',
   'na:鳥海山':'sc:鳥海山', 'na:赤城山':'sc:赤城山', 'na:筑波山':'sc:筑波山', 'na:白馬岳':'sc:白馬岳', 'na:立山':'sc:立山', 'na:八ヶ岳':'sc:八ヶ岳', 'na:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'na:大台ヶ原山':'sc:大台ヶ原山', 'na:大山 (鳥取県)':'sc:大山', 'na:石鎚山':'sc:石鎚山', 'na:阿蘇山':'sc:阿蘇山', 'na:霧島山':'sc:霧島山', 'na:昇仙峡':'sc:御嶽昇仙峡', 'na:十和田湖':'sc:十和田湖', 'na:高田松原':'sc:高田松原', 'na:猪苗代湖':'sc:猪苗代湖', 'na:中禅寺湖':'sc:中禅寺湖', 'na:菅沼 (群馬県)':'sc:菅沼', 'na:華厳滝':'sc:華厳滝', 'na:白糸の滝 (静岡県)':'sc:富士白糸の滝', 'na:上高地':'sc:上高地', 'na:黒部峡谷':'sc:黒部峡谷', 'na:鳥羽港':'sc:鳥羽湾', 'na:朝熊山':'sc:朝熊山', 'na:浦富海岸':'sc:浦富海岸', 'na:寒霞渓':'sc:寒霞渓', 'na:御崎':'sc:赤穂御崎', 'na:鞆の浦':'sc:鞆の浦', 'na:屋島':'sc:屋島', 'na:九十九島 (西海国立公園)':'sc:九十九島', 'na:雲仙岳':'sc:雲仙岳', 'na:久住高原':'sc:久住高原', 'na:飯田高原':'sc:飯田高原', 'na:袋田の滝':'sc:袋田の滝', 'na:養老の滝':'sc:養老の滝', 'na:赤目四十八滝':'sc:赤目四十八滝', 'na:箕面滝':'sc:箕面滝', 'na:那智滝':'sc:那智滝', 'na:古座川':'sc:古座川', 'na:大沼 (七飯町)':'sc:大沼',
   'hm:利尻山':'na:利尻山', 'hm:羅臼岳':'na:羅臼岳', 'hm:斜里岳':'na:斜里岳', 'hm:雌阿寒岳':'na:雌阿寒岳', 'hm:大雪山':'na:大雪山', 'hm:トムラウシ山':'na:トムラウシ山', 'hm:十勝岳':'na:十勝岳', 'hm:幌尻岳':'na:幌尻岳', 'hm:羊蹄山':'na:羊蹄山', 'hm:岩木山':'na:岩木山', 'hm:八甲田山':'na:八甲田山', 'hm:八幡平':'na:八幡平', 'hm:岩手山':'na:岩手山', 'hm:早池峰山':'na:早池峰山', 'hm:鳥海山':'sc:鳥海山', 'hm:月山':'na:月山', 'hm:朝日岳 (山形県・新潟県)':'na:朝日岳 (山形県・新潟県)', 'hm:蔵王山':'na:蔵王山', 'hm:飯豊山':'na:飯豊山', 'hm:吾妻山':'na:吾妻山', 'hm:安達太良山':'na:安達太良山', 'hm:磐梯山':'na:磐梯山', 'hm:会津駒ヶ岳':'na:会津駒ヶ岳', 'hm:那須岳':'na:那須岳', 'hm:越後駒ヶ岳':'na:越後駒ヶ岳', 'hm:平ヶ岳':'na:平ヶ岳', 'hm:巻機山':'na:巻機山', 'hm:燧ヶ岳':'na:燧ヶ岳', 'hm:至仏山':'na:至仏山', 'hm:谷川岳':'na:谷川岳', 'hm:雨飾山':'na:雨飾山', 'hm:苗場山':'na:苗場山', 'hm:妙高山':'na:妙高山', 'hm:火打山':'na:火打山', 'hm:高妻山':'na:高妻山', 'hm:男体山':'na:男体山', 'hm:日光白根山':'na:日光白根山', 'hm:皇海山':'na:皇海山', 'hm:武尊山':'na:武尊山', 'hm:赤城山':'sc:赤城山', 'hm:草津白根山':'na:草津白根山', 'hm:四阿山':'na:四阿山', 'hm:浅間山':'na:浅間山', 'hm:筑波山':'sc:筑波山', 'hm:白馬岳':'sc:白馬岳', 'hm:五竜岳':'na:五竜岳', 'hm:鹿島槍ヶ岳':'na:鹿島槍ヶ岳', 'hm:剱岳':'na:剱岳', 'hm:立山':'sc:立山', 'hm:薬師岳':'na:薬師岳', 'hm:黒部五郎岳':'na:黒部五郎岳', 'hm:水晶岳':'na:水晶岳', 'hm:鷲羽岳':'na:鷲羽岳', 'hm:槍ヶ岳':'na:槍ヶ岳', 'hm:穂高岳':'na:穂高岳', 'hm:常念岳':'na:常念岳', 'hm:笠ヶ岳':'na:笠ヶ岳', 'hm:焼岳':'na:焼岳', 'hm:乗鞍岳':'na:乗鞍岳', 'hm:御嶽山':'na:御嶽山', 'hm:美ヶ原':'na:美ヶ原', 'hm:霧ヶ峰':'na:霧ヶ峰', 'hm:蓼科山':'na:蓼科山', 'hm:八ヶ岳':'sc:八ヶ岳', 'hm:両神山':'na:両神山', 'hm:雲取山':'na:雲取山', 'hm:甲武信ヶ岳':'na:甲武信ヶ岳', 'hm:金峰山 (山梨県・長野県)':'na:金峰山 (山梨県・長野県)', 'hm:瑞牆山':'na:瑞牆山', 'hm:大菩薩嶺':'na:大菩薩嶺', 'hm:丹沢山':'na:丹沢山', 'hm:富士山':'wh:富士山', 'hm:天城山':'na:天城山', 'hm:木曽駒ヶ岳':'na:木曽駒ヶ岳', 'hm:空木岳':'na:空木岳', 'hm:恵那山':'na:恵那山', 'hm:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'hm:仙丈ヶ岳':'na:仙丈ヶ岳', 'hm:鳳凰山':'na:鳳凰山', 'hm:北岳':'na:北岳', 'hm:間ノ岳':'na:間ノ岳', 'hm:塩見岳':'na:塩見岳', 'hm:荒川岳':'na:荒川岳', 'hm:赤石岳':'na:赤石岳', 'hm:聖岳':'na:聖岳', 'hm:光岳':'na:光岳', 'hm:白山':'na:白山', 'hm:荒島岳':'na:荒島岳', 'hm:伊吹山':'na:伊吹山', 'hm:大台ヶ原山':'sc:大台ヶ原山', 'hm:大峰山':'na:大峰山', 'hm:大山 (鳥取県)':'sc:大山', 'hm:剣山':'na:剣山', 'hm:石鎚山':'sc:石鎚山', 'hm:九重山':'na:九重山', 'hm:祖母山':'na:祖母山', 'hm:阿蘇山':'sc:阿蘇山', 'hm:霧島山':'sc:霧島山', 'hm:開聞岳':'na:開聞岳', 'hm:宮之浦岳':'na:宮之浦岳' };
 /* 日本百名山の山を、まとめた先の id から引く（一覧の行と詳細で使う） */
