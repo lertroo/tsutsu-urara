@@ -493,6 +493,7 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .mk.biwa { fill: #2e86ab; fill-opacity: 0.9; } .mk.k-biwa { fill: #2e86ab; fill-opacity: 0.9; } .legend i.kd-biwa { background: #2e86ab; }
 .mk.scenic { fill: #2f9e8f; fill-opacity: 0.9; } .mk.k-scenic { fill: #2f9e8f; fill-opacity: 0.9; } .legend i.kd-scenic { background: #2f9e8f; }
 .mk.nature { fill: #4d7c0f; fill-opacity: 0.9; } .mk.k-nature { fill: #4d7c0f; fill-opacity: 0.9; } .legend i.kd-nature { background: #4d7c0f; }
+.mk.hyaku { fill: #0d47a1; fill-opacity: 0.9; } .mk.k-hyaku { fill: #0d47a1; fill-opacity: 0.9; } .legend i.kd-hyaku { background: #0d47a1; }
 body.xopen { overflow: hidden; }
 #xmodal { position: fixed; inset: 0; z-index: 50; background: rgba(10, 14, 18, .62); overflow-y: auto; padding: max(12px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; align-items: flex-start; }
 #xmodal[hidden] { display: none; }
@@ -568,7 +569,7 @@ body.xopen { overflow: hidden; }
       </div>
     </div>
     <p class="lede">行ったところを記録しよう。</p>
-    <p class="upd">データ更新：2026年10月23日　<a href="changelog.html">更新履歴</a></p>
+    <p class="upd">データ更新：2026年10月24日　<a href="changelog.html">更新履歴</a></p>
   </header>
 
 
@@ -707,6 +708,7 @@ body.xopen { overflow: hidden; }
 <script src="data/scenic.js"></script>
 <script>const SCN = SCENIC;</script>
 <script src="data/nature.js"></script>
+<script src="data/hyakumeizan.js"></script>
 <script src="data/aquariums.js"></script>
 <script src="data/gardens.js"></script>
 <script src="data/themeparks.js"></script>
@@ -1201,6 +1203,13 @@ function currentItems0() {
     a = a.filter(visOK);
     return orderItems(a);
   }
+  if (mode === 'hyaku') {
+    let a = HYAKU.slice();
+    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
+    if (flt.q) a = a.filter(qm);
+    a = a.filter(visOK);
+    return orderItems(a);
+  }
   if (mode === 'whs') {
     let a = WHS.slice();
     if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
@@ -1267,7 +1276,7 @@ function currentItems0() {
   if (flt.q) a = a.filter(qm);
   return flt.q ? orderItems(a.filter(visOK)) : a.filter(visOK);
 }
-function allItems() { return mode === 'all' ? ALLX : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'museums' ? MUSEUMS : mode === 'themes' ? TPARKS : mode === 'bots' ? BOTS : mode === 'aquas' ? AQUAS : mode === 'zoos' ? ZOOS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES; }
+function allItems() { return mode === 'all' ? ALLX : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'museums' ? MUSEUMS : mode === 'themes' ? TPARKS : mode === 'bots' ? BOTS : mode === 'aquas' ? AQUAS : mode === 'zoos' ? ZOOS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'hyaku' ? HYAKU : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES; }
 function findItem(id) { return allItems().find(x => x.id === id); }
 
 /* ===== 地図の点 ===== */
@@ -1301,6 +1310,7 @@ function baseR(it) {
   if (mode === 'whs') return 5.6;
   if (mode === 'scenic') return 5.6;
   if (mode === 'nature') return 5.2;
+  if (mode === 'hyaku') return 5.2;
   if (mode === 'biwa') return 5.8;
   if (mode === 'shin') return 4.4;
   if (mode === 'ik') return 5.6;
@@ -1336,7 +1346,7 @@ function drawDots() {
     const g = el('g', { 'data-id':it.id }, gDots);
     const hit = el('circle', { cx:xy[0], cy:xy[1], r:10, class:'hit' }, g);
     const mode = curKind(it);
-    const mk = el('rect', { class:'mk ' + (mode === 'airports' ? 'a' + it.fl : mode === 'museums' ? 'mus' : mode === 'themes' ? 'thm' : mode === 'bots' ? 'bot' : mode === 'aquas' ? 'aqu' : mode === 'zoos' ? 'zoo' : mode === 'stations' ? 'eki' : mode === 'capitals' ? 'cap' : mode === 'whs' ? 'whs' : mode === 'scenic' ? 'scenic' : mode === 'nature' ? 'nature' : mode === 'biwa' ? 'biwa' : mode === 'shin' ? 'shin' : mode === 'ik' ? 'ik' : mode === 'my' ? 'my' : KOEI_OF[mode] ? (it.x ? 'gone' : '') : 't-' + it.t) }, g);
+    const mk = el('rect', { class:'mk ' + (mode === 'airports' ? 'a' + it.fl : mode === 'museums' ? 'mus' : mode === 'themes' ? 'thm' : mode === 'bots' ? 'bot' : mode === 'aquas' ? 'aqu' : mode === 'zoos' ? 'zoo' : mode === 'stations' ? 'eki' : mode === 'capitals' ? 'cap' : mode === 'whs' ? 'whs' : mode === 'scenic' ? 'scenic' : mode === 'nature' ? 'nature' : mode === 'hyaku' ? 'hyaku' : mode === 'biwa' ? 'biwa' : mode === 'shin' ? 'shin' : mode === 'ik' ? 'ik' : mode === 'my' ? 'my' : KOEI_OF[mode] ? (it.x ? 'gone' : '') : 't-' + it.t) }, g);
     if (allMode) mk.classList.add('k-' + mode);
     let rk = null;
     if (mode === 'airports' || (mode === 'zoos' && it.ar) || (mode === 'aquas' && it.ar) || (mode === 'bots' && it.ar) || (mode === 'themes' && it.ar) || (mode === 'museums' && it.ar)) {
@@ -1718,10 +1728,20 @@ function prefFull(p) { return PREF_KEY[p] || p; }
 function mReg(it) { return it.rj === '登録・指定の一覧に掲載なし' ? '一覧に掲載なし' : it.rj === '未確認' ? '登録は未確認' : (it.rj || ''); }
 function fmtZooHa(a) { const h = a / 10000; return (h >= 10 ? Math.round(h) : h.toFixed(1)) + ' ha'; }
 function fmtKm(a) { return (a >= 10 ? a.toFixed(1) : a.toFixed(2)) + ' km²'; }
+/* 日本百名山にも入っている場所は、詳細に「日本百名山」の印と、本の番号・山名・標高を足す */
+function decorateTwin(it) {
+  const h = HM_OF[it.id], box = $('detail');
+  if (!h || it.id === h.id) return;
+  const kk = box.querySelector('.kicker');
+  if (kk) kk.insertAdjacentHTML('beforeend', '<span class="badge" style="--kc:' + KCOL.hyaku + '">日本百名山</span>');
+  const dl = box.querySelector('dl.facts');
+  if (dl) dl.insertAdjacentHTML('afterbegin', '<div class="row"><dt>日本百名山</dt><dd>第' + h.no + '座「' + esc(h.n) + '」・標高 ' + h.el.toLocaleString() + ' m（' + esc(h.rg) + '）</dd></div>');
+}
 function renderDetail() {
   /* 横断検索中は、選んだものの種類の詳細を出す（その間だけ mode を種類に合わせる） */
   const it0 = selId && findItem(selId), m0 = mode;
   if (m0 === 'all' && it0 && KIND.get(it0.id)) { mode = KIND.get(it0.id); try { renderDetail0(); } finally { mode = m0; } } else renderDetail0();
+  if (it0) decorateTwin(it0);
   decorateNote();
   drawFarBox();
 }
@@ -1856,6 +1876,18 @@ function renderDetail0() {
       '<div class="row"><dt>選定</dt><dd>昭和2年（1927年）・' + esc(it.ty) + '</dd></div>' +
       '<div class="row"><dt>景観の区分</dt><dd>' + esc(it.cl) + '</dd></div>' +
       '<div class="row"><dt>所在</dt><dd>' + esc(it.ps) + '</dd></div>' +
+      '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
+  } else if (mode === 'hyaku') {
+    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
+    box.innerHTML =
+      '<div class="kicker"><span class="badge">日本百名山</span><span class="badge outline">第' + it.no + '座</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
+      '<h2 class="place">' + esc(it.n) + '</h2>' +
+      '<p class="sub">' + esc(it.ps) + (it.al ? '（記事名：' + esc(it.al) + '）' : '') + '</p>' +
+      '<dl class="facts">' +
+      '<div class="row"><dt>標高</dt><dd class="num">' + it.el.toLocaleString() + ' m</dd></div>' +
+      '<div class="row"><dt>山系</dt><dd>' + esc(it.rg) + '</dd></div>' +
+      (it.pk ? '<div class="row"><dt>国立公園</dt><dd>' + esc(it.pk) + '</dd></div>' : '') +
+      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
       '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
   } else if (mode === 'nature') {
     const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
@@ -2045,20 +2077,20 @@ function renderDetail0() {
 }
 /* 写真（data/photos.js の PHOTOS。作者・ライセンス・出典つき）。写真のファイルは photos/ に置く */
 function photoHTML(it) {
-  const p = typeof PHOTOS === 'object' && PHOTOS[it.id];
+  const p = typeof PHOTOS === 'object' && (PHOTOS[it.id] || (it.na && PHOTOS[it.na]));
   if (!p || !/^photos\/[\w.\-]+$/.test(p.f || '')) return '';
   const lk = (u, t) => /^https:\/\//.test(u || '') ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
   return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '') + '</figcaption></figure>';
 }
-const MODE_LABEL = { themes:'テーマパーク', castles:'城', zoos:'動物園', aquas:'水族館', bots:'植物園', museums:'博物・美術館', airports:'空港', stations:'道の駅', capitals:'県庁所在地', whs:'世界遺産', scenic:'日本百景', nature:'自然', biwa:'琵琶湖', ik:'レアスポット', shin:'新幹線の駅', koei:'公営競技場', my:'マイスポット' };
+const MODE_LABEL = { themes:'テーマパーク', castles:'城', zoos:'動物園', aquas:'水族館', bots:'植物園', museums:'博物・美術館', airports:'空港', stations:'道の駅', capitals:'県庁所在地', whs:'世界遺産', scenic:'日本百景', nature:'自然', hyaku:'日本百名山', biwa:'琵琶湖', ik:'レアスポット', shin:'新幹線の駅', koei:'公営競技場', my:'マイスポット' };
 const KOEI_OF = { koei:KOEI };
 const KIND = new Map(), ALLX = [];
 function initAll() {
   dotsStale = true;
   if (ALLX.length) return;
-  ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'biwa', 'koei', 'ik', 'my'].forEach(m => modeItems(m).forEach(o => { if (TWIN[o.id]) return; KIND.set(o.id, m); ALLX.push(o); }));
+  ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'].forEach(m => modeItems(m).forEach(o => { if (TWIN[o.id]) return; KIND.set(o.id, m); ALLX.push(o); }));
 }
-function modeItems(m) { return KOEI_OF[m] ? KOEI_OF[m] : m === 'museums' ? MUSEUMS : m === 'themes' ? TPARKS : m === 'bots' ? BOTS : m === 'aquas' ? AQUAS : m === 'zoos' ? ZOOS : m === 'airports' ? AIRPORTS : m === 'stations' ? STATIONS : m === 'capitals' ? CAPS : m === 'whs' ? WHS : m === 'scenic' ? SCN : m === 'nature' ? NATURE : m === 'biwa' ? BIWA : m === 'shin' ? SHIN : m === 'ik' ? IKENAI : m === 'my' ? MYS : CASTLES; }
+function modeItems(m) { return KOEI_OF[m] ? KOEI_OF[m] : m === 'museums' ? MUSEUMS : m === 'themes' ? TPARKS : m === 'bots' ? BOTS : m === 'aquas' ? AQUAS : m === 'zoos' ? ZOOS : m === 'airports' ? AIRPORTS : m === 'stations' ? STATIONS : m === 'capitals' ? CAPS : m === 'whs' ? WHS : m === 'scenic' ? SCN : m === 'nature' ? NATURE : m === 'hyaku' ? HYAKU : m === 'biwa' ? BIWA : m === 'shin' ? SHIN : m === 'ik' ? IKENAI : m === 'my' ? MYS : CASTLES; }
 function nearItems(it, n, same) {
   if (typeof it.la !== 'number') return [];
   const R = Math.PI / 180, out = [];
@@ -2120,7 +2152,11 @@ function renderList(keepCount) {
     b.type = 'button'; b.className = 'row-btn'; b.dataset.id = it.id;
     if (it.id === selId) b.setAttribute('aria-current', 'true');
     const rk = mode !== 'all' ? mode : (rk1 && KIND.get(it.id) === rk1 ? rk1 : 'all');   /* 横断検索で種類を1つだけ選んでいるときは、その種類の行の形で出す */
-    if (rk === 'all') {
+    const hmr = rk === 'hyaku' ? it : rk === 'all' && rk1 === 'hyaku' ? HM_OF[it.id] : null;
+    if (hmr) {
+      b.innerHTML = '<span class="rno">' + hmr.no + '</span><span class="rname">' + visMark(it.id) + esc(hmr.n) + '</span><span class="rval"></span>' +
+        '<span class="rsub">' + esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg) + '</span>';
+    } else if (rk === 'all') {
       b.innerHTML = '<span class="rno"></span><span class="rname' + (it.x ? ' gone' : '') + '">' + visMark(it.id) + (KIND.get(it.id) === 'stations' ? esc(dn(it)) : esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + (it.xw || '閉園')) + '）</span>' : '')) + '</span><span class="rval"></span>' +
         '<span class="rsub"><i class="nbk">' + MODE_LABEL[KIND.get(it.id)] + '</i> ' + esc(prefFull(it.pf)) + '</span>';
     } else if (rk === 'zoos') {
@@ -2264,7 +2300,7 @@ function renderControls() {
     add('定期便:すべて', 'all', 'type', AIRPORTS.length);
     [1, 2, 3].forEach(c => add(AIR_FL_SHORT[c], String(c), 'type', AIRPORTS.filter(x => x.fl === c).length));
   }
-  const base = mode === 'all' ? ALLX.filter(kindOn) : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'zoos' ? ZOOS : mode === 'aquas' ? AQUAS : mode === 'bots' ? BOTS : mode === 'themes' ? TPARKS : mode === 'museums' ? MUSEUMS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES;
+  const base = mode === 'all' ? ALLX.filter(kindOn) : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'zoos' ? ZOOS : mode === 'aquas' ? AQUAS : mode === 'bots' ? BOTS : mode === 'themes' ? TPARKS : mode === 'museums' ? MUSEUMS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'hyaku' ? HYAKU : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES;
   const regOf = x => (mode === 'castles' || mode === 'all') ? (x.rg || REGION_OF[x.pf]) : REGION_OF[x.pf];
   const sep = document.createElement('div'); sep.style.flexBasis = '100%'; sep.style.height = '0';
   chips.appendChild(sep);
@@ -2284,7 +2320,7 @@ function renderControls() {
 function renderStat() { /* 「表示中 ○件、○都道府県に分布…」の一文は表示しない */ }
 function renderStatic() {
   if (mode === 'all') {
-    $('legend').innerHTML = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'biwa', 'koei', 'ik', 'my'].map(m => '<span><i class="kd-' + m + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
+    $('legend').innerHTML = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'].map(m => '<span><i class="kd-' + m + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
     $('mapnote').textContent = '種類をまたいで名前で探せます。選ぶと、詳細が開きます。';
     $('src').innerHTML = '';
   } else if (mode === 'zoos') {
@@ -2301,8 +2337,12 @@ function renderStatic() {
     $('src').innerHTML = '<b>出典</b><p>昭和2年（1927年）に大阪毎日新聞社・東京日日新聞社が選び、鉄道省が後援した「日本新八景・日本二十五勝・日本百景」です。一覧は Wikipedia の表をもとにしています。位置は概算です（個人利用）。</p>';
   } else if (mode === 'nature') {
     $('legend').innerHTML = '<span><i class="kd-nature"></i>自然</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '国立公園の中の山・湖・滝・島などと、日本の滝百選・ラムサール条約登録湿地の一部です。印は、各地の記事の座標による目安です。';
-    $('src').innerHTML = '<b>出典</b><p>場所は、Wikipedia 日本語版（CC BY-SA 4.0）の各国立公園の記事をもとに選んでいます。日本の滝百選・ラムサール条約登録湿地からは、記事がよく読まれている一部だけを入れています。位置は、各地の記事の座標をもとにした目安です。記事に座標がないものは Wikidata（CC0）の座標か、地図で調べた位置です（個人利用）。</p>';
+    $('mapnote').textContent = '国立公園の中の山・湖・滝・島などと、日本百名山（100座すべて）、日本の滝百選・名水百選・ラムサール条約登録湿地の一部です。印は、各地の記事の座標による目安です。';
+    $('src').innerHTML = '<b>出典</b><p>場所は、Wikipedia 日本語版（CC BY-SA 4.0）の各国立公園の記事をもとに選んでいます。日本百名山は、深田久弥『日本百名山』の100座をすべて入れています（阿寒岳は雌阿寒岳）。日本の滝百選・名水百選・ラムサール条約登録湿地からは、記事がよく読まれている一部だけを入れています。位置は、各地の記事の座標をもとにした目安です。記事に座標がないものは Wikidata（CC0）の座標か、地図で調べた位置です（個人利用）。</p>';
+  } else if (mode === 'hyaku') {
+    $('legend').innerHTML = '<span><i class="kd-hyaku"></i>日本百名山</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
+    $('mapnote').textContent = '深田久弥『日本百名山』の100座です。印は、各山の記事の座標による目安です。';
+    $('src').innerHTML = '<b>出典</b><p>100座の山名・標高・山系は、Wikipedia 日本語版（CC BY-SA 4.0）の「日本百名山」の表によります。位置は各山の記事の座標です（蔵王山・平ヶ岳は地図で調べた位置）。阿寒岳は雌阿寒岳としています（個人利用）。</p>';
   } else if (mode === 'whs') {
     $('legend').innerHTML = '<span><i class="kd-whs"></i>世界遺産</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
     $('mapnote').textContent = '印は、各遺産を代表する1地点の目安です。複数の県や場所にまたがる遺産も、1か所だけに印を付けています。';
@@ -2422,7 +2462,11 @@ const REC_KEY = 'jp-records-v1';
 /* 統合した館の旧ID → いまのID（博物・美術館で、同じ館の別登録をまとめたもの） */
 const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王子分館（原田の森ギャラリー）', 'mu:東山魁夷館':'mu:長野県立美術館', 'mu:立山博物館':'mu:富山県［立山博物館］', 'mu:富山県立近代美術館':'mu:富山県美術館', 'mu:東京大学総合研究博物館・小石川分館':'mu:東京大学総合研究博物館', 'mu:仏教美術資料研究センター':'mu:奈良国立博物館', 'mu:ウポポイ':'mu:国立アイヌ民族博物館' };
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */
-const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'lake:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城' };
+const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'lake:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
+  'na:鳥海山':'sc:鳥海山', 'na:赤城山':'sc:赤城山', 'na:筑波山':'sc:筑波山', 'na:白馬岳':'sc:白馬岳', 'na:立山':'sc:立山', 'na:八ヶ岳':'sc:八ヶ岳', 'na:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'na:大台ヶ原山':'sc:大台ヶ原山', 'na:大山 (鳥取県)':'sc:大山', 'na:石鎚山':'sc:石鎚山', 'na:阿蘇山':'sc:阿蘇山', 'na:霧島山':'sc:霧島山', 'na:昇仙峡':'sc:御嶽昇仙峡', 'na:十和田湖':'sc:十和田湖', 'na:高田松原':'sc:高田松原', 'na:猪苗代湖':'sc:猪苗代湖', 'na:中禅寺湖':'sc:中禅寺湖', 'na:菅沼 (群馬県)':'sc:菅沼', 'na:華厳滝':'sc:華厳滝', 'na:白糸の滝 (静岡県)':'sc:富士白糸の滝', 'na:上高地':'sc:上高地', 'na:黒部峡谷':'sc:黒部峡谷', 'na:鳥羽港':'sc:鳥羽湾', 'na:朝熊山':'sc:朝熊山', 'na:浦富海岸':'sc:浦富海岸', 'na:寒霞渓':'sc:寒霞渓', 'na:御崎':'sc:赤穂御崎', 'na:鞆の浦':'sc:鞆の浦', 'na:屋島':'sc:屋島', 'na:九十九島 (西海国立公園)':'sc:九十九島', 'na:雲仙岳':'sc:雲仙岳', 'na:久住高原':'sc:久住高原', 'na:飯田高原':'sc:飯田高原', 'na:袋田の滝':'sc:袋田の滝', 'na:養老の滝':'sc:養老の滝', 'na:赤目四十八滝':'sc:赤目四十八滝', 'na:箕面滝':'sc:箕面滝', 'na:那智滝':'sc:那智滝', 'na:古座川':'sc:古座川', 'na:大沼 (七飯町)':'sc:大沼',
+  'hm:利尻山':'na:利尻山', 'hm:羅臼岳':'na:羅臼岳', 'hm:斜里岳':'na:斜里岳', 'hm:雌阿寒岳':'na:雌阿寒岳', 'hm:大雪山':'na:大雪山', 'hm:トムラウシ山':'na:トムラウシ山', 'hm:十勝岳':'na:十勝岳', 'hm:幌尻岳':'na:幌尻岳', 'hm:羊蹄山':'na:羊蹄山', 'hm:岩木山':'na:岩木山', 'hm:八甲田山':'na:八甲田山', 'hm:八幡平':'na:八幡平', 'hm:岩手山':'na:岩手山', 'hm:早池峰山':'na:早池峰山', 'hm:鳥海山':'sc:鳥海山', 'hm:月山':'na:月山', 'hm:朝日岳 (山形県・新潟県)':'na:朝日岳 (山形県・新潟県)', 'hm:蔵王山':'na:蔵王山', 'hm:飯豊山':'na:飯豊山', 'hm:吾妻山':'na:吾妻山', 'hm:安達太良山':'na:安達太良山', 'hm:磐梯山':'na:磐梯山', 'hm:会津駒ヶ岳':'na:会津駒ヶ岳', 'hm:那須岳':'na:那須岳', 'hm:越後駒ヶ岳':'na:越後駒ヶ岳', 'hm:平ヶ岳':'na:平ヶ岳', 'hm:巻機山':'na:巻機山', 'hm:燧ヶ岳':'na:燧ヶ岳', 'hm:至仏山':'na:至仏山', 'hm:谷川岳':'na:谷川岳', 'hm:雨飾山':'na:雨飾山', 'hm:苗場山':'na:苗場山', 'hm:妙高山':'na:妙高山', 'hm:火打山':'na:火打山', 'hm:高妻山':'na:高妻山', 'hm:男体山':'na:男体山', 'hm:日光白根山':'na:日光白根山', 'hm:皇海山':'na:皇海山', 'hm:武尊山':'na:武尊山', 'hm:赤城山':'sc:赤城山', 'hm:草津白根山':'na:草津白根山', 'hm:四阿山':'na:四阿山', 'hm:浅間山':'na:浅間山', 'hm:筑波山':'sc:筑波山', 'hm:白馬岳':'sc:白馬岳', 'hm:五竜岳':'na:五竜岳', 'hm:鹿島槍ヶ岳':'na:鹿島槍ヶ岳', 'hm:剱岳':'na:剱岳', 'hm:立山':'sc:立山', 'hm:薬師岳':'na:薬師岳', 'hm:黒部五郎岳':'na:黒部五郎岳', 'hm:水晶岳':'na:水晶岳', 'hm:鷲羽岳':'na:鷲羽岳', 'hm:槍ヶ岳':'na:槍ヶ岳', 'hm:穂高岳':'na:穂高岳', 'hm:常念岳':'na:常念岳', 'hm:笠ヶ岳':'na:笠ヶ岳', 'hm:焼岳':'na:焼岳', 'hm:乗鞍岳':'na:乗鞍岳', 'hm:御嶽山':'na:御嶽山', 'hm:美ヶ原':'na:美ヶ原', 'hm:霧ヶ峰':'na:霧ヶ峰', 'hm:蓼科山':'na:蓼科山', 'hm:八ヶ岳':'sc:八ヶ岳', 'hm:両神山':'na:両神山', 'hm:雲取山':'na:雲取山', 'hm:甲武信ヶ岳':'na:甲武信ヶ岳', 'hm:金峰山 (山梨県・長野県)':'na:金峰山 (山梨県・長野県)', 'hm:瑞牆山':'na:瑞牆山', 'hm:大菩薩嶺':'na:大菩薩嶺', 'hm:丹沢山':'na:丹沢山', 'hm:富士山':'wh:富士山', 'hm:天城山':'na:天城山', 'hm:木曽駒ヶ岳':'na:木曽駒ヶ岳', 'hm:空木岳':'na:空木岳', 'hm:恵那山':'na:恵那山', 'hm:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'hm:仙丈ヶ岳':'na:仙丈ヶ岳', 'hm:鳳凰山':'na:鳳凰山', 'hm:北岳':'na:北岳', 'hm:間ノ岳':'na:間ノ岳', 'hm:塩見岳':'na:塩見岳', 'hm:荒川岳':'na:荒川岳', 'hm:赤石岳':'na:赤石岳', 'hm:聖岳':'na:聖岳', 'hm:光岳':'na:光岳', 'hm:白山':'na:白山', 'hm:荒島岳':'na:荒島岳', 'hm:伊吹山':'na:伊吹山', 'hm:大台ヶ原山':'sc:大台ヶ原山', 'hm:大峰山':'na:大峰山', 'hm:大山 (鳥取県)':'sc:大山', 'hm:剣山':'na:剣山', 'hm:石鎚山':'sc:石鎚山', 'hm:九重山':'na:九重山', 'hm:祖母山':'na:祖母山', 'hm:阿蘇山':'sc:阿蘇山', 'hm:霧島山':'sc:霧島山', 'hm:開聞岳':'na:開聞岳', 'hm:宮之浦岳':'na:宮之浦岳' };
+/* 日本百名山の山を、まとめた先の id から引く（一覧の行と詳細で使う） */
+const HM_OF = {}; HYAKU.forEach(h => { HM_OF[TWIN[h.id] || h.id] = h; });
 const cid = id => TWIN[id] || id;
 /* ===== マイスポット(自分で足した地点。この端末のブラウザに保存) ===== */
 const MYS_KEY = 'jp-myspots-v1';
@@ -2510,7 +2554,7 @@ function openMyForm(it) {
   myEl.hidden = false;
   g('my-n').focus();
 }
-const ALL_IDS = new Set(CASTLES.map(c => c.id).concat(KOEI.map(z => z.id), ZOOS.map(z => z.id), AQUAS.map(z => z.id), BOTS.map(z => z.id), TPARKS.map(z => z.id), MUSEUMS.map(z => z.id), (typeof MUSEUMS_RETIRED === 'object' ? MUSEUMS_RETIRED : []), AIRPORTS.map(a => a.id), STATIONS.map(s => s.id), CAPS.map(s => s.id), WHS.map(s => s.id), SCN.map(s => s.id), NATURE.map(s => s.id), BIWA.map(s => s.id), SHIN.map(s => s.id), IKENAI.map(s => s.id)));
+const ALL_IDS = new Set(CASTLES.map(c => c.id).concat(KOEI.map(z => z.id), ZOOS.map(z => z.id), AQUAS.map(z => z.id), BOTS.map(z => z.id), TPARKS.map(z => z.id), MUSEUMS.map(z => z.id), (typeof MUSEUMS_RETIRED === 'object' ? MUSEUMS_RETIRED : []), AIRPORTS.map(a => a.id), STATIONS.map(s => s.id), CAPS.map(s => s.id), WHS.map(s => s.id), SCN.map(s => s.id), NATURE.map(s => s.id), HYAKU.map(s => s.id), BIWA.map(s => s.id), SHIN.map(s => s.id), IKENAI.map(s => s.id)));
 MYS.forEach(m => ALL_IDS.add(m.id));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
@@ -2680,7 +2724,7 @@ $('bk-copy').onclick = () => {
   } else fallback();
 };
 /* 年表の書き出し（いま選んでいる人の記録） */
-const KIND_OF = [['城', CASTLES], ['公営競技場', KOEI], ['動物園', ZOOS], ['水族館', AQUAS], ['植物園', BOTS], ['テーマパーク', TPARKS], ['博物・美術館', MUSEUMS], ['空港', AIRPORTS], ['道の駅', STATIONS], ['県庁所在地', CAPS], ['世界遺産', WHS], ['日本百景', SCN], ['自然', NATURE], ['琵琶湖', BIWA], ['新幹線の駅', SHIN], ['レアスポット', IKENAI], ['マイスポット', MYS]];
+const KIND_OF = [['城', CASTLES], ['公営競技場', KOEI], ['動物園', ZOOS], ['水族館', AQUAS], ['植物園', BOTS], ['テーマパーク', TPARKS], ['博物・美術館', MUSEUMS], ['空港', AIRPORTS], ['道の駅', STATIONS], ['県庁所在地', CAPS], ['世界遺産', WHS], ['日本百景', SCN], ['自然', NATURE], ['日本百名山', HYAKU], ['琵琶湖', BIWA], ['新幹線の駅', SHIN], ['レアスポット', IKENAI], ['マイスポット', MYS]];
 function timelineRows() {
   const idx = {};
   KIND_OF.forEach(([k, arr]) => arr.forEach(it => { idx[it.id] = { it, k }; }));
@@ -2815,8 +2859,8 @@ $('q').addEventListener('keydown', e => {
 });
 document.querySelectorAll('.tab').forEach(t => { t.onclick = () => { const m = t.dataset.mode; if (m === 'tokyo') openTokyo(); else { setMode(m, true, true); if (m === 'all' && flt.pfk === '東京都') { flt.pfk = ''; refresh(); } } }; });
 /* ===== リッチ版の機能 ===== */
-const KCOL = { themes:'#e0457b', castles:'#8a5a2b', zoos:'#e08a1e', aquas:'#1f8fd6', bots:'#3fa34d', museums:'#8e5bd0', airports:'#5b6b7a', stations:'#148a8a', capitals:'#4f63c9', whs:'#b5851a', scenic:'#2f9e8f', nature:'#4d7c0f', biwa:'#2e86ab', ik:'#7a3b3b', shin:'#6d7f1f', koei:'#a33b8a', my:'#d0662a', tokyo:'#3b6fb0' };
-const KORDER = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'biwa', 'koei', 'ik', 'my'];
+const KCOL = { themes:'#e0457b', castles:'#8a5a2b', zoos:'#e08a1e', aquas:'#1f8fd6', bots:'#3fa34d', museums:'#8e5bd0', airports:'#5b6b7a', stations:'#148a8a', capitals:'#4f63c9', whs:'#b5851a', scenic:'#2f9e8f', nature:'#4d7c0f', hyaku:'#0d47a1', biwa:'#2e86ab', ik:'#7a3b3b', shin:'#6d7f1f', koei:'#a33b8a', my:'#d0662a', tokyo:'#3b6fb0' };
+const KORDER = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'];
 const ICON_P = {
   tokyo: '<path d="M12 3v3M9 6h6M9 6l-1.5 15M15 6l1.5 15M8.2 12h7.6M7.8 16h8.4M10 6l4 6M14 6l-4 6"/>',
   my: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><path d="M12 7.2v5.6M9.2 10h5.6"/>',
@@ -2826,6 +2870,7 @@ const ICON_P = {
   biwa: '<path d="M12.5 3.5c-3 1.5-4 4-3.2 6.6.6 2-1.6 3.2-1.6 5.4 0 2.2 2 4.2 4.8 4.6 2.2-.6 3.2-2.4 2.6-4.4-.6-2 1.6-3.4 1-6C15.7 6 14.4 4.2 12.5 3.5z"/>',
   scenic: '<path d="M2.5 19l6-9 4 6 3-4 6 7z"/><circle cx="17.5" cy="6.5" r="2"/>',
   nature: '<path d="M12 21v-4.5"/><path d="M12 3L6 11.5h3L5.5 16.5h13L15 11.5h3z"/>',
+  hyaku: '<path d="M2.5 20.5l7-11 3.5 5 2.5-3.5 6 9.5z"/><path d="M9.5 9.5V3.5l4.5 1.6-4.5 1.6"/>',
   whs: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17"/>',
   capitals: '<path d="M4 20h16M6 20V10l6-3 6 3v10M10 20v-5h4v5M12 7V3l3 1.2L12 5.4"/>',
   pin: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
@@ -3048,7 +3093,7 @@ function dashClick(e) {
 $('detail').addEventListener('click', dashClick); $('dashbox').addEventListener('click', dashClick);
 /* 足あとのまとめの置き場所：PCは地図の下、それ以外は一覧の下 */
 const midMQ = window.matchMedia('(min-width: 1360px)');
-function placeDetail() { const d = $('detail'); if (midMQ.matches) $('mid').prepend(d); else $('list').after(d); }
+function placeDetail() { const d = $('detail'); if (midMQ.matches) $('mid').prepend(d); else $('listh').after(d); }   /* 一覧の高さを変えるバーは、一覧のすぐ下に残す */
 if (midMQ.addEventListener) midMQ.addEventListener('change', placeDetail); else if (midMQ.addListener) midMQ.addListener(placeDetail);
 placeDetail();
 const dashMQ = window.matchMedia('(min-width: 1100px)');
