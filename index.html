@@ -13,50 +13,15 @@
     } catch {}
   })();
 </script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
 /* 配置:左に日本地図、右に詳細と一覧。スマホでは地図→詳細→一覧の順に積む。 */
-:root {
-  --bg: #e9efee;
-  --panel: #fbfcfb;
-  --ink: #15262d;
-  --muted: #55696f;
-  --line: #c9d6d6;
-  --accent: #14607f;
-  --accent-ink: #ffffff;
-  --sea: #cfe0e6;
-  --land: #f6f5ef;
-  --coast: #6c8a91;
-  --halo: #f6f5ef;
-  --park: #1b7f69;
-  --t-n: #b8322a;
-  --t-k: #c27a12;
-  --t-s: #14607f;
-  --t-a: #6b7f86;
-  --font-display: 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
-  --font-body: 'BIZ UDPGothic', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0a1318; --panel: #111d24; --ink: #e3eef0; --muted: #92a8ae; --line: #27393f;
-    --accent: #6cc0e0; --accent-ink: #06222d; --sea: #0d1c26; --land: #1f3339; --coast: #5f8e96; --halo: #0d1c26;
-    --park: #4fc9ad; --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0a1318; --panel: #111d24; --ink: #e3eef0; --muted: #92a8ae; --line: #27393f;
-  --accent: #6cc0e0; --accent-ink: #06222d; --sea: #0d1c26; --land: #1f3339; --coast: #5f8e96; --halo: #0d1c26;
-  --park: #4fc9ad; --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
-  color-scheme: dark;
-}
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.55; padding-inline: 10px; padding-block: 10px 28px; }
+body { color: var(--ink); font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.55; padding-inline: 10px; padding-block: 10px 28px; }
 .app { max-width: 1180px; margin-inline: auto; }
-h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45rem, 5vw, 2.3rem); line-height: 1.2; letter-spacing: 0.04em; margin: 0; }
-.head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 2px; }
+h1 { margin: 0; }
+.head { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 2px; }
 .topbar { display: flex; gap: 6px; justify-content: flex-end; flex: 0 0 auto; }
-.finder { display: flex; gap: 6px; margin: 0 0 8px; }
-#q { flex: 1 1 auto; min-width: 0; font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+#q { flex: 1 1 auto; min-width: 0; font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); padding: 8px 12px; }
 .tabs[hidden] { display: none; }
 #catbtn { flex: 0 0 auto; font: inherit; font-weight: 700; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; cursor: pointer; white-space: nowrap; }
 #catbtn.on, #catbtn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
@@ -64,9 +29,9 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .topbar button:hover { border-color: var(--accent); color: var(--accent); }
 @media (max-width: 440px) { .head { flex-wrap: wrap; row-gap: 4px; } .head .topbar { flex: 1 0 100%; } }
 .lede { margin: 0 0 6px; color: var(--muted); text-wrap: balance; }
-.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
-.tab { font: inherit; font-weight: 700; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; cursor: pointer; white-space: nowrap; flex: 1 1 auto; text-align: center; }
-.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.tabs { flex-wrap: wrap; margin-bottom: 0; }
+.tab { font: inherit; font-weight: 700; color: var(--ink); background: var(--panel); border: 1px solid var(--line); cursor: pointer; white-space: nowrap; flex: 1 1 auto; }
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; align-items: start; }
 .left, .right { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
@@ -94,27 +59,16 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .fararrow path { fill: #e0261b; stroke: #fff; stroke-width: 2.5; stroke-linejoin: round; }
 @media (prefers-reduced-motion: no-preference) { .fararrow svg { animation: farnudge 1.2s ease-in-out infinite; } }
 @keyframes farnudge { 0%, 100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
-.mapwrap { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--sea); overflow: hidden; }
+.mapwrap { position: relative; border: 1px solid var(--line); background: var(--sea); overflow: hidden; }
 #svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
-.mapwrap.unlocked #svg { touch-action: none; }
 .mapwrap.drag #svg { cursor: grabbing; }
 .seabg { fill: var(--sea); }
 .lakes path { fill: var(--sea); stroke: var(--coast); stroke-width: 0.9px; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
-.landp { fill: var(--land); stroke: var(--coast); stroke-width: 0.9px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.landp { stroke: var(--coast); stroke-width: 0.9px; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .prefsel { fill: var(--accent); fill-opacity: 0.16; stroke: var(--accent); stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-linejoin: round; pointer-events: none; }
-.hit { fill: transparent; pointer-events: none; }
-.mk { stroke: var(--halo); stroke-width: 1.2px; vector-effect: non-scaling-stroke; pointer-events: none; }
-.mk.t-n { fill: var(--t-n); } .mk.t-k { fill: var(--t-k); } .mk.t-s { fill: var(--t-s); } .mk.t-a { fill: var(--t-a); }
-.mk.a1 { fill: var(--t-n); fill-opacity: 0.85; } .mk.a2 { fill: var(--t-k); fill-opacity: 0.85; } .mk.a3 { fill: var(--t-a); fill-opacity: 0.85; } .mk.zoo { fill: var(--t-k); fill-opacity: 0.85; } .mk.zoo0 { fill: var(--t-a); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.aqu { fill: var(--t-k); fill-opacity: 0.85; } .mk.aqu0 { fill: var(--t-a); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.bot { fill: var(--t-k); fill-opacity: 0.85; } .mk.bot0 { fill: var(--t-a); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.thm { fill: var(--t-k); fill-opacity: 0.85; } .mk.thm0 { fill: var(--t-a); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.mus { fill: var(--t-k); fill-opacity: 0.85; } .mk.mus0 { fill: var(--t-a); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.eki { fill: var(--t-s); fill-opacity: 0.8; stroke-width: 0.8px; }
-.mk.park { fill: var(--park); fill-opacity: 0.78; stroke: var(--park); stroke-opacity: 1; stroke-width: 1.4px; }
-.rk { font-size: 11px; font-weight: 700; fill: var(--accent-ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
-.dim { opacity: 0.18; pointer-events: none; } .dim .hit { pointer-events: none; }
-.on .mk { stroke: var(--ink); stroke-width: 2.4px; }
+.mk { fill: var(--kc); fill-opacity: 0.9; stroke: var(--halo); stroke-width: 1.2px; vector-effect: non-scaling-stroke; pointer-events: none; }
+.dim { opacity: 0.18; pointer-events: none; }
+
 .speed { fill: var(--ink); opacity: .5; pointer-events: none; animation: spdin .45s ease-out; }
 @keyframes spdin { from { opacity: 0; } }
 .labbg { fill: var(--halo); stroke: var(--ink); stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .95; pointer-events: none; }
@@ -122,7 +76,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .nbh { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); padding-bottom: 4px; }
 .nbr { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line); padding: 5px 2px; cursor: pointer; }
 .nbr:hover { color: var(--accent); }
-.nbk { font-style: normal; font-size: 0.72rem; color: var(--accent); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-right: 6px; }
+.nbk { font-style: normal; font-size: 0.72rem; border: 1px solid var(--line); padding: 0 5px; margin-right: 6px; }
 .nbd { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .place.fly { cursor: pointer; }
 .place.fly:hover { text-decoration: underline dotted; text-underline-offset: 6px; }
@@ -160,12 +114,9 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 @media (max-width: 600px) { .bgmenu { right: 50px; } }
 #tattr { position: absolute; right: 10px; bottom: 52px; font-size: 0.625rem; line-height: 1.3; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 5px; }
 #tattr a { color: inherit; }
-#tab-all { font-weight: 800; letter-spacing: 0.06em; }
-#tab-all[aria-selected="false"] { background: var(--ink); color: var(--panel); border-color: var(--ink); }
-.ctrl .lock { font-size: 0.7rem; line-height: 1.2; padding: 4px 6px; }
-.ctrl .lock[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-@media (hover: hover) and (pointer: fine) { .ctrl .lock { display: none; } }
-.legend { position: absolute; left: 10px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 5px 10px; font-size: 0.75rem; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; max-width: calc(100% - 70px); }
+#tab-all { font-weight: 800; }
+
+.legend { position: absolute; left: 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 5px 10px; font-size: 0.75rem; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; max-width: calc(100% - 70px); }
 .legend { bottom: 56px; } .legend.off { display: none; }
 .legtog { position: absolute; left: 10px; bottom: 10px; font: inherit; font-size: 0.75rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
 .ll { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; white-space: nowrap; font-size: 0.6875rem; line-height: 1.35; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 6px; pointer-events: none; font-variant-numeric: tabular-nums; display: grid; grid-template-columns: auto auto; column-gap: 0.5em; }
@@ -178,31 +129,20 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .clu:hover .cmk { fill-opacity: 0.75; }
 .clu.vis .cmk { stroke: var(--ink); stroke-width: 2.6px; }
 .ctx { fill: var(--ink); paint-order: stroke; stroke: var(--halo); stroke-width: 3px; stroke-linejoin: round; font-weight: 700; text-anchor: middle; dominant-baseline: central; pointer-events: none; font-variant-numeric: tabular-nums; }
-.mk.k-themes { fill: #e0457b; fill-opacity: 0.9; } .legend i.kd-themes { background: #e0457b; }
-.mk.k-castles { fill: #8a5a2b; fill-opacity: 0.9; } .legend i.kd-castles { background: #8a5a2b; }
-.mk.k-zoos { fill: #e08a1e; fill-opacity: 0.9; } .legend i.kd-zoos { background: #e08a1e; }
-.mk.k-aquas { fill: #1f8fd6; fill-opacity: 0.9; } .legend i.kd-aquas { background: #1f8fd6; }
-.mk.k-bots { fill: #3fa34d; fill-opacity: 0.9; } .legend i.kd-bots { background: #3fa34d; }
-.mk.k-museums { fill: #8e5bd0; fill-opacity: 0.9; } .legend i.kd-museums { background: #8e5bd0; }
-.mk.k-airports { fill: #5b6b7a; fill-opacity: 0.9; } .legend i.kd-airports { background: #5b6b7a; }
-.mk.k-stations { fill: #148a8a; fill-opacity: 0.9; } .legend i.kd-stations { background: #148a8a; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
 .note { margin: 0; font-size: 0.78rem; color: var(--muted); }
 .note a { color: var(--accent); }
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 11px 14px; min-width: 0; }
+.panel { background: var(--panel); border: 1px solid var(--line); padding: 11px 14px; min-width: 0; }
 .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
-.badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; padding: 2px 8px; border-radius: 4px; background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); }
-.badge.outline { background: transparent; color: var(--accent); }
-.place { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 6vw, 2.1rem); line-height: 1.2; letter-spacing: 0.04em; margin: 6px 0 0; overflow-wrap: anywhere; }
+.badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; border: 1px solid var(--accent); }
+
+.place { font-size: clamp(1.6rem, 6vw, 2.1rem); line-height: 1.2; margin: 6px 0 0; overflow-wrap: anywhere; }
 .sub { margin: 2px 0 0; color: var(--muted); font-size: 0.85rem; }
 .facts { margin: 6px 0 0; }
 .facts .row { padding: 5px 0; border-top: 1px solid var(--line); }
 .facts dt { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); }
 .facts dd { margin: 2px 0 0; overflow-wrap: anywhere; }
 .facts dd.num { font-variant-numeric: tabular-nums; }
-.empty { margin: 0; color: var(--muted); }
-.stat { margin: 0; font-size: 0.85rem; color: var(--muted); }
-.stat b { color: var(--ink); font-variant-numeric: tabular-nums; }
 .chips { display: flex; flex-wrap: wrap; gap: 4px; }
 .chip { font: inherit; font-size: 0.82rem; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
@@ -211,22 +151,20 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .tools { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .tools input[type=search] { flex: 1 1 160px; min-width: 0; font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
 .tools select { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; max-width: 100%; }
-.list .grp { padding: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--accent) 9%, var(--panel)); position: sticky; top: 0; }
+.list .grp { font-size: 0.8rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--accent) 9%, var(--panel)); position: sticky; top: 0; }
 .tools label { font-size: 0.82rem; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
-.list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow-y: auto; max-height: 220px; }
-.row-btn { display: grid; grid-template-columns: 2.4em minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; width: 100%; text-align: left; font: inherit; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 6px 12px; cursor: pointer; }
+.list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); background: var(--panel); overflow-y: auto; max-height: 220px; }
+.row-btn { display: grid; align-items: center; width: 100%; text-align: left; font: inherit; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 .list li:last-child .row-btn { border-bottom: 0; }
-.list li:not(.grp) { content-visibility: auto; contain-intrinsic-size: auto 48px; }
+.list li:not(.grp) { content-visibility: auto; }
 .row-btn:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-.row-btn[aria-current="true"] { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+
 .rno { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.82rem; text-align: right; }
 .rname { font-weight: 700; overflow-wrap: anywhere; }
 .rname.gone { font-weight: 400; color: var(--muted); }
 .rx { font-size: 0.74rem; font-weight: 400; color: var(--muted); }   /* 名前のあとの「（○年廃止）」などは小さく */
 .rsub { grid-column: 2 / 4; font-size: 0.78rem; color: var(--muted); }
 .rval { font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
-.bar { grid-column: 2 / 4; height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--park) 14%, transparent); overflow: hidden; }
-.bar i { display: block; height: 100%; background: var(--park); border-radius: 3px; }
 .tdot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
 .src { font-size: 0.78rem; color: var(--muted); }
 .tky path { fill: none; stroke: var(--coast); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: .85; pointer-events: none; }
@@ -240,17 +178,14 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
 .src ul { margin: 4px 0 0; padding-left: 1.2em; }
 .src a { color: var(--accent); }
 #legal { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
-.vis .mk, .vis .mk.park { stroke: var(--accent); stroke-width: 2.6px; }
-.on .mk, .on .mk.park { stroke: var(--ink); stroke-width: 2.4px; }
-.vm { color: var(--accent); margin-right: 4px; font-weight: 700; }
-.visbox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 10px 0 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+
+.visbox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 10px 0 14px; padding: 10px 12px; border: 1px solid var(--line); }
 .chip.big { font-size: 0.95rem; font-weight: 700; padding: 7px 16px; }
 .vhead { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
 .vrow { flex-basis: 100%; display: flex; align-items: center; gap: 8px; }
 .vn { font-size: 0.82rem; color: var(--muted); min-width: 3.4em; font-variant-numeric: tabular-nums; }
 .vrow input { flex: 1 1 auto; }
-.vdate { font-size: 0.82rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
-.vdate input, .rec select, .rec input[type=text], .rec textarea { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; min-width: 0; }
+.rec select, .rec input[type=text], .rec textarea { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; min-width: 0; }
 .vwho { font-size: 0.78rem; color: var(--muted); }
 .rec summary { cursor: pointer; font-weight: 700; }
 .rec-body { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
@@ -287,12 +222,14 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
   --shadow: 0 1px 2px rgba(60, 50, 30, .06), 0 6px 18px rgba(60, 50, 30, .07);
   --font-display: 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Sans CJK JP', sans-serif;
   --font-body: 'BIZ UDPGothic', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+  --t-n: #b8322a; --t-k: #c27a12; --t-s: #14607f; --t-a: #6b7f86; --t-N: var(--t-n);   /* 城の天守の区分の色（一覧の丸） */
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #12171d; --panel: #1a222b; --ink: #ebe7de; --muted: #9aa5ad; --line: #2c3742;
     --accent: #7db6e0; --accent-ink: #0b1c29; --sea: #0f1b25; --land: #232f38; --coast: #5d7480; --halo: #0f1b25;
     --stamp: #ff7062; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
     color-scheme: dark;
   }
 }
@@ -300,6 +237,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.45re
   --bg: #12171d; --panel: #1a222b; --ink: #ebe7de; --muted: #9aa5ad; --line: #2c3742;
   --accent: #7db6e0; --accent-ink: #0b1c29; --sea: #0f1b25; --land: #232f38; --coast: #5d7480; --halo: #0f1b25;
   --stamp: #ff7062; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
   color-scheme: dark;
 }
 body { background: var(--bg); background-image: radial-gradient(color-mix(in srgb, var(--ink) 5%, transparent) 1px, transparent 1px); background-size: 22px 22px; }
@@ -358,9 +296,8 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .mapwrap.tkyonly .landp:not([data-k="東京都"]), .mapwrap.tkyonly .pfill:not([data-k="東京都"]) { display: none; }
 .fillview .landp { cursor: pointer; }
 .fillview .landp:hover { fill: color-mix(in srgb, var(--accent) 16%, var(--land)); }
-.vis .mk, .vis .mk.park { stroke: var(--stamp); stroke-width: 2.8px; }
+.vis .mk { stroke: var(--stamp); stroke-width: 2.8px; }
 .legend i.lg { border-color: var(--accent); }
-.legend span.stamp i { background: transparent; border: 3px solid var(--stamp); }
 .on .mk { stroke: var(--ink); stroke-width: 2.6px; }
 @media (prefers-reduced-motion: no-preference) {
   .on .mk { animation: mkpulse 1.7s ease-in-out infinite; }
@@ -377,7 +314,7 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 
 /* 一覧 */
 .row-btn { position: relative; padding-left: 16px; }
-.row-btn::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 4px; border-radius: 0 3px 3px 0; background: var(--kc, transparent); }
+.row-btn::before { content: ""; position: absolute; left: 0; width: 4px; border-radius: 0 3px 3px 0; background: var(--kc, transparent); }
 .row-btn[aria-current="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 /* 一覧：1件1行・詰め・右に余白 */
 .row-btn { grid-template-columns: auto minmax(0, auto) minmax(5em, 1fr) auto; gap: 0 8px; padding: 3px 8px 3px 12px; line-height: 1.4; }
@@ -388,7 +325,6 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .row-btn > .rname { grid-column: 2; grid-row: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
 .row-btn > .rsub { grid-column: 3; grid-row: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; font-size: 0.74rem; }
 .row-btn > .rval { grid-column: 4; grid-row: 1; }
-.row-btn > .bar { grid-column: 2 / 5; grid-row: 2; height: 3px; margin-top: 1px; }
 .list .grp { padding: 3px 12px; }
 .list li:not(.grp) { contain-intrinsic-size: auto 28px; }
 .listh { height: 14px; margin-top: -2px; }
@@ -404,25 +340,11 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 /* 足あとのまとめ */
 .dash { display: flex; flex-direction: column; gap: 10px; }
 .dtop { display: flex; align-items: center; gap: 16px; }
-.ring { flex: 0 0 auto; width: 96px; height: 96px; position: relative; }
-.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.ring .rbg { stroke: color-mix(in srgb, var(--ink) 10%, transparent); }
-.ring .rfg { stroke: var(--stamp); stroke-linecap: round; transition: stroke-dasharray .6s ease; }
-.ring .rc { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; line-height: 1.1; }
-.ring .rc b { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.ring .rc small { display: block; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; }
 .dtit { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.06em; margin: 0; }
 .dsub { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 .dsub b { color: var(--ink); font-variant-numeric: tabular-nums; }
 .dh { margin: 0 0 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; color: var(--accent); }
-.krows { display: flex; flex-direction: column; gap: 6px; }
-.krow { display: grid; grid-template-columns: 24px minmax(0, 7.2em) 1fr auto; align-items: center; gap: 8px; width: 100%; font: inherit; color: var(--ink); background: none; border: 0; padding: 3px 0; cursor: pointer; text-align: left; }
-.krow:hover .kname { color: var(--accent); }
-.krow .kic { color: var(--kc); display: grid; place-items: center; }
-.krow .kic .ic { width: 18px; height: 18px; }
 .kname { font-size: 0.85rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.kbar { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--kc) 14%, transparent); overflow: hidden; }
-.kbar i { display: block; height: 100%; border-radius: 4px; background: var(--kc); }
 .kn { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .kn b { color: var(--ink); }
 .tiles { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -448,7 +370,6 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .pfchips button { font: inherit; font-size: 0.8rem; color: var(--ink); background: color-mix(in srgb, var(--kc) 10%, transparent); border: 1px solid color-mix(in srgb, var(--kc) 35%, var(--line)); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
 .pfchips button:hover { border-color: var(--kc); }
 .chip.pf { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-@media (min-width: 920px) { .ring { width: 104px; height: 104px; } }
 
 .notea { width: 100%; box-sizing: border-box; min-height: 5em; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; resize: vertical; }
 .noteb { display: flex; gap: 6px; margin-top: 4px; } .noteb .btn, .noteedit { font-size: 0.8125rem; padding: 2px 10px; }
@@ -480,20 +401,9 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .upd a { color: var(--accent); font-weight: 700; }
 
 #tab-all { grid-column: 1 / -1; }
-.mk.cap { fill: #4f63c9; fill-opacity: 0.9; } .mk.k-capitals { fill: #4f63c9; fill-opacity: 0.9; } .legend i.kd-capitals { background: #4f63c9; }
-.mk.my { fill: #d0662a; fill-opacity: 0.9; } .mk.k-my { fill: #d0662a; fill-opacity: 0.9; } .legend i.kd-my { background: #d0662a; }
 .myform { display: flex; flex-direction: column; gap: 10px; } .myform label { display: flex; flex-direction: column; gap: 3px; font-size: .82rem; color: var(--muted); } .myform input, .myform select, .myform textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; min-width: 0; } .myform textarea { min-height: 4.5em; resize: vertical; } .myform .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; } .myform input, .myform select, .myform textarea { width: 100%; box-sizing: border-box; } .myform .err { color: var(--t-n, #b8322a); font-size: .85rem; min-height: 1.2em; margin: 0; }
 #pickbar { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 60; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 8px 12px; display: flex; gap: 10px; align-items: center; font-size: .88rem; max-width: calc(100vw - 24px); } #pickbar[hidden] { display: none; }
-.mk.whs { fill: #b5851a; fill-opacity: 0.9; } .mk.k-whs { fill: #b5851a; fill-opacity: 0.9; } .legend i.kd-whs { background: #b5851a; }
-.mk.shin { fill: #6d7f1f; fill-opacity: 0.9; } .mk.k-shin { fill: #6d7f1f; fill-opacity: 0.9; } .legend i.kd-shin { background: #6d7f1f; }
-.mk.ik { fill: #7a3b3b; fill-opacity: 0.9; } .mk.k-ik { fill: #7a3b3b; fill-opacity: 0.9; } .legend i.kd-ik { background: #7a3b3b; }
-/* 公営競技場 */
-.mk.k-koei { fill: #a33b8a; fill-opacity: 0.9; } .legend i.kd-koei { background: #a33b8a; }
-.mk.gone { fill-opacity: 0.45; }
-.mk.biwa { fill: #2e86ab; fill-opacity: 0.9; } .mk.k-biwa { fill: #2e86ab; fill-opacity: 0.9; } .legend i.kd-biwa { background: #2e86ab; }
-.mk.scenic { fill: #2f9e8f; fill-opacity: 0.9; } .mk.k-scenic { fill: #2f9e8f; fill-opacity: 0.9; } .legend i.kd-scenic { background: #2f9e8f; }
-.mk.nature { fill: #4d7c0f; fill-opacity: 0.9; } .mk.k-nature { fill: #4d7c0f; fill-opacity: 0.9; } .legend i.kd-nature { background: #4d7c0f; }
-.mk.hyaku { fill: #0d47a1; fill-opacity: 0.9; } .mk.k-hyaku { fill: #0d47a1; fill-opacity: 0.9; } .legend i.kd-hyaku { background: #0d47a1; }
+.mk.gone { fill-opacity: 0.45; }   /* 廃止・休止した公営競技場 */
 body.xopen { overflow: hidden; }
 #xmodal { position: fixed; inset: 0; z-index: 50; background: rgba(10, 14, 18, .62); overflow-y: auto; padding: max(12px, env(safe-area-inset-top, 0px)) 12px max(12px, env(safe-area-inset-bottom, 0px)); display: flex; justify-content: center; align-items: flex-start; }
 #xmodal[hidden] { display: none; }
@@ -523,9 +433,6 @@ body.xopen { overflow: hidden; }
 .xtx input { width: 100%; }
 /* 狭い画面：操作ボタンを小さく */
 @media (max-width: 600px) { .ctrl { gap: 4px; top: 8px; right: 8px; } .ctrl button { min-width: 36px; height: 34px; padding: 0 6px; font-size: .85rem; } }
-/* 国宝天守（N）の色 */
-:root { --t-N: var(--t-n); }
-.mk.t-N { fill: var(--t-n); }
 /* PCの広い画面：全幅で使い、地図を縦いっぱいに */
 @media (min-width: 1100px) {
   body { padding-inline: clamp(32px, 3.2vw, 64px); padding-block: 12px 40px; }
@@ -610,7 +517,7 @@ body.xopen { overflow: hidden; }
         <button type="button" id="legtog" class="legtog" aria-expanded="false" aria-controls="legend">凡例</button>
       </div>
       <div class="maph" id="maph" role="separator" aria-orientation="horizontal" aria-label="地図の高さ（上下にドラッグ、ダブルタップで元に戻す）" tabindex="0"><i></i></div>
-      <p class="note" id="mapnote"></p>
+      <p class="note" id="mapnote">種類をまたいで名前で探せます。選ぶと、詳細が開きます。</p>
     </section>
 
     <section class="mid" id="mid" aria-label="詳細"><p class="panel mid-empty" id="midempty">施設を選ぶと、ここに詳細が出ます。</p></section>
@@ -662,7 +569,6 @@ body.xopen { overflow: hidden; }
           <p class="msg" id="bk-msg" role="status"></p>
         </div>
       </details>
-      <div class="src" id="src"></div>
       <div class="src" id="tkysrc" hidden>東京都の区市町村の境界：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html" target="_blank" rel="noopener">「国土数値情報（行政区域データ）」</a>（国土交通省、2025年1月1日時点）をもとに作成（点を間引くなどの加工をしています）。国土交通省が作成したものではありません。測量法に基づく国土地理院長承認（複製）R 6JHf 503。</div>
       <div class="src" id="citysrc" hidden>市区町村の境界：「国土数値情報（行政区域データ）」（国土交通省、2021年1月1日時点）を、スマートニュース メディア研究所が簡素化したもの（https://github.com/smartnews-smri/japan-topography）をもとに作成。国土交通省が作成したものではありません。</div>
       <div class="src" id="legal">
@@ -706,7 +612,6 @@ body.xopen { overflow: hidden; }
 <script src="data/capitals.js"></script>
 <script src="data/worldheritage.js"></script>
 <script src="data/scenic.js"></script>
-<script>const SCN = SCENIC;</script>
 <script src="data/nature.js"></script>
 <script src="data/hyakumeizan.js"></script>
 <script src="data/aquariums.js"></script>
@@ -733,7 +638,7 @@ const REGIONS = ['北海道','東北','関東','中部','近畿','中国','四�
 const TYPE_LABEL = { N:'現存天守・国宝', k:'現存天守・重要文化財', s:'復元・復興などの天守', a:'城跡など（天守なし）' };
 const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
   const [n, pf, lo, la, t, rm] = ln.split('|');
-  return { id:'c' + (i + 1), no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '' };
+  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '' };
 });
 
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
@@ -761,9 +666,33 @@ const AIR_ST = { 1:'供用中', 2:'建設中', 3:'休止中' };
 /* 道の駅の表示名。改名した駅は「旧名 → 新名」、閉鎖した駅は名前の後ろに閉鎖年を付ける */
 function dn(it) { let t = it.o ? it.o + ' → ' + it.n : it.n; if (it.x) t += '（' + it.x + '年閉鎖）'; return t; }
 
-
-
-
+/* ===== 種類の表 =====
+   種類の並び（KORDER）・名前・色・データ・地図の点の大きさ（r）は、ここだけに書く。アイコンは ICON_P */
+const MYS_KEY = 'jp-myspots-v1';
+const MYS = [];   /* マイスポット（自分で足した地点。この端末のブラウザに保存） */
+const KINDS = [
+  { k:'themes',   label:'テーマパーク', col:'#e0457b', items:TPARKS,   r:4.4 },
+  { k:'castles',  label:'城',           col:'#8a5a2b', items:CASTLES,  r:c => c.t === 'N' ? 5.6 : c.t === 'k' ? 5.2 : c.t === 's' ? 4.4 : 3.8 },
+  { k:'zoos',     label:'動物園',       col:'#e08a1e', items:ZOOS,     r:4.4 },
+  { k:'aquas',    label:'水族館',       col:'#1f8fd6', items:AQUAS,    r:4.4 },
+  { k:'bots',     label:'植物園',       col:'#3fa34d', items:BOTS,     r:4.4 },
+  { k:'museums',  label:'博物・美術館', col:'#8e5bd0', items:MUSEUMS,  r:4.4 },
+  { k:'airports', label:'空港',         col:'#5b6b7a', items:AIRPORTS, r:4.4 },
+  { k:'shin',     label:'新幹線の駅',   col:'#6d7f1f', items:SHIN,     r:4.4 },
+  { k:'stations', label:'道の駅',       col:'#148a8a', items:STATIONS, r:3.4 },
+  { k:'capitals', label:'県庁所在地',   col:'#4f63c9', items:CAPS,     r:5.2 },
+  { k:'whs',      label:'世界遺産',     col:'#b5851a', items:WHS,      r:5.6 },
+  { k:'scenic',   label:'日本百景',     col:'#2f9e8f', items:SCENIC,   r:5.6 },
+  { k:'nature',   label:'自然',         col:'#4d7c0f', items:NATURE,   r:5.2 },
+  { k:'hyaku',    label:'日本百名山',   col:'#0d47a1', items:HYAKU,    r:5.2 },
+  { k:'biwa',     label:'琵琶湖',       col:'#2e86ab', items:BIWA,     r:5.8 },
+  { k:'koei',     label:'公営競技場',   col:'#a33b8a', items:KOEI,     r:4.4 },
+  { k:'ik',       label:'レアスポット', col:'#7a3b3b', items:IKENAI,   r:5.6 },
+  { k:'my',       label:'マイスポット', col:'#d0662a', items:MYS,      r:5.8 },
+];
+const KORDER = KINDS.map(x => x.k), KIND_BY = {}, MODE_LABEL = {}, KCOL = { tokyo:'#3b6fb0' };
+KINDS.forEach(x => { KIND_BY[x.k] = x; MODE_LABEL[x.k] = x.label; KCOL[x.k] = x.col; });
+function modeItems(k) { return (KIND_BY[k] || KIND_BY.castles).items; }
 
 const PREF_ORDER = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
 
@@ -779,8 +708,8 @@ window.addEventListener('resize', () => { svgSzC = null; });
 const NS = 'http://www.w3.org/2000/svg';
 const W0 = { x:120, y:0, w:680, h:880 };
 let vb = { ...W0 };
-let mode = 'all', selId = null;
-const flt = { kinds:null, type:'all', region:'all', q:'', vis:'all', pf:'all', fac:'all', pfk:'' };
+let selId = null;
+const flt = { kinds:null, type:'all', region:'all', q:'', vis:'all', pfk:'' };
 
 function el(name, attrs, parent) {
   const e = document.createElementNS(NS, name);
@@ -935,6 +864,7 @@ function showLL() {
   if (llPtr) { const [plo, pla] = f(unproj(llPtr[0], llPtr[1])); t = '<span>カーソル</span><span>' + pla + '°N ' + plo + '°E</span>' + t; }
   e.innerHTML = t;
 }
+let usRaf = 0;
 function applyVB() {
   clampVB();
   svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
@@ -942,7 +872,9 @@ function applyVB() {
   updateFine();
   updateTky();
   updateTiles();
-  updateSizes();
+  /* 指・ホイールで動かしている間は、点の大きさ・まとめ・名前を、画面の描き直し1回につき1度だけ直す（イベントは1回の描き直しの間に何度も来る） */
+  if (labBusy()) { if (!usRaf) usRaf = requestAnimationFrame(() => { usRaf = 0; updateSizes(); }); }
+  else { cancelAnimationFrame(usRaf); usRaf = 0; updateSizes(); }
   drawSpeed();
   drawFarArrow();
 }
@@ -1158,136 +1090,38 @@ function matchScore(it, q) {
   const i = n.indexOf(t);
   return i >= 0 ? 2 + Math.min(i, 60) / 100 : 3;
 }
+const jaCmp = new Intl.Collator('ja').compare;
 function orderItems(a) {
   const q = flt.q;
-  const base = (x, y) => (isVisited(y.id) - isVisited(x.id)) || (pfIdx(x) - pfIdx(y)) || x.n.localeCompare(y.n, 'ja');
+  const base = (x, y) => (isVisited(y.id) - isVisited(x.id)) || (pfIdx(x) - pfIdx(y)) || jaCmp(x.n, y.n);
   return a.slice().sort(q ? (x, y) => (matchScore(x, q) - matchScore(y, q)) || base(x, y) : base);
 }
-function currentItems() { const a = currentItems0(); return flt.pfk ? a.filter(x => PREF_KEY[x.pf] === flt.pfk) : a; }
-function currentItems0() {
-  if (mode === 'all') {
-    let a = ALLX;
-    if (flt.kinds && flt.kinds.size < KORDER.length) a = a.filter(kindOn);
-    const tk = typeKind(), tf = tk && flt.type !== 'all' && (TYPEF[tk].find(t => t[1] === flt.type) || [])[2];
-    if (tf) a = a.filter(tf);
-    if (flt.region !== 'all') a = a.filter(x => (x.rg || REGION_OF[x.pf]) === flt.region);
-    if (flt.q) a = a.filter(qm);
-    return orderItems(a.filter(visOK));
-  }
-  if (mode === 'zoos') {
-    let a = ZOOS.slice();
-    if (flt.type === 'ar') a = a.filter(x => x.ar); else if (flt.type === 'noar') a = a.filter(x => !x.ar); else if (flt.type === 'combo') a = a.filter(x => x.tg);
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'my') {
-    let a = MYS.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'scenic') {
-    let a = SCN.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'nature') {
-    let a = NATURE.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'hyaku') {
-    let a = HYAKU.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'whs') {
-    let a = WHS.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'capitals') {
-    let a = CAPS.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'aquas') {
-    let a = AQUAS.slice();
-    if (flt.type === 'ar') a = a.filter(x => x.ar); else if (flt.type === 'noar') a = a.filter(x => !x.ar); else if (flt.type === 'combo') a = a.filter(x => x.tg);
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'bots') {
-    let a = BOTS.slice();
-    if (flt.type === 'ar') a = a.filter(x => x.ar); else if (flt.type === 'noar') a = a.filter(x => !x.ar); else if (flt.type === 'combo') a = a.filter(x => x.tg);
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'themes') {
-    let a = TPARKS.slice();
-    if (flt.type === 'ar') a = a.filter(x => x.ar); else if (flt.type === 'noar') a = a.filter(x => !x.ar); else if (flt.type === 'combo') a = a.filter(x => x.tg);
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'museums') {
-    let a = MUSEUMS.slice();
-    if (flt.type === 'pref') a = a.filter(x => x.kb === '都道府県立'); else if (flt.type === 'nat') a = a.filter(x => x.kb === '国立' || x.kb === '国立大学'); else if (flt.type === 'reg') a = a.filter(x => x.rj === '登録博物館'); else if (flt.type === 'des') a = a.filter(x => x.rj === '指定施設'); else if (flt.type === 'nopos') a = a.filter(x => typeof x.la !== 'number');
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    a = a.filter(visOK);
-    return orderItems(a);
-  }
-  if (mode === 'airports') {
-    let a = AIRPORTS.slice();
-    if (flt.type !== 'all') a = a.filter(x => String(x.fl) === flt.type);
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.q) a = a.filter(qm);
-    return orderItems(a.filter(visOK));
-  }
-  if (mode === 'stations') {
-    let a = STATIONS.slice();
-    if (flt.region !== 'all') a = a.filter(x => REGION_OF[x.pf] === flt.region);
-    if (flt.pf !== 'all') a = a.filter(x => x.pf === flt.pf);
-    if (flt.q) a = a.filter(qm);
-    return flt.q ? orderItems(a.filter(visOK)) : a.filter(visOK);
-  }
-  let a = CASTLES.slice();
-  if (flt.type !== 'all') a = a.filter(c => flt.type === 'tower' ? (c.t === 'N' || c.t === 'k') : flt.type === 'N' ? c.t === 'N' : c.t === flt.type);
-  if (flt.region !== 'all') a = a.filter(c => c.rg === flt.region);
+/* 1回の画面の更新で何度も呼ばれるので、条件（絞り込み・記録・データの数）が同じあいだは、前の結果を返す */
+let ciKey = '', ciVal = null;
+function currentItems() {
+  const key = [flt.q, flt.vis, flt.region, flt.type, flt.pfk, flt.kinds ? [...flt.kinds].join() : '-', rec.cur, rec.rev, dataRev].join('|');
+  if (key === ciKey) return ciVal;
+  let a = ALLX;
+  if (flt.kinds && flt.kinds.size < KORDER.length) a = a.filter(kindOn);
+  const tk = typeKind(), tf = tk && flt.type !== 'all' && (TYPEF[tk].find(t => t[1] === flt.type) || [])[2];
+  if (tf) a = a.filter(tf);
+  if (flt.region !== 'all') a = a.filter(x => (x.rg || REGION_OF[x.pf]) === flt.region);
   if (flt.q) a = a.filter(qm);
-  return flt.q ? orderItems(a.filter(visOK)) : a.filter(visOK);
+  if (flt.pfk) a = a.filter(x => PREF_KEY[x.pf] === flt.pfk);
+  ciKey = key; ciVal = orderItems(a.filter(visOK));
+  return ciVal;
 }
-function allItems() { return mode === 'all' ? ALLX : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'museums' ? MUSEUMS : mode === 'themes' ? TPARKS : mode === 'bots' ? BOTS : mode === 'aquas' ? AQUAS : mode === 'zoos' ? ZOOS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'hyaku' ? HYAKU : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES; }
-function findItem(id) { return allItems().find(x => x.id === id); }
+function findItem(id) { return ALLX.find(x => x.id === id); }
 
 /* ===== 地図の点 ===== */
 let dotEls = {};
 let mapView = 'dots';
-function hasVisitedAny() { return allItems().some(x => isVisited(x.id)); }
+function hasVisitedAny() { return ALLX.some(x => isVisited(x.id)); }
 function drawFill() {
   const g = $('g-fill'); g.innerHTML = '';
   if (mapView !== 'fill') return;
   const cnt = {};
-  allItems().forEach(x => { if (!isVisited(x.id)) return; const k = PREF_KEY[x.pf]; if (k) cnt[k] = (cnt[k] || 0) + 1; });
+  ALLX.forEach(x => { if (!isVisited(x.id)) return; const k = PREF_KEY[x.pf]; if (k) cnt[k] = (cnt[k] || 0) + 1; });
   Object.keys(cnt).forEach(k => {
     if (!GEO_PREFS[k]) return;
     const pa = geoPath(k, { class:'pfill lv' + (cnt[k] >= 5 ? 3 : cnt[k] >= 2 ? 2 : 1), 'data-k':k }, g);
@@ -1300,82 +1134,34 @@ function applyMapView() {
   if (mapView === 'fill') $('legend').innerHTML += hasVisitedAny() ? '<span><i class="lg lv1"></i>行った都道府県</span><span><i class="lg lv2"></i>2か所以上</span><span><i class="lg lv3"></i>5か所以上</span>' : '<span>行った記録がまだありません</span>';
   drawFill();
 }
-function setMapView(v) { mapView = v; renderStatic(); applyMapView(); }
-function curKind(it) { return mode === 'all' ? (KIND.get(it.id) || 'themes') : mode; }
-function baseR(it) {
-  const mode = curKind(it);
-  if (mode === 'zoos') return 4.4;
-  if (mode === 'aquas') return 4.4;
-  if (mode === 'capitals') return 5.2;
-  if (mode === 'whs') return 5.6;
-  if (mode === 'scenic') return 5.6;
-  if (mode === 'nature') return 5.2;
-  if (mode === 'hyaku') return 5.2;
-  if (mode === 'biwa') return 5.8;
-  if (mode === 'shin') return 4.4;
-  if (mode === 'ik') return 5.6;
-  if (KOEI_OF[mode]) return 4.4;
-  if (mode === 'my') return 5.8;
-  if (mode === 'bots') return 4.4;
-  if (mode === 'themes') return 4.4;
-  if (mode === 'museums') return 4.4;
-  if (mode === 'airports') return 4.4;
-  if (mode === 'stations') return 3.4;
-  return it.t === 'N' ? 5.6 : it.t === 'k' ? 5.2 : it.t === 's' ? 4.4 : 3.8;
-}
-/* 横断検索では、点の集まりは変わらない（絞り込みで変わるのは「薄くするか」だけ）ので、初回に作った点を使い回す。
+function setMapView(v) { mapView = v; renderLegend(); applyMapView(); }
+function curKind(it) { return KIND.get(it.id) || 'themes'; }
+function baseR(it) { const r = KIND_BY[curKind(it)].r; return typeof r === 'function' ? r(it) : r; }
+/* 点の集まりは変わらない（絞り込みで変わるのは「薄くするか」だけ）ので、初回に作った点を使い回す。
    データが変わった（マイスポットの追加・削除、読み込み）ときは、initAll() が dotsStale を立てて作り直す */
-let dotsStale = true, dotsMode = '';
+let dotsStale = true;
 function drawDots() {
   drawFill();
-  const allMode = mode === 'all';
   const shown = new Set(currentItems().map(x => x.id));
-  if (allMode && !dotsStale && dotsMode === 'all') {
+  if (!dotsStale) {
     gLab.innerHTML = '';
     for (const id in dotEls) { const d = dotEls[id]; d.g.classList.toggle('dim', !shown.has(id)); d.g.classList.toggle('vis', isVisited(id)); }
-    updateSizes(); markSel();
+    markSel(true); updateSizes();
     return;
   }
   gDots.innerHTML = ''; gLab.innerHTML = ''; dotEls = {};
-  dotsStale = false; dotsMode = mode;
-  let list = allItems().slice();
-  if (mode === 'airports') list.sort((a, b) => b.ar - a.ar); else if (mode === 'museums') list.sort((a, b) => (b.ar || 0) - (a.ar || 0)); else if (mode === 'themes') list.sort((a, b) => (b.ar || 0) - (a.ar || 0)); else if (mode === 'bots') list.sort((a, b) => (b.ar || 0) - (a.ar || 0)); else if (mode === 'aquas') list.sort((a, b) => (b.ar || 0) - (a.ar || 0)); else if (mode === 'zoos') list.sort((a, b) => (b.ar || 0) - (a.ar || 0)); else if (mode === 'castles') list.sort((a, b) => (a.t === 'a') - (b.t === 'a'));
-  list = list.filter(it => typeof it.la === 'number');
-  list.slice().reverse().forEach(it => {
+  dotsStale = false;
+  ALLX.filter(it => typeof it.la === 'number').reverse().forEach(it => {
     const xy = proj(it.lo, it.la);
     const g = el('g', { 'data-id':it.id }, gDots);
-    const hit = el('circle', { cx:xy[0], cy:xy[1], r:10, class:'hit' }, g);
-    const mode = curKind(it);
-    const mk = el('rect', { class:'mk ' + (mode === 'airports' ? 'a' + it.fl : mode === 'museums' ? 'mus' : mode === 'themes' ? 'thm' : mode === 'bots' ? 'bot' : mode === 'aquas' ? 'aqu' : mode === 'zoos' ? 'zoo' : mode === 'stations' ? 'eki' : mode === 'capitals' ? 'cap' : mode === 'whs' ? 'whs' : mode === 'scenic' ? 'scenic' : mode === 'nature' ? 'nature' : mode === 'hyaku' ? 'hyaku' : mode === 'biwa' ? 'biwa' : mode === 'shin' ? 'shin' : mode === 'ik' ? 'ik' : mode === 'my' ? 'my' : KOEI_OF[mode] ? (it.x ? 'gone' : '') : 't-' + it.t) }, g);
-    if (allMode) mk.classList.add('k-' + mode);
-    let rk = null;
-    if (mode === 'airports' || (mode === 'zoos' && it.ar) || (mode === 'aquas' && it.ar) || (mode === 'bots' && it.ar) || (mode === 'themes' && it.ar) || (mode === 'museums' && it.ar)) {
-      
-    }
-    const title = el('title', {}, g); title.textContent = mode === 'stations' ? dn(it) : it.n;
-    g.addEventListener('click', ev => { if (!moved) select(nearestDot(ev, it.id), false, true); });
+    const k = curKind(it);
+    const mk = el('rect', { class:'mk' + (k === 'koei' && it.x ? ' gone' : ''), style:'--kc:' + KCOL[k] }, g);
+    const title = el('title', {}, g); title.textContent = k === 'stations' ? dn(it) : it.n;
     if (!shown.has(it.id)) g.classList.add('dim');
     if (isVisited(it.id)) g.classList.add('vis');
-    dotEls[it.id] = { g, hit, mk, rk, it, xy };
+    dotEls[it.id] = { g, mk, it, xy, hr:10 };   /* hr：押したとみなす半径（地図の単位） */
   });
-  updateSizes();
-  markSel();
-}
-/* 点の当たり判定は広くて重なるので、タップした位置にいちばん近い点を選ぶ（後から描いた点が勝つのを避ける） */
-function nearestDot(ev, fallback) {
-  try {
-    const m = svg.getScreenCTM(); if (!m || ev.clientX == null) return fallback;
-    const pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
-    const q = pt.matrixTransform(m.inverse());
-    let best = fallback, bd = Infinity;
-    for (const id in dotEls) {
-      const d = dotEls[id];
-      if (d.g.style.display === 'none' || d.g.classList.contains('dim')) continue;
-      const dx = d.xy[0] - q.x, dy = d.xy[1] - q.y, dd = dx * dx + dy * dy, r = +d.hit.getAttribute('r') || 0;
-      if (dd <= r * r && dd < bd) { bd = dd; best = id; }
-    }
-    return best;
-  } catch (e) { return fallback; }
+  selOn = null; markSel(true); updateSizes();
 }
 let usLast = null;   /* 最後に点の大きさ・まとめ・名前を直したときの、画面の中心と幅 */
 function updateSizes(force) {
@@ -1394,8 +1180,7 @@ function updateSizes(force) {
     d.sk = key;
     const r = baseR(d.it) * f;
     { const h = r * 0.6 * (LABS / 0.8); d.mk.setAttribute('x', d.xy[0] - h); d.mk.setAttribute('y', d.xy[1] - h); d.mk.setAttribute('width', 2 * h); d.mk.setAttribute('height', 2 * h); d.mk.dataset.r = h; }
-    d.hit.setAttribute('r', Math.max(r * 1.3, 10 * k + 6 * f));
-    if (d.rk) { d.rk.style.fontSize = Math.max(7, 11 * f) + 'px'; d.rk.style.display = r > 5 ? '' : 'none'; }
+    d.hr = Math.max(r * 1.3, 10 * k + 6 * f);
   }
   if (labBusy()) drawLabelSoon(); else drawLabel();
 }
@@ -1415,7 +1200,7 @@ try { const v = parseInt(localStorage.getItem('jp-clul3'), 10); if (v >= 0 && v 
 function showClu() { const l = document.getElementById('clul'), r = document.getElementById('clus'); if (l) l.textContent = '省略：' + CLU_LV[CLUL][0]; if (r) r.value = String(CLUL); }
 function setClu(v) { CLUL = v; try { localStorage.setItem('jp-clul3', String(v)); } catch (e) {} showClu(); if (typeof refresh === 'function') refresh(); }
 showClu();
-function fewMode() { if (!(mode === 'all' || (flt.q && qterms().length))) return false; let n = 0, t = 0; for (const id in dotEls) { t++; if (!dotEls[id].g.classList.contains('dim')) n++; } return n <= 80 && n < t; }   /* 0件のときも、除外された施設の薄い点は出さない（全部オフで、うっすら四角が残るのを防ぐ） */
+function fewMode() { let n = 0, t = 0; for (const id in dotEls) { t++; if (!dotEls[id].g.classList.contains('dim')) n++; } return n <= 80 && n < t; }   /* 0件のときも、除外された施設の薄い点は出さない（全部オフで、うっすら四角が残るのを防ぐ） */
 function drawClusters() {
   gClu.innerHTML = '';
   clusterOn = CLU_LV[CLUL][1] < 1e9 && vb.h > CL_W * W0.h / W0.w;   /* 「なし」は、引いた表示でも円にまとめない */
@@ -1653,45 +1438,21 @@ function crowdCheck(n) {
 const LABM = new Map();
 try { document.fonts && document.fonts.addEventListener('loadingdone', () => LABM.clear()); } catch (e) {}
 function drawLabel() {
-  const svgW = svgSz().width;   /* 描く前に測る（描いた後に測ると、画面の計算が走り直す） */
   gLab.innerHTML = '';
   const k = vb.h / W0.h;
   const fs = 13 * Math.pow(k, 0.85) * LABS;
-  const showAll = CLU_LV[CLUL][1] >= 1e9 || ((mode === 'castles' || mode === 'zoos' || mode === 'aquas' || mode === 'bots' || mode === 'themes' || mode === 'museums') ? k < 0.3 : (mode === 'stations' || mode === 'all') ? k < 0.2 : k < 0.5);
-  if (clusterOn) { /* まとめ表示中は個別の名前を出さない */ }
+  const showAll = CLU_LV[CLUL][1] >= 1e9 || k < 0.2;
   /* 画面の外に出す余白は、画面の大きさに合わせる（固定だと、拡大したとき画面外の名前が160件の枠を使い切り、画面の中の名前が出ない） */
   const mgx = Math.min(10, vb.w * 0.15), mgy = Math.min(10, vb.h * 0.15);
-  let nLab = 0; const few = fewMode(), placed = [], mz = vb.w <= MINW * 1.04, dq = [], pend = [];
+  let nLab = 0; const few = fewMode(), dq = [];
   for (const id in dotEls) {
     const d = dotEls[id];
     if (d.g.classList.contains('dim')) continue;
-    if (!(showAll || few) || clusterOn) continue;
+    if (!(showAll || few) || clusterOn) continue;   /* まとめ表示中は個別の名前を出さない */
     if (d.xy[0] < vb.x - mgx || d.xy[0] > vb.x + vb.w + mgx || d.xy[1] < vb.y - mgy || d.xy[1] > vb.y + vb.h + mgy) continue;
     if (++nLab > 160) continue;
-    dq.push(d); continue;
-    const t = el('text', { x:d.xy[0] + parseFloat(d.mk.dataset.r) + 3 * k, y:d.xy[1], class:'lab' }, gLab);
-    t.style.fontSize = (isSel ? fs * 1.2 : fs) + 'px';
-    t.style.dominantBaseline = 'central';
-    t.style.strokeWidth = (LAB_STROKE * k * LABS) + 'px';
-    t.textContent = d.it.n;
-    pend.push({ t, id });
+    dq.push(d);
   }
-  /* 大きさの測り（getBBox）は、1つ描くたびに行うと、そのたびに画面の計算が走って遅い。全部描いてからまとめて測る */
-  /* 名前の大きさは文字の大きさに比例するので、名前ごとの比を覚えておき、2回目からは測らない */
-  const bbs = pend.map(o => {
-    const n = o.t.textContent, fsz = parseFloat(o.t.style.fontSize) || 1, x = +o.t.getAttribute('x'), y = +o.t.getAttribute('y');
-    let m = LABM.get(n);
-    if (!m) { const r = o.t.getBBox(); m = [r.width / fsz, r.height / fsz, (r.y - y) / fsz]; LABM.set(n, m); return r; }
-    return { x:x, y:y + m[2] * fsz, width:m[0] * fsz, height:m[1] * fsz };
-  });
-  const scl = (svgW / vb.w) || 1;
-  pend.forEach((o, i) => {
-    const t = o.t, id = o.id, bb = bbs[i];
-    if (few && !showAll) { if (placed.some(c => c.x < bb.x + bb.width && c.x + c.width > bb.x && c.y < bb.y + bb.height && c.y + c.height > bb.y)) { t.remove(); return; } placed.push(bb); }
-    const hr = el('rect', labHit(bb, scl), gLab);
-    gLab.insertBefore(hr, t);
-    hr.addEventListener('click', () => { if (!moved) select(id, false); });
-  });
   const leader = dodgeLabels(dq, fs, k);
   crowdCheck(leader ? 0 : nLab);   /* 引き出し線で並べたときは、名前が多いという注意書きは出さない */
   const sd = dotEls[selId];
@@ -1713,19 +1474,22 @@ function drawLabel() {
     }
   }
 }
-function markSel() {
-  for (const id in dotEls) dotEls[id].g.classList.toggle('on', id === selId);
+let selOn = null;   /* いま印（on）を付けている点 */
+function markSel(noLabel) {
+  if (selOn && selOn !== dotEls[selId]) selOn.g.classList.remove('on');
+  selOn = dotEls[selId] || null;
+  if (selOn) selOn.g.classList.add('on');
   gSel.innerHTML = '';
   const it = selId && findItem(selId);
   if (it && PREF_KEY[it.pf]) geoPath(PREF_KEY[it.pf], { class:'prefsel' }, gSel);
   else if (!it && flt.pfk && GEO_PREFS[flt.pfk]) geoPath(flt.pfk, { class:'prefsel' }, gSel);
   if (dotEls[selId]) dotEls[selId].g.parentNode.appendChild(dotEls[selId].g);
-  drawLabel();
+  if (!noLabel) drawLabel();
 }
 
 /* ===== 詳細 ===== */
 function prefFull(p) { return PREF_KEY[p] || p; }
-function mReg(it) { return it.rj === '登録・指定の一覧に掲載なし' ? '一覧に掲載なし' : it.rj === '未確認' ? '登録は未確認' : (it.rj || ''); }
+function mReg(it) { return it.rj === '登録・指定の一覧に掲載なし' ? '一覧に掲載なし' : (it.rj || ''); }
 function fmtZooHa(a) { const h = a / 10000; return (h >= 10 ? Math.round(h) : h.toFixed(1)) + ' ha'; }
 function fmtKm(a) { return (a >= 10 ? a.toFixed(1) : a.toFixed(2)) + ' km²'; }
 /* 日本百名山にも入っている場所は、詳細に「日本百名山」の印と、本の番号・山名・標高を足す */
@@ -1737,18 +1501,10 @@ function decorateTwin(it) {
   const dl = box.querySelector('dl.facts');
   if (dl) dl.insertAdjacentHTML('afterbegin', '<div class="row"><dt>日本百名山</dt><dd>第' + h.no + '座「' + esc(h.n) + '」・標高 ' + h.el.toLocaleString() + ' m（' + esc(h.rg) + '）</dd></div>');
 }
-function renderDetail() {
-  /* 横断検索中は、選んだものの種類の詳細を出す（その間だけ mode を種類に合わせる） */
-  const it0 = selId && findItem(selId), m0 = mode;
-  if (m0 === 'all' && it0 && KIND.get(it0.id)) { mode = KIND.get(it0.id); try { renderDetail0(); } finally { mode = m0; } } else renderDetail0();
-  if (it0) decorateTwin(it0);
-  decorateNote();
-  drawFarBox();
-}
 /* ===== 注釈の編集（アーティファクトの共有データベース notes/）=====
    読めるのは、ログインして開いた人。書けるのは、アーティファクトのオーナーだけ（公開時の rules で固定）。
    元の注釈（データ側の nt）は消さずに、編集した文を上に重ねて見せる。ドキュメント名は、日本語が使えないので id のハッシュ */
-var NOTES = new Map(), noteDb = null, noteOwner = false, noteEditing = null;
+var NOTES = new Map(), NOTE_DOC = new Map(), noteDb = null, noteOwner = false, noteEditing = null;
 function noteKey(id) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
   for (let i = 0; i < id.length; i++) { const c = id.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
@@ -1764,7 +1520,7 @@ function decorateNote() {
   let row = [...facts.querySelectorAll('.row')].find(r => { const t = r.querySelector('dt'); return t && t.textContent === '注釈'; });
   if (!row) { if (mine == null && !noteOwner) return; row = document.createElement('div'); row.className = 'row'; row.innerHTML = '<dt>注釈</dt><dd></dd>'; facts.appendChild(row); }
   const dd = row.querySelector('dd'); if (!dd) return;
-  const key = noteKey(it.id);
+  const key = NOTE_DOC.get(it.id) || noteKey(it.id);
   if (noteEditing === it.id) {
     dd.innerHTML = '<textarea class="notea" rows="4" aria-label="注釈"></textarea><div class="noteb"><button type="button" class="btn" data-na="save">保存</button><button type="button" class="btn" data-na="cancel">取消</button>' + (mine != null ? '<button type="button" class="btn" data-na="reset">元に戻す</button>' : '') + '</div><div class="notem" role="status"></div>';
     const ta = dd.querySelector('textarea'); ta.value = mine != null ? mine : orig; ta.focus();
@@ -1792,7 +1548,8 @@ function decorateNote() {
     const user = await claude.use('user');
     noteOwner = !!(user && user.isOwner && user.isOwner()); noteDb = db;
     db.collection('notes').onSnapshot(snap => {
-      NOTES.clear(); snap.docs.forEach(d => { const x = d.data(); if (x && x.id && typeof x.t === 'string') NOTES.set(x.id, x.t); });
+      NOTES.clear(); NOTE_DOC.clear();
+      snap.docs.forEach(d => { const x = d.data(); if (x && x.id && typeof x.t === 'string') { const id = ID_ALIAS[x.id] || x.id; NOTES.set(id, x.t); NOTE_DOC.set(id, noteKey(x.id)); } });
       if (!noteEditing) renderDetail();
     }, () => {});
   } catch (e) { /* データベースが使えない表示（ログインしていないなど）では、元の注釈だけを出す */ }
@@ -1838,229 +1595,86 @@ function drawFarArrow() {
   a.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
   a.hidden = false;
 }
-function renderDetail0() {
+/* 詳細の部品。fRow の html は、呼ぶ側でエスケープしておく */
+const wikiUrl = wp => /^ja:/.test(wp || '') ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(wp.slice(3)) : /^Q\d+$/.test(wp || '') ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + wp : '';
+const fRow = (dt, html, num) => '<div class="row"><dt>' + dt + '</dt><dd' + (num ? ' class="num"' : '') + '>' + html + '</dd></div>';
+const fTxt = (dt, v, num) => v ? fRow(dt, esc(v), num) : '';
+const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
+const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
+const fPos = (it, what, after) => typeof it.la === 'number' ? fRow('位置（' + esc(what || '目安') + '）', fLL(it.la, it.lo) + (after || ''), 1) : fRow('位置', '地図には表示していません（位置情報なし）');
+const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '') + '">' + esc(t) + '</span>';
+/* 見出し：種類などの印と地方、名前、名前の下の一行 */
+const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' +
+  '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
+/* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
+const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
+function detailHTML(it, k) {
+  const pfs = prefFull(it.pf), nt = fTxt('注釈', it.nt), wiki = fLink('Wikipedia', wikiUrl(it.wp), '記事を開く');
+  const web = /^https?:\/\//.test(it.web || '') ? fLink('公式サイト', it.web, '開く') : '';
+  const rp = it.rp ? it.rp + '・目安' : '';
+  const facts = (...rows) => '<dl class="facts">' + rows.join('') + '</dl>';
+  if (FAC[k]) return dHead(badge(FAC[k]) + (it.x ? badge('閉園済み（' + it.x + '年）', 1) : '') + (it.tg ? badge(FAC[k] + '＋' + it.tg.split('、').join('＋'), 1) : ''), it, pfs) +
+    facts(fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+  if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, fPos(it, '県庁舎・目安'));
+  if (k === 'scenic') return dHead(badge('日本百景（' + it.ty + '）') + badge(it.cl, 1), it, it.ps) +
+    facts(fTxt('選定', '昭和2年（1927年）・' + it.ty), fTxt('景観の区分', it.cl), fTxt('所在', it.ps), nt, wiki, fPos(it, rp));
+  if (k === 'nature') return dHead(badge('自然') + badge(it.ty, 1), it, it.ps) +
+    facts(fTxt('国立公園', it.pk), fTxt('選定', it.sl), fTxt('種類', it.ty), nt, wiki, fPos(it, rp));
+  if (k === 'hyaku') return dHead(badge('日本百名山') + badge('第' + it.no + '座', 1), it, it.ps + (it.al ? '（記事名：' + it.al + '）' : '')) +
+    facts(fRow('標高', it.el.toLocaleString() + ' m', 1), fTxt('山系', it.rg), fTxt('国立公園', it.pk), wiki, fPos(it, rp));
+  if (k === 'shin') return dHead(badge('新幹線の駅'), it, pfs) + facts(fTxt('路線', it.ln.join('・')), fTxt('所在', pfs), nt, fPos(it, rp));
+  if (k === 'ik') {
+    const ll = typeof it.la === 'number' ? [it.la, it.lo] : it.ll;
+    return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
+      facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
+  }
+  if (k === 'koei') return dHead(badge(it.sh) + badge(it.kb, 1), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, fPos(it));
+  if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
+  if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
+    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), fPos(it, rp));
+  if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
+    facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
+    '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
+  if (k === 'museums') return dHead(badge('博物・美術館') + badge(it.kb, 1) + badge(mReg(it), 1), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj + '（文化庁の一覧・2026年10月8日版）'), fTxt('備考', it.rm),
+      it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+  if (k === 'airports') {
+    const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
+    const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
+    return dHead(badge('空港') + badge(AIR_FL_SHORT[it.fl], 1), it, pfs + '（' + (AIR_ST[it.st] || '') + '）') +
+      facts(fRow('面積（概算）', '約 ' + fmtKm(it.ar), 1), fTxt('区分', AIR_TYPE[it.t]), fTxt('定期便', AIR_FL[it.fl]), fTxt('滑走路', rws || '不明', 1),
+        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), fPos(it, '標点'));
+  }
+  if (k === 'stations') {
+    const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から' }[it.s];
+    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(fPos(it, '', src ? '（' + src + '）' : ''));
+  }
+  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fPos(it), fTxt('備考', it.rm));   /* 城 */
+}
+function renderDetail() {
   const box = $('detail');
   const it = selId && findItem(selId);
   renderDash();
   box.hidden = !it;
-  if (!it) { box.innerHTML = ''; return; }
-  if (mode === 'zoos') {
-    const rank = it.ar ? currentItems().findIndex(x => x.id === it.id) : -1;
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : /^Q\d+$/.test(it.wp) ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + it.wp : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + '動物園' + '</span>' + (it.x ? '<span class="badge outline">閉園済み（' + it.x + '年）</span>' : '') + (it.tg ? '<span class="badge outline">' + esc('動物園＋' + it.tg.split('、').join('＋')) + '</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts"><div class="row"><dt>面積（概算）</dt><dd class="num">' + (it.ar ? '約 ' + fmtZooHa(it.ar) : '不明') + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (it.sd ? '<div class="row"><dt>開設</dt><dd class="num">' + esc(it.sd) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      (it.web ? '<div class="row"><dt>公式サイト</dt><dd><a href="' + esc(it.web) + '" target="_blank" rel="noopener">開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'capitals') {
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">県庁所在地</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts"><div class="row"><dt>県庁</dt><dd>' + esc(it.ch) + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（県庁舎・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'scenic') {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">日本百景（' + esc(it.ty) + '）</span><span class="badge outline">' + esc(it.cl) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(it.ps) + '</p>' +
-      '<dl class="facts">' +
-      '<div class="row"><dt>選定</dt><dd>昭和2年（1927年）・' + esc(it.ty) + '</dd></div>' +
-      '<div class="row"><dt>景観の区分</dt><dd>' + esc(it.cl) + '</dd></div>' +
-      '<div class="row"><dt>所在</dt><dd>' + esc(it.ps) + '</dd></div>' +
-      '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'hyaku') {
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">日本百名山</span><span class="badge outline">第' + it.no + '座</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(it.ps) + (it.al ? '（記事名：' + esc(it.al) + '）' : '') + '</p>' +
-      '<dl class="facts">' +
-      '<div class="row"><dt>標高</dt><dd class="num">' + it.el.toLocaleString() + ' m</dd></div>' +
-      '<div class="row"><dt>山系</dt><dd>' + esc(it.rg) + '</dd></div>' +
-      (it.pk ? '<div class="row"><dt>国立公園</dt><dd>' + esc(it.pk) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'nature') {
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">自然</span><span class="badge outline">' + esc(it.ty) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(it.ps) + '</p>' +
-      '<dl class="facts">' +
-      (it.pk ? '<div class="row"><dt>国立公園</dt><dd>' + esc(it.pk) + '</dd></div>' : '') +
-      (it.sl ? '<div class="row"><dt>選定</dt><dd>' + esc(it.sl) + '</dd></div>' : '') +
-      '<div class="row"><dt>種類</dt><dd>' + esc(it.ty) + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'shin') {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">新幹線の駅</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts">' +
-      '<div class="row"><dt>路線</dt><dd>' + esc(it.ln.join('・')) + '</dd></div>' +
-      '<div class="row"><dt>所在</dt><dd>' + esc(prefFull(it.pf)) + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (typeof it.la === 'number' ? '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div>' : '<div class="row"><dt>位置</dt><dd>未入力（地図には出ません）</dd></div>') + '</dl>';
-  } else if (mode === 'ik') {
-    const ll = typeof it.la === 'number' ? [it.la, it.lo] : it.ll;
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">レアスポット</span><span class="badge outline">' + esc(it.ky) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(it.ps) + '</p>' +
-      '<dl class="facts">' +
-      '<div class="row"><dt>状況</dt><dd>' + esc(it.rs) + '</dd></div>' +
-      '<div class="row"><dt>所在</dt><dd>' + esc(it.ps) + '</dd></div>' +
-      (ll ? '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + ll[0].toFixed(3) + '、東経 ' + ll[1].toFixed(3) + (typeof it.la === 'number' ? '' : '（地図の範囲外）') + '</dd></div>' : '') + '</dl>';
-  } else if (KOEI_OF[mode]) {
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + esc(it.sh) + '</span><span class="badge outline">' + esc(it.kb) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + '</p>' +
-      '<dl class="facts">' +
-      (it.x ? '<div class="row"><dt>状況</dt><dd>' + esc(it.x + '年に' + it.xw) + '</dd></div>' : '') +
-      (it.sp ? '<div class="row"><dt>主催</dt><dd>' + esc(it.sp) + '</dd></div>' : '') +
-      (it.rm ? '<div class="row"><dt>備考</dt><dd>' + esc(it.rm) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'biwa') {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">琵琶湖</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">滋賀県</p>' +
-      '<dl class="facts">' +
-      '<div class="row"><dt>概要</dt><dd>日本最大の湖（面積 約669 km²）</dd></div>' +
-      '<div class="row"><dt>所在</dt><dd>滋賀県</dd></div>' +
-      '<div class="row"><dt>位置（湖の中心）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'whs') {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">世界遺産（' + esc(it.ty) + '）</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(it.ps) + '</p>' +
-      '<dl class="facts">' +
-      (it.of ? '<div class="row"><dt>正式名称</dt><dd>' + esc(it.of) + '</dd></div>' : '') +
-      '<div class="row"><dt>登録</dt><dd class="num">' + esc(it.yr) + '年（' + esc(it.ty) + '遺産）</dd></div>' +
-      '<div class="row"><dt>所在</dt><dd>' + esc(it.ps) + '</dd></div>' +
-      '<div class="row"><dt>位置（' + esc(it.rp) + '・目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'my') {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">マイスポット</span>' + (it.k ? '<span class="badge outline">' + esc(it.k) + '</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf] || '') + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts">' +
-      (it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '') +
-      '<div class="row"><dt>位置</dt><dd class="num">北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4) + '</dd></div></dl>' +
-      '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
+  if (!it) { box.innerHTML = ''; drawFarBox(); return; }
+  const k = curKind(it);
+  box.innerHTML = detailHTML(it, k);
+  if (k === 'my') {
     $('my-edit').onclick = () => openMyForm(it);
     let armed = false;
     $('my-del').onclick = () => { const b = $('my-del'); if (!armed) { armed = true; b.textContent = '本当に削除（記録も消えます）'; setTimeout(() => { armed = false; if ($('my-del')) $('my-del').textContent = '削除'; }, 4000); } else delMySpot(it.id); };
-  } else if (mode === 'aquas') {
-    const rank = it.ar ? currentItems().findIndex(x => x.id === it.id) : -1;
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : /^Q\d+$/.test(it.wp) ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + it.wp : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + '水族館' + '</span>' + (it.x ? '<span class="badge outline">閉園済み（' + it.x + '年）</span>' : '') + (it.tg ? '<span class="badge outline">' + esc('水族館＋' + it.tg.split('、').join('＋')) + '</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts"><div class="row"><dt>面積（概算）</dt><dd class="num">' + (it.ar ? '約 ' + fmtZooHa(it.ar) : '不明') + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (it.sd ? '<div class="row"><dt>開設</dt><dd class="num">' + esc(it.sd) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      (it.web ? '<div class="row"><dt>公式サイト</dt><dd><a href="' + esc(it.web) + '" target="_blank" rel="noopener">開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'bots') {
-    const rank = it.ar ? currentItems().findIndex(x => x.id === it.id) : -1;
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : /^Q\d+$/.test(it.wp) ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + it.wp : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + '植物園' + '</span>' + (it.x ? '<span class="badge outline">閉園済み（' + it.x + '年）</span>' : '') + (it.tg ? '<span class="badge outline">' + esc('植物園＋' + it.tg.split('、').join('＋')) + '</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts"><div class="row"><dt>面積（概算）</dt><dd class="num">' + (it.ar ? '約 ' + fmtZooHa(it.ar) : '不明') + '</dd></div>' +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (it.sd ? '<div class="row"><dt>開設</dt><dd class="num">' + esc(it.sd) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      (it.web ? '<div class="row"><dt>公式サイト</dt><dd><a href="' + esc(it.web) + '" target="_blank" rel="noopener">開く</a></dd></div>' : '') +
-      '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'themes') {
-    const rank = it.ar ? currentItems().findIndex(x => x.id === it.id) : -1;
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : /^Q\d+$/.test(it.wp) ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + it.wp : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + 'テーマパーク' + '</span>' + (it.x ? '<span class="badge outline">閉園済み（' + it.x + '年）</span>' : '') + (it.tg ? '<span class="badge outline">' + esc('テーマパーク＋' + it.tg.split('、').join('＋')) + '</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts"><div class="row"><dt>面積（概算）</dt><dd class="num">' + (it.ar ? '約 ' + fmtZooHa(it.ar) : '不明') + '</dd></div>' +
-      (it.o ? '<div class="row"><dt>旧称</dt><dd>' + esc(it.o) + '</dd></div>' : '') +
-      (it.nt ? '<div class="row"><dt>注釈</dt><dd>' + esc(it.nt) + '</dd></div>' : '') +
-      (it.sd ? '<div class="row"><dt>開設</dt><dd class="num">' + esc(it.sd) + '</dd></div>' : '') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      (it.web ? '<div class="row"><dt>公式サイト</dt><dd><a href="' + esc(it.web) + '" target="_blank" rel="noopener">開く</a></dd></div>' : '') +
-      (typeof it.la === 'number' ? '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div>' : '<div class="row"><dt>位置</dt><dd>未入力（地図には出ません）</dd></div>') + '</dl>';
-  } else if (mode === 'museums') {
-    const wl = /^ja:/.test(it.wp) ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(it.wp.slice(3)) : /^Q\d+$/.test(it.wp) ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + it.wp : '';
-    const fr = (k, v, cls) => v ? '<div class="row"><dt>' + k + '</dt><dd' + (cls ? ' class="' + cls + '"' : '') + '>' + esc(v) + '</dd></div>' : '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + '博物・美術館' + '</span><span class="badge outline">' + esc(it.kb) + '</span><span class="badge outline">' + esc(mReg(it)) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + '</p>' +
-      '<dl class="facts">' + fr('旧称', it.o) + fr('通称', it.al) + fr('含む施設', it.inc) + fr('設置', it.ow) + fr('種別', it.st) + fr('登録状況', it.rj === '未確認' ? '未確認（文化庁の一覧とは照らし合わせていません。設置者はWikipediaの記述で確認）' : it.rj + '（文化庁の一覧・2026年10月8日版）') + fr('備考', it.rm) +
-      (it.ar ? '<div class="row"><dt>面積（概算）</dt><dd class="num">約 ' + fmtZooHa(it.ar) + '</dd></div>' : '') +
-      fr('開設', it.sd, 'num') +
-      (wl ? '<div class="row"><dt>Wikipedia</dt><dd><a href="' + esc(wl) + '" target="_blank" rel="noopener">記事を開く</a></dd></div>' : '') +
-      (/^https?:\/\//.test(it.web || '') ? '<div class="row"><dt>公式サイト</dt><dd><a href="' + esc(it.web) + '" target="_blank" rel="noopener">開く</a></dd></div>' : '') +
-      (typeof it.la === 'number' ? '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div>' : '<div class="row"><dt>位置</dt><dd>地図には表示していません（位置情報なし）</dd></div>') + '</dl>';
-  } else if (mode === 'airports') {
-    const rank = currentItems().findIndex(x => x.id === it.id);
-    const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
-    const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
-    const hrs = (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">' + '空港' + '</span><span class="badge outline">' + esc(AIR_FL_SHORT[it.fl]) + '</span><span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '（' + esc(AIR_ST[it.st] || '') + '）</p>' +
-      '<dl class="facts"><div class="row"><dt>面積（概算）</dt><dd class="num">約 ' + fmtKm(it.ar) + '</dd></div>' +
-      '<div class="row"><dt>区分</dt><dd>' + esc(AIR_TYPE[it.t] || '') + '</dd></div>' +
-      '<div class="row"><dt>定期便</dt><dd>' + esc(AIR_FL[it.fl] || '') + '</dd></div>' +
-      '<div class="row"><dt>滑走路</dt><dd class="num">' + esc(rws || '不明') + '</dd></div>' +
-      '<div class="row"><dt>運用時間</dt><dd class="num">' + esc(hrs) + '</dd></div>' +
-      '<div class="row"><dt>位置（標点）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div></dl>';
-  } else if (mode === 'stations') {
-    const posSrc = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から' }[it.s] || '';
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">道の駅</span>' + (it.x ? '<span class="badge outline">閉鎖済み（' + it.x + '年）</span>' : '') + '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span></div>' +
-      '<h2 class="place">' + esc(dn(it)) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '</p>' +
-      '<dl class="facts">' + (typeof it.la === 'number'
-        ? '<div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + (posSrc ? '（' + posSrc + '）' : '') + '</dd></div>'
-        : '<div class="row"><dt>位置</dt><dd>地図には表示していません（位置情報なし）</dd></div>') + '</dl>';
-  } else {
-    box.innerHTML =
-      '<div class="kicker"><span class="badge">日本100名城 No.' + it.no + '</span><span class="badge outline">' + TYPE_LABEL[it.t] + '</span></div>' +
-      '<h2 class="place">' + esc(it.n) + '</h2>' +
-      '<p class="sub">' + esc(prefFull(it.pf)) + '（' + esc(it.rg) + '）</p>' +
-      '<dl class="facts"><div class="row"><dt>位置（目安）</dt><dd class="num">北緯 ' + it.la.toFixed(3) + '、東経 ' + it.lo.toFixed(3) + '</dd></div>' + (it.rm ? '<div class="row"><dt>備考</dt><dd>' + esc(it.rm) + '</dd></div>' : '') + '</dl>';
   }
-  const nbS = nearItems(it, 5, true), nbO = nearItems(it, 5, false);
-  const nbRow = o => '<button type="button" class="nbr" data-id="' + esc(o.it.id) + '" data-m="' + o.m + '"><span>' + (o.m !== mode ? '<i class="nbk">' + MODE_LABEL[o.m] + '</i>' : '') + esc(o.m === 'stations' ? dn(o.it) : o.it.n) + '</span><span class="nbd">' + (o.d < 10 ? o.d.toFixed(1) : Math.round(o.d)) + ' km</span></button>';
+  const nbS = nearItems(it, 5, true, k), nbO = nearItems(it, 5, false, k);
+  const nbRow = o => '<button type="button" class="nbr" data-id="' + esc(o.it.id) + '"><span>' + (o.m !== k ? '<i class="nbk">' + MODE_LABEL[o.m] + '</i>' : '') + esc(o.m === 'stations' ? dn(o.it) : o.it.n) + '</span><span class="nbd">' + (o.d < 10 ? o.d.toFixed(1) : Math.round(o.d)) + ' km</span></button>';
   if (nbS.length || nbO.length) {
     box.insertAdjacentHTML('beforeend', '<div class="nbrs">' +
-      (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[mode] + '）</div>' + nbS.map(nbRow).join('') : '') +
+      (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join('') : '') +
       (nbO.length ? '<div class="nbh" style="margin-top:12px">近くのほかの種類</div>' + nbO.map(nbRow).join('') : '') + '</div>');
     box.querySelectorAll('.nbr').forEach(b => b.onclick = () => {
-      const id = b.dataset.id, m = b.dataset.m;
-      if (m !== mode && mode !== 'all') setMode(m, false, true);
-      const d = dotEls[id];
+      const d = dotEls[b.dataset.id];
       if (d) flyToDot(d);
-      select(id, false);
+      select(b.dataset.id, false);
     });
   }
   const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
@@ -2073,7 +1687,10 @@ function renderDetail0() {
     ph.onclick = go; ph.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
   }
   box.querySelectorAll('.photo img').forEach(im => im.addEventListener('error', () => { const f = im.closest('figure'); if (f) f.remove(); }));
-  box.style.setProperty('--kc', KCOL[KIND.get(it.id)] || KCOL[mode] || 'var(--accent)');
+  box.style.setProperty('--kc', KCOL[k]);
+  decorateTwin(it);
+  decorateNote();
+  drawFarBox();
 }
 /* 写真（data/photos.js の PHOTOS。作者・ライセンス・出典つき）。写真のファイルは photos/ に置く */
 function photoHTML(it) {
@@ -2082,22 +1699,21 @@ function photoHTML(it) {
   const lk = (u, t) => /^https:\/\//.test(u || '') ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
   return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '') + '</figcaption></figure>';
 }
-const MODE_LABEL = { themes:'テーマパーク', castles:'城', zoos:'動物園', aquas:'水族館', bots:'植物園', museums:'博物・美術館', airports:'空港', stations:'道の駅', capitals:'県庁所在地', whs:'世界遺産', scenic:'日本百景', nature:'自然', hyaku:'日本百名山', biwa:'琵琶湖', ik:'レアスポット', shin:'新幹線の駅', koei:'公営競技場', my:'マイスポット' };
-const KOEI_OF = { koei:KOEI };
 const KIND = new Map(), ALLX = [];
+let dataRev = 0;   /* データが変わった回数（initAll のたびに増やす） */
 function initAll() {
-  dotsStale = true;
+  dotsStale = true; dataRev++;
   if (ALLX.length) return;
-  ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'].forEach(m => modeItems(m).forEach(o => { if (TWIN[o.id]) return; KIND.set(o.id, m); ALLX.push(o); }));
+  KORDER.forEach(m => modeItems(m).forEach(o => { if (TWIN[o.id]) return; KIND.set(o.id, m); ALLX.push(o); }));
 }
-function modeItems(m) { return KOEI_OF[m] ? KOEI_OF[m] : m === 'museums' ? MUSEUMS : m === 'themes' ? TPARKS : m === 'bots' ? BOTS : m === 'aquas' ? AQUAS : m === 'zoos' ? ZOOS : m === 'airports' ? AIRPORTS : m === 'stations' ? STATIONS : m === 'capitals' ? CAPS : m === 'whs' ? WHS : m === 'scenic' ? SCN : m === 'nature' ? NATURE : m === 'hyaku' ? HYAKU : m === 'biwa' ? BIWA : m === 'shin' ? SHIN : m === 'ik' ? IKENAI : m === 'my' ? MYS : CASTLES; }
-function nearItems(it, n, same) {
+/* 近くの施設。TWIN の副（ほかの種類の同じ場所）は、主のほうで数える */
+function nearItems(it, n, same, k) {
   if (typeof it.la !== 'number') return [];
   const R = Math.PI / 180, out = [];
-  Object.keys(MODE_LABEL).forEach(m => {
-    if ((m === mode) !== same) return;
+  KORDER.forEach(m => {
+    if ((m === k) !== same) return;
     modeItems(m).forEach(o => {
-      if (o.id === it.id || typeof o.la !== 'number') return;
+      if (o.id === it.id || TWIN[o.id] || typeof o.la !== 'number') return;
       const dx = (o.lo - it.lo) * Math.cos(it.la * R), dy = o.la - it.la;
       const d = Math.sqrt(dx * dx + dy * dy) * 111.2;
       if (d < 0.3 && o.n === it.n) return;
@@ -2128,11 +1744,29 @@ function otherKindHits() {
   ALLX.forEach(x => { if (flt.region !== 'all' && (x.rg || REGION_OF[x.pf]) !== flt.region) return; if (!qm(x) || !visOK(x)) return; if (flt.pfk && PREF_KEY[x.pf] !== flt.pfk) return; kindsOf(x).forEach(k => { if (!flt.kinds.has(k)) hit[k] = (hit[k] || 0) + 1; }); });
   return hit;
 }
+/* 一覧の行の2行目（種類を1つだけ選んでいるとき）。名前の後ろの（○年廃止）などは、行を作る側で付ける */
+const noPos = it => typeof it.la === 'number' ? '' : ' / 地図には未表示';
+const facSub = k => it => esc(prefFull(it.pf)) + (it.tg ? ' / ' + FAC[k] + '＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + noPos(it);
+const ROW_SUB = {
+  zoos:facSub('zoos'), aquas:facSub('aquas'), bots:facSub('bots'), themes:facSub('themes'),
+  my: it => esc(prefFull(it.pf)) + (it.k ? ' / ' + esc(it.k) : ''),
+  scenic: it => esc(it.ps) + ' / ' + esc(it.ty) + '・' + esc(it.cl),
+  nature: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.pk || it.sl ? '・' + esc(it.pk || it.sl) : ''),
+  shin: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ln.map(l => l.replace('新幹線', '')).join('・')) + noPos(it),
+  koei: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + '・' + esc(it.kb),
+  ik: it => esc(it.ps) + ' / ' + esc(it.ky) + noPos(it),
+  biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
+  whs: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録',
+  capitals: it => esc(prefFull(it.pf)),
+  museums: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.kb) + ' / ' + esc(mReg(it)) + noPos(it),
+  airports: it => esc(prefFull(it.pf)) + ' / ' + esc(AIR_FL_SHORT[it.fl]) + (it.st !== 1 ? ' / ' + esc(AIR_ST[it.st] || '') : ''),
+  stations: it => esc(prefFull(it.pf)) + (it.x ? '' : noPos(it)),
+};
 function renderList(keepCount) {
   const items = currentItems(), ul = $('list');
   ul.innerHTML = ''; listEntries = []; listPos = 0;
   if (!items.length) {
-    const oh = (mode === 'all' && flt.kinds && qterms().length && kindAskNo !== flt.q) ? otherKindHits() : null, ks = oh ? KORDER.filter(k => oh[k]) : [];
+    const oh = (flt.kinds && qterms().length && kindAskNo !== flt.q) ? otherKindHits() : null, ks = oh ? KORDER.filter(k => oh[k]) : [];
     if (ks.length) {   /* 選んでいない種類にだけ該当があるときは、その種類も出すかを聞く */
       const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
       li.innerHTML = '<div>「' + esc(flt.q) + '」は、選んでいない種類（' + ks.map(k => esc(MODE_LABEL[k]) + ' ' + oh[k] + '件').join('・') + '）にあります。表示しますか？</div><div class="noteb"><button type="button" class="btn" data-ka="yes">はい</button><button type="button" class="btn" data-ka="no">いいえ</button></div>';
@@ -2140,83 +1774,30 @@ function renderList(keepCount) {
       li.querySelector('[data-ka=no]').onclick = () => { kindAskNo = flt.q; renderList(); };
       ul.appendChild(li); return;
     }
-    ul.innerHTML = '<li style="padding:14px 16px;color:var(--muted)">' + (mode === 'all' && flt.kinds && !flt.kinds.size && !qterms().length ? '下の「種類」を選ぶと、ここに一覧が出ます。' : '条件に合うものがありません。') + '</li>'; return;
+    ul.innerHTML = '<li style="padding:14px 16px;color:var(--muted)">' + (flt.kinds && !flt.kinds.size && !qterms().length ? '下の「種類」を選ぶと、ここに一覧が出ます。' : '条件に合うものがありません。') + '</li>'; return;
   }
-  const max = Math.max.apply(null, items.map(x => x.ha || 0)), maxAr = Math.max.apply(null, items.map(x => x.ar || 0));
-  let lastPf = null, lastGrp = null; const entries = [];
+  let lastGrp = null; const entries = [];
   const nVisAll = items.filter(x => isVisited(x.id)).length;
-  const rk1 = mode === 'all' && flt.kinds && flt.kinds.size === 1 ? flt.kinds.values().next().value : null;
-  const rowLi = (it, i) => {
+  const rk1 = flt.kinds && flt.kinds.size === 1 ? flt.kinds.values().next().value : null;   /* 種類を1つだけ選んでいるときは、その種類の行の形で出す */
+  const rowLi = it => {
     const li = document.createElement('li');
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'row-btn'; b.dataset.id = it.id;
     if (it.id === selId) b.setAttribute('aria-current', 'true');
-    const rk = mode !== 'all' ? mode : (rk1 && KIND.get(it.id) === rk1 ? rk1 : 'all');   /* 横断検索で種類を1つだけ選んでいるときは、その種類の行の形で出す */
-    const hmr = rk === 'hyaku' ? it : rk === 'all' && rk1 === 'hyaku' ? HM_OF[it.id] : null;
-    if (hmr) {
-      b.innerHTML = '<span class="rno">' + hmr.no + '</span><span class="rname">' + visMark(it.id) + esc(hmr.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg) + '</span>';
-    } else if (rk === 'all') {
-      b.innerHTML = '<span class="rno"></span><span class="rname' + (it.x ? ' gone' : '') + '">' + visMark(it.id) + (KIND.get(it.id) === 'stations' ? esc(dn(it)) : esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + (it.xw || '閉園')) + '）</span>' : '')) + '</span><span class="rval"></span>' +
-        '<span class="rsub"><i class="nbk">' + MODE_LABEL[KIND.get(it.id)] + '</i> ' + esc(prefFull(it.pf)) + '</span>';
-    } else if (rk === 'zoos') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.tg ? ' / 動物園＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + '</span>';
-    } else if (rk === 'my') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.k ? ' / ' + esc(it.k) : '') + '</span>';
-    } else if (rk === 'scenic') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(it.ps) + ' / ' + esc(it.ty) + '・' + esc(it.cl) + '</span>';
-    } else if (rk === 'nature') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.pk || it.sl ? '・' + esc(it.pk || it.sl) : '') + '</span>';
-    } else if (rk === 'shin') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + ' / ' + esc(it.ln.map(l => l.replace('新幹線', '')).join('・')) + (typeof it.la === 'number' ? '' : ' / 地図には未表示') + '</span>';
-    } else if (KOEI_OF[rk]) {
-      b.innerHTML = '<span class="rno"></span><span class="rname' + (it.x ? ' gone' : '') + '">' + visMark(it.id) + esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + it.xw) + '）</span>' : '') + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + '・' + esc(it.kb) + '</span>';
-    } else if (rk === 'ik') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(it.ps) + ' / ' + esc(it.ky) + (typeof it.la === 'number' ? '' : ' / 地図には未表示') + '</span>';
-    } else if (rk === 'biwa') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + ' / 日本最大の湖</span>';
-    } else if (rk === 'whs') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録</span>';
-    } else if (rk === 'capitals') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + '</span>';
-    } else if (rk === 'aquas') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.tg ? ' / 水族館＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + '</span>';
-    } else if (rk === 'bots') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.tg ? ' / 植物園＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + '</span>';
-    } else if (rk === 'themes') {
-      b.innerHTML = '<span class="rno"></span><span class="rname' + (it.x ? ' gone' : '') + '">' + visMark(it.id) + esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年閉園') + '）</span>' : '') + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.tg ? ' / テーマパーク＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + (typeof it.la === 'number' ? '' : ' / 地図には未表示') + '</span>';
-    } else if (rk === 'museums') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.kb) + ' / ' + esc(mReg(it)) + (typeof it.la === 'number' ? '' : ' / 地図には未表示') + '</span>';
-    } else if (rk === 'airports') {
-      b.innerHTML = '<span class="rno"></span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + ' / ' + esc(AIR_FL_SHORT[it.fl]) + (it.st !== 1 ? ' / ' + esc(AIR_ST[it.st] || '') : '') + '</span>';
-    } else if (rk === 'stations') {
-      b.innerHTML = '<span class="rno"></span><span class="rname' + (it.x ? ' gone' : '') + '">' + visMark(it.id) + esc(dn(it)) + '</span><span class="rval"></span>' +
-        '<span class="rsub">' + esc(prefFull(it.pf)) + (typeof it.la === 'number' || it.x ? '' : ' / 地図には未表示') + '</span>';
-    } else {
-      b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
-    }
+    const k = KIND.get(it.id), hmr = rk1 === 'hyaku' ? HM_OF[it.id] : null;
+    const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + sub + '</span>';
+    const name = k === 'stations' ? esc(dn(it)) : esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + (it.xw || '閉園')) + '）</span>' : '');
+    if (hmr) b.innerHTML = row(esc(hmr.n), esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg), hmr.no);
+    else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
+    else if (k === rk1 && ROW_SUB[k]) b.innerHTML = row(name, ROW_SUB[k](it), '', it.x);
+    else b.innerHTML = row(name, '<i class="nbk">' + MODE_LABEL[k] + '</i> ' + esc(prefFull(it.pf)), '', it.x);
     b.onclick = () => select(it.id, true);
     li.appendChild(b);
     if (listNear) { const v = b.querySelector('.rval'); if (v) v.insertAdjacentHTML('afterbegin', '<b class="rdist">' + fmtDist(distKm(it)) + '</b> '); }
     return li;
   };
-  items.forEach((it, i) => {
-    if (!listNear && !flt.q && mode !== 'stations' && mode !== 'castles' && nVisAll > 0) {
+  items.forEach(it => {
+    if (!listNear && !flt.q && nVisAll > 0) {
       const g2 = isVisited(it.id) ? '行った' : '記録なし';
       if (g2 !== lastGrp) {
         lastGrp = g2;
@@ -2224,12 +1805,7 @@ function renderList(keepCount) {
         entries.push(gh);
       }
     }
-    if (!listNear && mode === 'stations' && !flt.q && it.pf !== lastPf) {
-      lastPf = it.pf;
-      const gh = document.createElement('li'); gh.className = 'grp'; gh.textContent = prefFull(it.pf) + '（' + items.filter(x => x.pf === it.pf).length + '）';
-      entries.push(gh);
-    }
-    entries.push({ id: it.id, build: () => rowLi(it, i) });
+    entries.push({ id: it.id, build: () => rowLi(it) });
   });
   const want = Math.max(LIST_CHUNK, keepCount || 0);
   listEntries = entries; listMore(want); if (selId) listEnsure(selId);
@@ -2246,14 +1822,14 @@ function renderControls() {
     chips.appendChild(c);
   };
   const brk = () => { const b0 = document.createElement('div'); b0.style.flexBasis = '100%'; b0.style.height = '0'; chips.appendChild(b0); };
-  const nVis = allItems().filter(x => isVisited(x.id)).length;
+  const nVis = ALLX.filter(x => isVisited(x.id)).length;
   if (flt.pfk) { const pc = document.createElement('button'); pc.type = 'button'; pc.className = 'chip pf'; pc.setAttribute('aria-pressed', 'true'); pc.textContent = flt.pfk + ' ✕'; pc.onclick = () => setPfk(''); chips.appendChild(pc); }
   add('記録:すべて', 'all', 'vis');
   add('行った', 'yes', 'vis', nVis);
-  add('記録なし', 'no', 'vis', allItems().length - nVis);
+  add('記録なし', 'no', 'vis', ALLX.length - nVis);
   brk();
-  if (mode === 'all') {
-    /* 種類を複数選べる。始めは全部選んだ状態 */
+  {
+    /* 種類を複数選べる */
     const kn = {}, kv = {}; ALLX.forEach(x => { const k = KIND.get(x.id); kn[k] = (kn[k] || 0) + 1; if (isVisited(x.id)) kv[k] = (kv[k] || 0) + 1; });
     const allOn = flt.kinds.size === KORDER.length;
     const kg = document.createElement('div'); kg.className = 'kgrid';
@@ -2265,121 +1841,17 @@ function renderControls() {
     const tk = typeKind();
     if (tk) { const src = ALLX.filter(kindOn); TYPEF[tk].forEach(t => add(t[0], t[1], 'type', t[2] ? src.filter(t[2]).length : src.length)); brk(); }
   }
-  if (mode === 'castles') {
-    add('すべて', 'all', 'type', CASTLES.length);
-    add('現存天守', 'tower', 'type', CASTLES.filter(c => c.t === 'N' || c.t === 'k').length);
-    add('国宝天守', 'N', 'type', CASTLES.filter(c => c.t === 'N').length);
-    add('復元などの天守', 's', 'type', CASTLES.filter(c => c.t === 's').length);
-    add('城跡など', 'a', 'type', CASTLES.filter(c => c.t === 'a').length);
-  }
-  if (mode === 'zoos') {
-    add('すべて', 'all', 'type', ZOOS.length);
-    add('合体', 'combo', 'type', ZOOS.filter(x => x.tg).length);
-  }
-  if (mode === 'aquas') {
-    add('すべて', 'all', 'type', AQUAS.length);
-    add('合体', 'combo', 'type', AQUAS.filter(x => x.tg).length);
-  }
-  if (mode === 'bots') {
-    add('すべて', 'all', 'type', BOTS.length);
-    add('合体', 'combo', 'type', BOTS.filter(x => x.tg).length);
-  }
-  if (mode === 'themes') {
-    add('すべて', 'all', 'type', TPARKS.length);
-    add('合体', 'combo', 'type', TPARKS.filter(x => x.tg).length);
-  }
-  if (mode === 'museums') {
-    add('すべて', 'all', 'type', MUSEUMS.length);
-    add('県立', 'pref', 'type', MUSEUMS.filter(x => x.kb === '都道府県立').length);
-    add('国立（大学を含む）', 'nat', 'type', MUSEUMS.filter(x => x.kb === '国立' || x.kb === '国立大学').length);
-    add('登録博物館', 'reg', 'type', MUSEUMS.filter(x => x.rj === '登録博物館').length);
-    add('指定施設', 'des', 'type', MUSEUMS.filter(x => x.rj === '指定施設').length);
-    add('地図に未表示', 'nopos', 'type', MUSEUMS.filter(x => typeof x.la !== 'number').length);
-  }
-  if (mode === 'airports') {
-    add('定期便:すべて', 'all', 'type', AIRPORTS.length);
-    [1, 2, 3].forEach(c => add(AIR_FL_SHORT[c], String(c), 'type', AIRPORTS.filter(x => x.fl === c).length));
-  }
-  const base = mode === 'all' ? ALLX.filter(kindOn) : KOEI_OF[mode] ? KOEI_OF[mode] : mode === 'zoos' ? ZOOS : mode === 'aquas' ? AQUAS : mode === 'bots' ? BOTS : mode === 'themes' ? TPARKS : mode === 'museums' ? MUSEUMS : mode === 'airports' ? AIRPORTS : mode === 'stations' ? STATIONS : mode === 'capitals' ? CAPS : mode === 'whs' ? WHS : mode === 'scenic' ? SCN : mode === 'nature' ? NATURE : mode === 'hyaku' ? HYAKU : mode === 'biwa' ? BIWA : mode === 'shin' ? SHIN : mode === 'ik' ? IKENAI : mode === 'my' ? MYS : CASTLES;
-  const regOf = x => (mode === 'castles' || mode === 'all') ? (x.rg || REGION_OF[x.pf]) : REGION_OF[x.pf];
+  const base = ALLX.filter(kindOn), regOf = x => x.rg || REGION_OF[x.pf];
   const sep = document.createElement('div'); sep.style.flexBasis = '100%'; sep.style.height = '0';
   chips.appendChild(sep);
   add('全国', 'all', 'region', base.length);
-  REGIONS.forEach(r => { const n = base.filter(x => regOf(x) === r).length; if (mode === 'castles' || n) add(r, r, 'region', n); });
-  if (mode === 'my' || mode === 'all') { const ab = document.createElement('button'); ab.type = 'button'; ab.className = 'btn'; ab.textContent = '＋ 地点を追加'; ab.onclick = () => openMyForm(null); tools.appendChild(ab); }
-  const inp = $('q');
-  inp.placeholder = mode === 'all' ? '施設名・県名で検索' : mode === 'castles' ? '城名・都道府県で絞り込み' : mode === 'zoos' ? '園名・都道府県で絞り込み' : mode === 'aquas' ? '園名・都道府県で絞り込み' : mode === 'bots' ? '園名・都道府県で絞り込み' : mode === 'themes' ? '園名・都道府県で絞り込み' : mode === 'museums' ? '館名・都道府県で絞り込み' : mode === 'airports' ? '空港名・都道府県で絞り込み' : mode === 'stations' ? '駅名・市町村・都道府県で絞り込み' : mode === 'capitals' ? '市名・都道府県で絞り込み' : mode === 'my' ? '名前・種類・メモで絞り込み' : '名前・都道府県で絞り込み';
-  inp.value = flt.q;
-  if (mode === 'stations') {
-    const sp = document.createElement('select'); sp.setAttribute('aria-label', '都道府県');
-    sp.innerHTML = '<option value="all">都道府県:すべて</option>' + PREF_ORDER.map(p => '<option value="' + esc(p) + '">' + esc(prefFull(p)) + '</option>').join('');
-    sp.value = flt.pf; sp.onchange = () => { flt.pf = sp.value; refresh(); };
-    tools.appendChild(sp);
-  }
+  REGIONS.forEach(r => { const n = base.filter(x => regOf(x) === r).length; if (n) add(r, r, 'region', n); });
+  { const ab = document.createElement('button'); ab.type = 'button'; ab.className = 'btn'; ab.textContent = '＋ 地点を追加'; ab.onclick = () => openMyForm(null); tools.appendChild(ab); }
+  $('q').value = flt.q;
 }
 function renderStat() { /* 「表示中 ○件、○都道府県に分布…」の一文は表示しない */ }
-function renderStatic() {
-  if (mode === 'all') {
-    $('legend').innerHTML = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'].map(m => '<span><i class="kd-' + m + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '種類をまたいで名前で探せます。選ぶと、詳細が開きます。';
-    $('src').innerHTML = '';
-  } else if (mode === 'zoos') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = 'Wikipedia由来の施設は座標のみで、閉園済みのものが混ざります。';
-    $('src').innerHTML = '<b>出典</b><p>© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）のカテゴリと座標をもとに作成しています。一部の位置は手で調べて入れています。動物園と植物園などの合体した施設は、動物園の区分で載せ、注釈に書いています。</p>';
-  } else if (mode === 'my') {
-    $('legend').innerHTML = '<span><i class="kd-my"></i>マイスポット</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = 'ここは自分で足した地点です。「＋地点を追加」から、名前と位置を入れて登録できます。この端末のブラウザに保存され、「書き出し」にも含まれます。';
-    $('src').innerHTML = '';
-  } else if (mode === 'scenic') {
-    $('legend').innerHTML = '<span><i class="kd-scenic"></i>日本百景</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '印は、各景勝地を代表する1地点の目安です。広がりのある山・川・海岸も、1か所だけに印を付けています。';
-    $('src').innerHTML = '<b>出典</b><p>昭和2年（1927年）に大阪毎日新聞社・東京日日新聞社が選び、鉄道省が後援した「日本新八景・日本二十五勝・日本百景」です。一覧は Wikipedia の表をもとにしています。位置は概算です（個人利用）。</p>';
-  } else if (mode === 'nature') {
-    $('legend').innerHTML = '<span><i class="kd-nature"></i>自然</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '国立公園の中の山・湖・滝・島などと、日本百名山（100座すべて）、日本の滝百選・名水百選・ラムサール条約登録湿地の一部です。印は、各地の記事の座標による目安です。';
-    $('src').innerHTML = '<b>出典</b><p>場所は、Wikipedia 日本語版（CC BY-SA 4.0）の各国立公園の記事をもとに選んでいます。日本百名山は、深田久弥『日本百名山』の100座をすべて入れています（阿寒岳は雌阿寒岳）。日本の滝百選・名水百選・ラムサール条約登録湿地からは、記事がよく読まれている一部だけを入れています。位置は、各地の記事の座標をもとにした目安です。記事に座標がないものは Wikidata（CC0）の座標か、地図で調べた位置です（個人利用）。</p>';
-  } else if (mode === 'hyaku') {
-    $('legend').innerHTML = '<span><i class="kd-hyaku"></i>日本百名山</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '深田久弥『日本百名山』の100座です。印は、各山の記事の座標による目安です。';
-    $('src').innerHTML = '<b>出典</b><p>100座の山名・標高・山系は、Wikipedia 日本語版（CC BY-SA 4.0）の「日本百名山」の表によります。位置は各山の記事の座標です（蔵王山・平ヶ岳は地図で調べた位置）。阿寒岳は雌阿寒岳としています（個人利用）。</p>';
-  } else if (mode === 'whs') {
-    $('legend').innerHTML = '<span><i class="kd-whs"></i>世界遺産</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '印は、各遺産を代表する1地点の目安です。複数の県や場所にまたがる遺産も、1か所だけに印を付けています。';
-    $('src').innerHTML = '<b>出典</b><p>一覧・種別・登録年は、ユネスコ世界遺産センター「日本」のページ（https://whc.unesco.org/en/statesparties/jp ）で確認しています。位置は、各遺産を代表する地点の概算です（個人利用）。</p>';
-  } else if (mode === 'capitals') {
-    $('legend').innerHTML = '<span><i class="kd-capitals"></i>県庁所在地</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '印は県庁舎の位置です（目安）。東京都庁は新宿区にあります。';
-    $('src').innerHTML = '<b>出典</b><p>各都道府県の県庁舎の位置を、公開されている情報をもとに作成しています（個人利用）。位置は目安です。</p>';
-  } else if (mode === 'aquas') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = 'Wikipedia由来の施設は座標のみで、閉園済みのものが混ざります。';
-    $('src').innerHTML = '<b>出典</b><p>© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）のカテゴリと座標をもとに作成しています。一部の位置は手で調べて入れています。水族館と植物園などの合体した施設は、水族館の区分で載せ、注釈に書いています。</p>';
-  } else if (mode === 'bots') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = 'Wikipedia由来の施設は座標のみで、閉園済みのものが混ざります。';
-    $('src').innerHTML = '<b>出典</b><p>© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）のカテゴリと座標をもとに作成しています。一部の位置は手で調べて入れています。動物園などと合体した施設は、名称で主な区分を決めて載せ、注釈に書いています。</p>';
-  } else if (mode === 'themes') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = 'Wikipedia由来の施設は座標のみで、閉園済みのものが混ざります。';
-    $('src').innerHTML = '<b>出典</b><p>© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）のカテゴリと座標をもとに作成しています。一部の位置は手で調べて入れています。他の区分と合体した施設は、名称で主な区分を決めて注釈に書いています。</p>';
-  } else if (mode === 'museums') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-k)"></i>施設</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '国や国立大学、都道府県が設置した博物館と美術館です。ほかに、それ以外の館をサイトの作者の基準で選んだ「lertroo基準」の館があります。位置がまだ入っていない館は、一覧には出ますが地図には出ません。';
-    $('src').innerHTML = '<b>出典</b><p>登録博物館・指定施設の区分と設置者は、文化庁「全国の博物館」（https://museum.bunka.go.jp/guide/ ）の一覧（2026年10月8日版）をもとにしています。「一覧に掲載なし」は、その版の登録・指定の一覧に載っていない館です。国立・国立大学の館は、法律上、登録博物館にはならず、指定施設までです。「登録は未確認」の館は、文化庁の一覧と照らし合わせておらず、設置者を Wikipedia 日本語版（CC BY-SA 4.0）の記述で確かめて載せています。位置は、© OpenStreetMap contributors（ODbL）、Wikidata（CC0）、Wikipedia 日本語版（CC BY-SA 4.0）をもとにしています。</p>';
-  } else if (mode === 'airports') {
-    $('legend').innerHTML = [1, 2, 3].map(c => '<span><i style="background:var(--t-' + ({ 1:'n', 2:'k', 3:'a' })[c] + ')"></i>' + AIR_FL_SHORT[c] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '位置は標点で、「定期便」はデータ作成時点の区分です。';
-    $('src').innerHTML = '<b>出典</b><p>国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Urara が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</p>';
-  } else if (mode === 'stations') {
-    $('legend').innerHTML = '<span><i style="background:var(--t-s)"></i>道の駅</span><span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '順位は付けていません。一覧は都道府県の標準的な順、その中は五十音順です。駅名の読みは作業側で付けたため、並びに誤りが混じる可能性があります。改名した駅は「旧名 → 新名」、閉鎖した駅は（○年閉鎖）を付けて残しています。設備が分からない項目は「未確認」です。';
-    $('src').innerHTML = '<b>出典</b><p>駅名と都道府県は、mach-tools「道の駅オープンデータ」（CC BY 4.0、https://www.mach-tools.net/map/michinoeki/）をもとにしています。位置は、© OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取り、一部は手で調べて入れています。閉鎖した駅は名称と閉鎖年のみを残しています（個人利用・手入力の整理のため、漏れや誤りが残る可能性があります）。</p>';
-  } else {
-    $('legend').innerHTML = ['N','k','s','a'].map(t => '<span><i style="background:var(--t-' + t + ')"></i>' + TYPE_LABEL[t] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
-    $('mapnote').textContent = '収録は日本100名城の100城です。位置と天守の区分は目安で、実際と少し違うことがあります。現存12天守のうち、国宝は松本城・犬山城・彦根城・姫路城・松江城の5城です。';
-    $('src').innerHTML = '';
-  }
+function renderLegend() {
+  $('legend').innerHTML = KORDER.map(m => '<span><i style="background:' + KCOL[m] + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
 }
 
 /* ===== 選択 ===== */
@@ -2412,14 +1884,15 @@ function refresh() {
   drawSpeed();
 }
 let mvInit = false;
-function setMode(m, keepQ, keepView) {
+/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類） */
+function resetAll(keepQ, keepView, kinds) {
   initAll();
-  dotEls = {}; mode = m; selId = null; flt.kinds = new Set(); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; flt.pf = 'all'; flt.fac = 'all'; if (!keepQ) flt.pfk = '';
+  dotEls = {}; selId = null; flt.kinds = new Set(kinds || []); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
   syncTabSel();
   if (!mvInit) { mvInit = true; mapView = 'dots';   /* 塗りは、初期状態ではオフ */ }
   if (keepView) applyVB(); else fitAll();
-  renderStatic(); applyMapView(); refresh();
-  try { history.replaceState(null, '', '#' + m); } catch (e) {}
+  renderLegend(); applyMapView(); refresh();
+  try { history.replaceState(null, '', '#all'); } catch (e) {}
 }
 /* ===== 文字サイズと表示モード(この端末に保存) ===== */
 const store = {
@@ -2459,18 +1932,21 @@ $('prefreset').onclick = () => {
 
 /* ===== 行った記録(このブラウザに保存。人ごとに分けられる) ===== */
 const REC_KEY = 'jp-records-v1';
-/* 統合した館の旧ID → いまのID（博物・美術館で、同じ館の別登録をまとめたもの） */
-const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王子分館（原田の森ギャラリー）', 'mu:東山魁夷館':'mu:長野県立美術館', 'mu:立山博物館':'mu:富山県［立山博物館］', 'mu:富山県立近代美術館':'mu:富山県美術館', 'mu:東京大学総合研究博物館・小石川分館':'mu:東京大学総合研究博物館', 'mu:仏教美術資料研究センター':'mu:奈良国立博物館', 'mu:ウポポイ':'mu:国立アイヌ民族博物館' };
+/* 古い id → いまの id（記録・書き出し・注釈を読むときに読み替える）。
+   博物・美術館で同じ館の別登録をまとめたもの、2026-10-24 に id を「種類:名前」にそろえたもの（城・道の駅・公営競技場・テーマパーク・琵琶湖） */
+const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王子分館（原田の森ギャラリー）', 'mu:東山魁夷館':'mu:長野県立美術館', 'mu:立山博物館':'mu:富山県［立山博物館］', 'mu:富山県立近代美術館':'mu:富山県美術館', 'mu:東京大学総合研究博物館・小石川分館':'mu:東京大学総合研究博物館', 'mu:仏教美術資料研究センター':'mu:奈良国立博物館', 'mu:ウポポイ':'mu:国立アイヌ民族博物館',
+  'lake:琵琶湖':'bw:琵琶湖', rs:'th:ルスツリゾート', tds:'th:東京ディズニーシー', tdl:'th:東京ディズニーランド', pl:'th:サンリオピューロランド', gb:'th:ジブリパーク', lg:'th:レゴランド・ジャパン', mm:'th:博物館明治村', ss:'th:志摩スペイン村', ut:'th:東映太秦映画村', usj:'th:ユニバーサル・スタジオ・ジャパン', hb:'th:ハウステンボス', 'th:横浜アンパンマンこどもミュージアム＆モール旧':'th:横浜アンパンマンこどもミュージアム＆モール@旧施設' };
+CASTLES.forEach(c => { ID_ALIAS['c' + c.no] = c.id; });
+STATIONS.forEach(s => { ID_ALIAS['ms:' + s.no] = s.id; });
+{ const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */
-const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'lake:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
+const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'bw:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
   'na:鳥海山':'sc:鳥海山', 'na:赤城山':'sc:赤城山', 'na:筑波山':'sc:筑波山', 'na:白馬岳':'sc:白馬岳', 'na:立山':'sc:立山', 'na:八ヶ岳':'sc:八ヶ岳', 'na:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'na:大台ヶ原山':'sc:大台ヶ原山', 'na:大山 (鳥取県)':'sc:大山', 'na:石鎚山':'sc:石鎚山', 'na:阿蘇山':'sc:阿蘇山', 'na:霧島山':'sc:霧島山', 'na:昇仙峡':'sc:御嶽昇仙峡', 'na:十和田湖':'sc:十和田湖', 'na:高田松原':'sc:高田松原', 'na:猪苗代湖':'sc:猪苗代湖', 'na:中禅寺湖':'sc:中禅寺湖', 'na:菅沼 (群馬県)':'sc:菅沼', 'na:華厳滝':'sc:華厳滝', 'na:白糸の滝 (静岡県)':'sc:富士白糸の滝', 'na:上高地':'sc:上高地', 'na:黒部峡谷':'sc:黒部峡谷', 'na:鳥羽港':'sc:鳥羽湾', 'na:朝熊山':'sc:朝熊山', 'na:浦富海岸':'sc:浦富海岸', 'na:寒霞渓':'sc:寒霞渓', 'na:御崎':'sc:赤穂御崎', 'na:鞆の浦':'sc:鞆の浦', 'na:屋島':'sc:屋島', 'na:九十九島 (西海国立公園)':'sc:九十九島', 'na:雲仙岳':'sc:雲仙岳', 'na:久住高原':'sc:久住高原', 'na:飯田高原':'sc:飯田高原', 'na:袋田の滝':'sc:袋田の滝', 'na:養老の滝':'sc:養老の滝', 'na:赤目四十八滝':'sc:赤目四十八滝', 'na:箕面滝':'sc:箕面滝', 'na:那智滝':'sc:那智滝', 'na:古座川':'sc:古座川', 'na:大沼 (七飯町)':'sc:大沼',
   'hm:利尻山':'na:利尻山', 'hm:羅臼岳':'na:羅臼岳', 'hm:斜里岳':'na:斜里岳', 'hm:雌阿寒岳':'na:雌阿寒岳', 'hm:大雪山':'na:大雪山', 'hm:トムラウシ山':'na:トムラウシ山', 'hm:十勝岳':'na:十勝岳', 'hm:幌尻岳':'na:幌尻岳', 'hm:羊蹄山':'na:羊蹄山', 'hm:岩木山':'na:岩木山', 'hm:八甲田山':'na:八甲田山', 'hm:八幡平':'na:八幡平', 'hm:岩手山':'na:岩手山', 'hm:早池峰山':'na:早池峰山', 'hm:鳥海山':'sc:鳥海山', 'hm:月山':'na:月山', 'hm:朝日岳 (山形県・新潟県)':'na:朝日岳 (山形県・新潟県)', 'hm:蔵王山':'na:蔵王山', 'hm:飯豊山':'na:飯豊山', 'hm:吾妻山':'na:吾妻山', 'hm:安達太良山':'na:安達太良山', 'hm:磐梯山':'na:磐梯山', 'hm:会津駒ヶ岳':'na:会津駒ヶ岳', 'hm:那須岳':'na:那須岳', 'hm:越後駒ヶ岳':'na:越後駒ヶ岳', 'hm:平ヶ岳':'na:平ヶ岳', 'hm:巻機山':'na:巻機山', 'hm:燧ヶ岳':'na:燧ヶ岳', 'hm:至仏山':'na:至仏山', 'hm:谷川岳':'na:谷川岳', 'hm:雨飾山':'na:雨飾山', 'hm:苗場山':'na:苗場山', 'hm:妙高山':'na:妙高山', 'hm:火打山':'na:火打山', 'hm:高妻山':'na:高妻山', 'hm:男体山':'na:男体山', 'hm:日光白根山':'na:日光白根山', 'hm:皇海山':'na:皇海山', 'hm:武尊山':'na:武尊山', 'hm:赤城山':'sc:赤城山', 'hm:草津白根山':'na:草津白根山', 'hm:四阿山':'na:四阿山', 'hm:浅間山':'na:浅間山', 'hm:筑波山':'sc:筑波山', 'hm:白馬岳':'sc:白馬岳', 'hm:五竜岳':'na:五竜岳', 'hm:鹿島槍ヶ岳':'na:鹿島槍ヶ岳', 'hm:剱岳':'na:剱岳', 'hm:立山':'sc:立山', 'hm:薬師岳':'na:薬師岳', 'hm:黒部五郎岳':'na:黒部五郎岳', 'hm:水晶岳':'na:水晶岳', 'hm:鷲羽岳':'na:鷲羽岳', 'hm:槍ヶ岳':'na:槍ヶ岳', 'hm:穂高岳':'na:穂高岳', 'hm:常念岳':'na:常念岳', 'hm:笠ヶ岳':'na:笠ヶ岳', 'hm:焼岳':'na:焼岳', 'hm:乗鞍岳':'na:乗鞍岳', 'hm:御嶽山':'na:御嶽山', 'hm:美ヶ原':'na:美ヶ原', 'hm:霧ヶ峰':'na:霧ヶ峰', 'hm:蓼科山':'na:蓼科山', 'hm:八ヶ岳':'sc:八ヶ岳', 'hm:両神山':'na:両神山', 'hm:雲取山':'na:雲取山', 'hm:甲武信ヶ岳':'na:甲武信ヶ岳', 'hm:金峰山 (山梨県・長野県)':'na:金峰山 (山梨県・長野県)', 'hm:瑞牆山':'na:瑞牆山', 'hm:大菩薩嶺':'na:大菩薩嶺', 'hm:丹沢山':'na:丹沢山', 'hm:富士山':'wh:富士山', 'hm:天城山':'na:天城山', 'hm:木曽駒ヶ岳':'na:木曽駒ヶ岳', 'hm:空木岳':'na:空木岳', 'hm:恵那山':'na:恵那山', 'hm:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'hm:仙丈ヶ岳':'na:仙丈ヶ岳', 'hm:鳳凰山':'na:鳳凰山', 'hm:北岳':'na:北岳', 'hm:間ノ岳':'na:間ノ岳', 'hm:塩見岳':'na:塩見岳', 'hm:荒川岳':'na:荒川岳', 'hm:赤石岳':'na:赤石岳', 'hm:聖岳':'na:聖岳', 'hm:光岳':'na:光岳', 'hm:白山':'na:白山', 'hm:荒島岳':'na:荒島岳', 'hm:伊吹山':'na:伊吹山', 'hm:大台ヶ原山':'sc:大台ヶ原山', 'hm:大峰山':'na:大峰山', 'hm:大山 (鳥取県)':'sc:大山', 'hm:剣山':'na:剣山', 'hm:石鎚山':'sc:石鎚山', 'hm:九重山':'na:九重山', 'hm:祖母山':'na:祖母山', 'hm:阿蘇山':'sc:阿蘇山', 'hm:霧島山':'sc:霧島山', 'hm:開聞岳':'na:開聞岳', 'hm:宮之浦岳':'na:宮之浦岳' };
 /* 日本百名山の山を、まとめた先の id から引く（一覧の行と詳細で使う） */
 const HM_OF = {}; HYAKU.forEach(h => { HM_OF[TWIN[h.id] || h.id] = h; });
 const cid = id => TWIN[id] || id;
-/* ===== マイスポット(自分で足した地点。この端末のブラウザに保存) ===== */
-const MYS_KEY = 'jp-myspots-v1';
-const MYS = [];
+/* ===== マイスポット(自分で足した地点。この端末のブラウザに保存。MYS は「種類の表」のところ) ===== */
 let pickCb = null;
 function addMySpot(o) {
   if (!o || typeof o !== 'object') return null;
@@ -2548,13 +2024,13 @@ function openMyForm(it) {
     if (m) { Object.assign(m, f); m.rg = REGION_OF[m.pf]; }
     else { m = addMySpot(f); if (!m) return err('保存できませんでした。'); ALL_IDS.add(m.id); }
     saveMys(); rebuildAllx(); closeMyForm();
-    if (mode !== 'my' && mode !== 'all') setMode('my'); else refresh();
+    refresh();
     select(m.id, true);
   };
   myEl.hidden = false;
   g('my-n').focus();
 }
-const ALL_IDS = new Set(CASTLES.map(c => c.id).concat(KOEI.map(z => z.id), ZOOS.map(z => z.id), AQUAS.map(z => z.id), BOTS.map(z => z.id), TPARKS.map(z => z.id), MUSEUMS.map(z => z.id), (typeof MUSEUMS_RETIRED === 'object' ? MUSEUMS_RETIRED : []), AIRPORTS.map(a => a.id), STATIONS.map(s => s.id), CAPS.map(s => s.id), WHS.map(s => s.id), SCN.map(s => s.id), NATURE.map(s => s.id), HYAKU.map(s => s.id), BIWA.map(s => s.id), SHIN.map(s => s.id), IKENAI.map(s => s.id)));
+const ALL_IDS = new Set([].concat(...KINDS.map(x => x.items.map(o => o.id)), MUSEUMS_RETIRED));
 MYS.forEach(m => ALL_IDS.add(m.id));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
@@ -2623,8 +2099,9 @@ function bindVis(it) {
   });
 }
 function afterVisChange() {
-  const st = $('list').scrollTop;
-  renderControls(); updateTabs(); renderList(listPos); $('list').scrollTop = st;
+  /* 一覧は、いまの位置まで見えている分だけ作り直す（地図から下のほうの施設を選ぶと、そこまでの行が全部作られていて、毎回作り直すと重い） */
+  const ul = $('list'), st = ul.scrollTop, rh = (ul.querySelector('.row-btn') || {}).offsetHeight || 28;
+  renderControls(); renderList(Math.min(listPos, Math.ceil((st + ul.clientHeight) / rh) + 40)); ul.scrollTop = st;
   drawDots(); renderDetail(); renderStat(); renderProfiles(); renderBackupInfo(); updateTabs();
 }
 
@@ -2724,14 +2201,13 @@ $('bk-copy').onclick = () => {
   } else fallback();
 };
 /* 年表の書き出し（いま選んでいる人の記録） */
-const KIND_OF = [['城', CASTLES], ['公営競技場', KOEI], ['動物園', ZOOS], ['水族館', AQUAS], ['植物園', BOTS], ['テーマパーク', TPARKS], ['博物・美術館', MUSEUMS], ['空港', AIRPORTS], ['道の駅', STATIONS], ['県庁所在地', CAPS], ['世界遺産', WHS], ['日本百景', SCN], ['自然', NATURE], ['日本百名山', HYAKU], ['琵琶湖', BIWA], ['新幹線の駅', SHIN], ['レアスポット', IKENAI], ['マイスポット', MYS]];
 function timelineRows() {
   const idx = {};
-  KIND_OF.forEach(([k, arr]) => arr.forEach(it => { idx[it.id] = { it, k }; }));
+  KINDS.forEach(x => x.items.forEach(it => { idx[it.id] = { it, k:x.k }; }));
   const rows = [], d = curData();
   Object.keys(d).forEach(id => {
     const e = idx[id]; if (!e) return;
-    d[id].forEach(day => rows.push({ day, name:e.k === '道の駅' ? dn(e.it) : e.it.n, kind:e.k, pf:prefFull(e.it.pf) }));
+    d[id].forEach(day => rows.push({ day, name:e.k === 'stations' ? dn(e.it) : e.it.n, kind:MODE_LABEL[e.k], pf:prefFull(e.it.pf) }));
   });
   rows.sort((a, b) => ((a.day === '') - (b.day === '')) || (a.day < b.day ? -1 : a.day > b.day ? 1 : 0) || (a.day === '' ? a.kind.localeCompare(b.kind, 'ja') : 0) || a.name.localeCompare(b.name, 'ja'));
   return rows;
@@ -2857,10 +2333,8 @@ $('q').addEventListener('keydown', e => {
   hits.forEach(x => { const xy = proj(x.lo, x.la); x0 = Math.min(x0, xy[0]); x1 = Math.max(x1, xy[0]); y0 = Math.min(y0, xy[1]); y1 = Math.max(y1, xy[1]); });
   flyTo((x0 + x1) / 2, (y0 + y1) / 2, Math.max((x1 - x0) * 1.35, (y1 - y0) * 1.35 / ASPECT, 40));
 });
-document.querySelectorAll('.tab').forEach(t => { t.onclick = () => { const m = t.dataset.mode; if (m === 'tokyo') openTokyo(); else { setMode(m, true, true); if (m === 'all' && flt.pfk === '東京都') { flt.pfk = ''; refresh(); } } }; });
+document.querySelectorAll('.tab').forEach(t => { t.onclick = () => { if (t.dataset.mode === 'tokyo') openTokyo(); else { resetAll(true, true); if (flt.pfk === '東京都') { flt.pfk = ''; refresh(); } } }; });
 /* ===== リッチ版の機能 ===== */
-const KCOL = { themes:'#e0457b', castles:'#8a5a2b', zoos:'#e08a1e', aquas:'#1f8fd6', bots:'#3fa34d', museums:'#8e5bd0', airports:'#5b6b7a', stations:'#148a8a', capitals:'#4f63c9', whs:'#b5851a', scenic:'#2f9e8f', nature:'#4d7c0f', hyaku:'#0d47a1', biwa:'#2e86ab', ik:'#7a3b3b', shin:'#6d7f1f', koei:'#a33b8a', my:'#d0662a', tokyo:'#3b6fb0' };
-const KORDER = ['themes', 'castles', 'zoos', 'aquas', 'bots', 'museums', 'airports', 'shin', 'stations', 'capitals', 'whs', 'scenic', 'nature', 'hyaku', 'biwa', 'koei', 'ik', 'my'];
 const ICON_P = {
   tokyo: '<path d="M12 3v3M9 6h6M9 6l-1.5 15M15 6l1.5 15M8.2 12h7.6M7.8 16h8.4M10 6l4 6M14 6l-4 6"/>',
   my: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><path d="M12 7.2v5.6M9.2 10h5.6"/>',
@@ -2890,10 +2364,10 @@ function icon(k) { return '<svg class="ic" viewBox="0 0 24 24" fill="none" strok
 
 /* タブ：アイコンと「行った／全部」 */
 /* 「都内」は、横断検索を東京都で絞った表示。どのタブが選ばれて見えるかは、モードと県の絞り込みから決める */
-function tabIsOn(m) { return m === 'tokyo' ? (mode === 'all' && flt.pfk === '東京都') : m === 'all' ? (mode === 'all' && flt.pfk !== '東京都') : m === mode; }
+function tabIsOn(m) { return m === 'tokyo' ? flt.pfk === '東京都' : flt.pfk !== '東京都'; }
 function syncTabSel() { document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(tabIsOn(t.dataset.mode)))); }
 function openTokyo() {
-  setMode('all', false, true);
+  resetAll(false, true);
   flt.pfk = '東京都'; refresh();
   const c = proj(139.62, 35.68); flyTo(c[0], c[1], 24);
 }
@@ -2964,7 +2438,7 @@ let biwaBB = null;
 const SPEED = (() => { let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647; return Array.from({ length:110 }, (_, i) => ({ a:(i + rnd() * 0.8) / 110 * Math.PI * 2, f:1 + rnd() * 0.9, w:0.35 + rnd() * rnd() * 1.4 })); })();
 function drawSpeed() {
   const g = document.getElementById('g-speed'); if (!g) return;
-  const on = mode === 'all' && flt.kinds && flt.kinds.size === 1 && flt.kinds.has('biwa');
+  const on = flt.kinds && flt.kinds.size === 1 && flt.kinds.has('biwa');
   if (!on) { if (g.firstChild) g.textContent = ''; return; }
   if (!biwaBB) { const p = gLake.querySelector('path[data-lake="琵琶湖"]'); if (!p) return; const b = p.getBBox(); if (!(b.width > 0)) return; biwaBB = b; }
   const b = biwaBB, cx = b.x + b.width / 2, cy = b.y + b.height / 2, m = vb.w * 0.05;
@@ -3004,13 +2478,11 @@ function flyTo(cx, cy, w) {
 }
 
 /* 足あとのまとめ */
-let ITEM_BY_ID = null;
-function itemById(id) { if (!ITEM_BY_ID) ITEM_BY_ID = new Map(ALLX.map(x => [x.id, x])); return ITEM_BY_ID.get(id); }
 function fmtDate(d) { return d ? d.replace(/^(\d{4})-(\d{2})-(\d{2})$/, (m, y, mo, da) => y + '/' + mo + '/' + da) : '日付なし'; }
 function renderDash() {
   const box = $('dashbox');
   box.style.setProperty('--kc', 'var(--accent)');
-  const scoped = mode === 'all' ? ALLX : allItems();
+  const scoped = ALLX;
   const pfk = flt.pfk;
   const items = pfk ? scoped.filter(x => PREF_KEY[x.pf] === pfk) : scoped;
   const idset = new Set(items.map(x => x.id));
@@ -3018,7 +2490,7 @@ function renderDash() {
   const total = items.length, nv = visItems.length;
   const cd = curData();
   const prefAll = new Set(scoped.filter(x => isVisited(x.id) && PREF_KEY[x.pf]).map(x => PREF_KEY[x.pf]));
-  const title = pfk ? pfk : (mode === 'all' ? '足あとのまとめ' : MODE_LABEL[mode] + 'の足あと');
+  const title = pfk || '足あとのまとめ';
   const C = 2 * Math.PI * 42, frac = pfk ? (total ? nv / total : 0) : prefAll.size / 47;
   let h = '<div class="dash">';
   h += '<div class="dtop">';
@@ -3026,7 +2498,7 @@ function renderDash() {
   if (!pfk) h += '<br><span style="font-size:.78rem">' + prefAll.size + ' 都道府県</span>';
   h += '<br><span style="font-size:.78rem">記録する人：' + esc(curName()) + '</span></p></div></div>';
   if (pfk) h += '<button type="button" class="dback" data-act="clearpf">← 県の絞り込みを解除</button>';
-  if (mode === 'all') {
+  {
     const kc = {}; KORDER.forEach(k => { kc[k] = 0; });
     let dbl = 0;
     visItems.forEach(x => { kc[KIND.get(x.id)]++; });
@@ -3064,7 +2536,7 @@ function renderDash() {
   if (recs.length) {
     h += '<div><h3 class="dh">最近の足あと</h3><div class="recent">';
     recs.slice(0, 6).forEach(r => {
-      const it = itemById(r.id); if (!it) return;
+      const it = findItem(r.id); if (!it) return;
       const k = KIND.get(it.id);
       h += '<button type="button" class="rrow" style="--kc:' + KCOL[k] + '" data-act="sel:' + esc(it.id) + '"><time>' + esc(fmtDate(r.d)) + '</time><i></i><span class="rn">' + esc(k === 'stations' ? dn(it) : it.n) + '</span></button>';
     });
@@ -3087,7 +2559,7 @@ function dashClick(e) {
   const a = b.dataset.act;
   if (a === 'clearpf') setPfk('');
   else if (a.startsWith('pf:')) setPfk(a.slice(3));
-  else if (a.startsWith('mode:')) { const m = a.slice(5); if (mode === 'all' && KORDER.includes(m)) { flt.kinds = new Set([m]); refresh(); } else setMode(m, true); }
+  else if (a.startsWith('mode:')) { const m = a.slice(5); if (KORDER.includes(m)) { flt.kinds = new Set([m]); refresh(); } }
   else if (a.startsWith('sel:')) select(a.slice(4), true);
 }
 $('detail').addEventListener('click', dashClick); $('dashbox').addEventListener('click', dashClick);
@@ -3172,7 +2644,7 @@ function pickAt(ev) {
   for (const id in dotEls) {
     const d = dotEls[id];
     if (d.g.style.display === 'none' || d.g.classList.contains('dim')) continue;
-    const dist = Math.hypot(d.xy[0] - u.x, d.xy[1] - u.y) * s, r = (+d.hit.getAttribute('r') || 0) * s;
+    const dist = Math.hypot(d.xy[0] - u.x, d.xy[1] - u.y) * s, r = d.hr * s;
     if (dist <= 9 && dist < bd) { bd = dist; bestDot = id; }
     if (dist <= r && dist < bf) { bf = dist; bestFar = id; }
     const b = d.labBox;
@@ -3543,8 +3015,10 @@ document.addEventListener('click', e => { const b = e.target.closest && e.target
 
 buildTabs();
 /* 初めの表示は、全種類を選んだ状態。#種類 で開いたときは、その種類だけ */
-{ const h = location.hash.slice(1); setMode('all'); flt.kinds = new Set(KORDER.includes(h) ? [h] : []); refresh(); }
+{ const h = location.hash.slice(1); resetAll(false, false, KORDER.includes(h) ? [h] : []); }
 </script>
+<!-- 文字の CSS は、スクリプトの後ろで読む（前に置くと、届くまでスクリプト全体が待たされる） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6a9785a6be45493e8bb2444c231bae65"}'></script><!-- End Cloudflare Web Analytics -->
 
 </body></html>
