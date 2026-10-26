@@ -1,0 +1,203 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
+<title>津々浦ラ - あしあと</title>
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.lertroo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css?v=20261026k">
+
+<main class="app">
+  <header>
+    <div class="head">
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>ツツウララ</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
+      <div class="topbar prefs">
+        <button type="button" class="prefbtn" id="prefbtn" aria-label="表示の設定" title="表示の設定" aria-expanded="false" aria-controls="prefmenu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <div class="prefmenu" id="prefmenu" role="group" aria-label="表示の設定" hidden>
+          <div class="pmrow"><span class="pml">文字の大きさ</span><button type="button" id="fsm" aria-label="文字を小さく">A−</button><button type="button" id="fsp" aria-label="文字を大きく">A＋</button></div>
+          <div class="pmrow"><span class="pml">ライト/ダーク</span><button type="button" id="theme" aria-label="表示モードの切り替え">自動</button></div>
+          <div class="pmrow"><span class="pml">フォント</span><button type="button" id="fontsel" aria-label="フォントの切り替え（サイトの指定／端末の標準）" title="サイトで指定した書体と、この端末の標準の書体を切り替えます">サイト指定</button></div>
+          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォントを、初期状態に戻します（行った記録はそのまま）">初期化</button></div>
+        </div>
+      </div>
+    </div>
+    <nav class="ptabs" aria-label="ページ"><a href="index.html">地図</a><a href="ashiato.html" aria-current="page">あしあと</a><a href="kiroku.html">出力・保存</a><a href="changelog.html">更新履歴</a><a href="about.html">このサイト</a></nav>
+  </header>
+  <div class="page">
+    <section class="panel">
+      <div class="who"><label for="who">記録する人</label><select id="who"></select></div>
+    </section>
+    <section class="panel" id="dash"></section>
+  </div>
+</main>
+
+<script src="data/geo.js"></script>
+<script src="data/shinkansen.js"></script>
+<script src="data/ikenai.js"></script>
+<script src="data/koei.js"></script>
+<script src="data/castles.js"></script>
+<script src="data/airports.js"></script>
+<script src="data/stations.js"></script>
+<script src="data/zoos.js"></script>
+<script src="data/capitals.js"></script>
+<script src="data/worldheritage.js"></script>
+<script src="data/scenic.js"></script>
+<script src="data/nature.js"></script>
+<script src="data/hyakumeizan.js"></script>
+<script src="data/aquariums.js"></script>
+<script src="data/gardens.js"></script>
+<script src="data/themeparks.js"></script>
+<script src="data/museums.js"></script>
+<script src="data/lakes.js"></script>
+<script src="site.js?v=20261026k"></script>
+<script src="core.js?v=20261026k"></script>
+<script>
+/* あしあと：行った所の記録を、文字の一覧で見るページ。並べ方は「日付順・種類別・都道府県別」を切り替える */
+const VIEW_KEY = 'jp-ashiato-view';
+const VIEWS = [['date', '日付順'], ['kind', '種類別'], ['pref', '都道府県別']];
+let view = store.get(VIEW_KEY) || 'date'; if (!VIEWS.some(v => v[0] === view)) view = 'date';
+let query = '';
+const nameOf = it => KIND.get(it.id) === 'stations' ? dn(it) : it.n;
+const md = d => d.slice(5).replace('-', '/');   /* 2026-10-20 → 10/20 */
+const lastDate = ds => ds.filter(Boolean).pop() || '';
+const kindTag = k => '<span class="akind" style="--kc:' + KCOL[k] + '"><i></i>' + esc(MODE_LABEL[k]) + '</span>';
+const nameTag = n => '<span class="aname">' + esc(n) + '</span>';
+const cntTag = n => n > 1 ? '<span class="acnt">' + n + '回</span>' : '';
+
+/* いまの人の、行った所（双子は本来の側にまとめてある）と、行った日のリスト */
+function visited() {
+  const cd = curData();
+  return ALLX.filter(x => isVisited(x.id)).map(it => ({ it, ds: cd[cid(it.id)], ks: kindsOf(it) }));
+}
+const hit = v => !query || [nameOf(v.it), v.it.pf, prefFull(v.it.pf)].concat(v.ks.map(k => MODE_LABEL[k])).some(t => t && t.toLowerCase().includes(query));
+
+function renderDash() {
+  const V = visited(), dated = [];
+  V.forEach(v => v.ds.forEach(d => { if (d) dated.push(d); }));
+  dated.sort();
+  const nPref = new Set(V.map(v => v.it.pf).filter(p => PREF_KEY[p])).size;
+  const nVis = V.reduce((t, v) => t + v.ds.length, 0);
+  let h = '<p class="asum"><b>' + V.length + '</b> か所・<b>' + nPref + '</b> 都道府県・延べ <b>' + nVis + '</b> 回';
+  if (dated.length) h += '<span class="aspan">（' + dated[0].replace(/^(\d{4})-(\d{2}).*/, '$1年$2月').replace('年0', '年') + '〜' + dated[dated.length - 1].replace(/^(\d{4})-(\d{2}).*/, '$1年$2月').replace('年0', '年') + '）</span>';
+  h += '</p>';
+  h += '<div class="abar"><div class="aseg" role="group" aria-label="並べ方">' + VIEWS.map(([k, t]) => '<button type="button" data-view="' + k + '" aria-pressed="' + (k === view) + '">' + t + '</button>').join('') + '</div>';
+  h += '<input type="search" id="aq" placeholder="名前・種類・県で絞り込み" aria-label="名前・種類・県で絞り込み" autocomplete="off" value="' + esc(query) + '"></div>';
+  h += '<div id="alist"></div>';
+  $('dash').innerHTML = h;
+  renderList();
+}
+
+function renderList() {
+  const V = visited().filter(hit);
+  let h = '';
+  if (!V.length) h = '';
+  else if (view === 'date') h = listByDate(V);
+  else if (view === 'kind') h = listByKind();
+  else h = listByPref();
+  $('alist').innerHTML = h || '<p class="dhint">' + (query ? '「' + esc(query) + '」に合う記録はありません。' : 'まだ足あとはありません。地図のページで施設を選んで「行ったら記録する」を押すと、ここに並びます。') + '</p>';
+}
+
+/* 日付順：年ごとに、新しい順。日付が分からない回は最後にまとめる */
+function listByDate(V) {
+  const ev = [];
+  V.forEach(v => v.ds.forEach(d => ev.push({ v, d })));
+  if (!ev.length) return '';
+  ev.sort((a, b) => (a.d === '' ? 1 : 0) - (b.d === '' ? 1 : 0) || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
+  const grp = new Map();
+  ev.forEach(e => { const y = e.d ? e.d.slice(0, 4) + '年' : '日付不明'; if (!grp.has(y)) grp.set(y, []); grp.get(y).push(e); });
+  let h = '';
+  grp.forEach((es, y) => {
+    h += '<section class="agrp"><h3 class="agh">' + y + '<span>' + es.length + '回</span></h3><div class="arows">';
+    es.forEach(({ v, d }) => {
+      h += '<div class="arow"><time>' + (d ? md(d) : '—') + '</time>' + nameTag(nameOf(v.it))
+        + '<span class="ameta">' + v.ks.map(kindTag).join('') + '<span class="apf">' + esc(prefFull(v.it.pf)) + '</span>' + cntTag(v.ds.length) + '</span></div>';
+    });
+    h += '</div></section>';
+  });
+  return h;
+}
+
+/* 行った所の行（種類別・都道府県別で使う）。最後に行った日を右に出す */
+function placeRow(n, ds, meta) {
+  const ld = lastDate(ds);
+  return '<div class="arow">' + nameTag(n) + '<span class="ameta">' + meta + cntTag(ds.length) + '</span><time>' + (ld ? fmtDate(ld) : '日付不明') + '</time></div>';
+}
+const prefRank = p => { const i = PREF_ORDER.indexOf(p); return i < 0 ? 99 : i; };
+
+/* 種類別：種類ごとに、北から順。双子は両方の種類に出す。行った所がない種類は出さない */
+function listByKind() {
+  const cd = curData();
+  let h = '';
+  KORDER.forEach(k => {
+    const all = modeItems(k);
+    const vis = all.filter(o => isVisited(o.id));
+    const show = vis.filter(o => !query || [o.n, o.pf, prefFull(o.pf), MODE_LABEL[k]].some(t => t && t.toLowerCase().includes(query)));
+    if (!show.length) return;
+    show.sort((a, b) => prefRank(a.pf) - prefRank(b.pf) || a.n.localeCompare(b.n, 'ja'));
+    h += '<section class="agrp"><h3 class="agh"><span class="akind" style="--kc:' + KCOL[k] + '"><i></i></span>' + esc(MODE_LABEL[k]) + '<span>' + vis.length + ' / ' + all.length + '</span></h3><div class="arows">';
+    show.forEach(o => { h += placeRow(k === 'stations' ? dn(o) : o.n, cd[cid(o.id)], '<span class="apf">' + esc(prefFull(o.pf)) + '</span>'); });
+    h += '</div></section>';
+  });
+  return h;
+}
+
+/* 都道府県別：県の欄は、はじめから全部開いておく（畳める）。上の県のマスを押すと、その県の欄へ移る。行った所がない県は、欄を出さず、マスも押せない */
+function listByPref() {
+  const cd = curData(), by = {};
+  ALLX.forEach(x => { if (PREF_KEY[x.pf]) (by[x.pf] = by[x.pf] || []).push(x); });
+  let h = '';
+  if (!query) {
+    h += '<div class="tiles atiles">';
+    PREF_ORDER.forEach(p => {
+      const n = (by[p] || []).filter(x => isVisited(x.id)).length, lv = n >= 5 ? 3 : n >= 2 ? 2 : n >= 1 ? 1 : 0;
+      h += '<button type="button" class="tile l' + lv + '"' + (n ? ' data-pf="' + esc(p) + '"' : ' disabled') + ' title="' + esc(prefFull(p)) + '：' + n + ' / ' + (by[p] || []).length + '">' + esc(p) + '</button>';
+    });
+    h += '</div><p class="dhint">県のマスを押すと、その県の欄へ移ります。色が濃いほど、行った所が多い県です。</p>';
+  }
+  REGIONS.forEach(r => {
+    let hr = '';
+    PREF_ORDER.filter(p => REGION_OF[p] === r).forEach(p => {
+      const all = by[p] || [];
+      const vis = all.filter(x => isVisited(x.id)).filter(x => hit({ it: x, ks: kindsOf(x) }));
+      if (!vis.length) return;
+      vis.sort((a, b) => KORDER.indexOf(KIND.get(a.id)) - KORDER.indexOf(KIND.get(b.id)) || a.n.localeCompare(b.n, 'ja'));
+      hr += '<details class="apref" id="pf-' + esc(p) + '" open><summary><b>' + esc(prefFull(p)) + '</b><span>' + vis.length + ' / ' + all.length + '</span></summary><div class="arows">';
+      vis.forEach(x => { hr += placeRow(nameOf(x), cd[cid(x.id)], kindsOf(x).map(kindTag).join('')); });
+      hr += '</div></details>';
+    });
+    if (hr) h += '<section class="agrp"><h3 class="agh">' + esc(r) + '</h3>' + hr + '</section>';
+  });
+  return h;
+}
+
+$('dash').addEventListener('input', e => { if (e.target.id === 'aq') { query = e.target.value.trim().toLowerCase(); renderList(); } });
+$('dash').addEventListener('click', e => {
+  const v = e.target.closest('[data-view]');
+  if (v) { view = v.dataset.view; store.set(VIEW_KEY, view); $('dash').querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b === v))); renderList(); return; }
+  const t = e.target.closest('[data-pf]');
+  if (t) { const d = document.getElementById('pf-' + t.dataset.pf); if (d) { d.open = true; d.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }
+});
+function renderWho() {
+  const sel = $('who'); sel.innerHTML = '';
+  rec.profiles.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.id; o.textContent = p.name + '（' + Object.keys(rec.data[p.id]).length + '件）';
+    if (p.id === rec.cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+$('who').onchange = e => { rec.cur = e.target.value; saveRec(); renderWho(); renderDash(); };
+initAll(); renderWho(); renderDash();
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+
+</body></html>

@@ -1,0 +1,284 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
+<title>津々浦ラ - 出力・保存</title>
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.lertroo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css?v=20261026k">
+
+<main class="app">
+  <header>
+    <div class="head">
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>ツツウララ</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
+      <div class="topbar prefs">
+        <button type="button" class="prefbtn" id="prefbtn" aria-label="表示の設定" title="表示の設定" aria-expanded="false" aria-controls="prefmenu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <div class="prefmenu" id="prefmenu" role="group" aria-label="表示の設定" hidden>
+          <div class="pmrow"><span class="pml">文字の大きさ</span><button type="button" id="fsm" aria-label="文字を小さく">A−</button><button type="button" id="fsp" aria-label="文字を大きく">A＋</button></div>
+          <div class="pmrow"><span class="pml">ライト/ダーク</span><button type="button" id="theme" aria-label="表示モードの切り替え">自動</button></div>
+          <div class="pmrow"><span class="pml">フォント</span><button type="button" id="fontsel" aria-label="フォントの切り替え（サイトの指定／端末の標準）" title="サイトで指定した書体と、この端末の標準の書体を切り替えます">サイト指定</button></div>
+          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォントを、初期状態に戻します（行った記録はそのまま）">初期化</button></div>
+        </div>
+      </div>
+    </div>
+    <nav class="ptabs" aria-label="ページ"><a href="index.html">地図</a><a href="ashiato.html">あしあと</a><a href="kiroku.html" aria-current="page">出力・保存</a><a href="changelog.html">更新履歴</a><a href="about.html">このサイト</a></nav>
+  </header>
+  <div class="page">
+    <section class="panel rec">
+      <h2>記録する人</h2>
+      <p class="note">記録はこのブラウザの中に保存されます。登録やログインは要りません。ほかの人は、自分の端末でこのページを開いて記録してください。1台を何人かで使うときは、ここで人を追加できます。</p>
+      <div class="line"><label for="prof-sel">記録する人</label><select id="prof-sel"></select></div>
+      <div class="line">
+        <input type="text" id="prof-name" maxlength="20" placeholder="名前（20字まで）" aria-label="人の名前" autocomplete="off">
+        <button type="button" class="btn" id="prof-add">追加</button>
+        <button type="button" class="btn" id="prof-ren">名前を変更</button>
+        <button type="button" class="btn warn" id="prof-del">削除</button>
+      </div>
+      <p class="msg" id="who-msg" role="status"></p>
+    </section>
+    <section class="panel rec">
+      <h2>出力</h2>
+      <p class="note">いま選んでいる人の記録から、見せるための画像や年表を作ります。</p>
+      <h3>画像を作る</h3>
+      <p class="note">行った所を、きれいな一枚の画像にします。見せる範囲は、作る前に選べます。</p>
+      <div class="line"><button type="button" class="btn primary" data-act="xport">画像を作る</button></div>
+      <h3>年表</h3>
+      <p class="note">記録を日付順に並べます。日付が分からない回は、最後にまとめます。</p>
+      <div class="line">
+        <button type="button" class="btn" id="tl-txt">テキストの年表</button>
+        <button type="button" class="btn" id="tl-csv">エクセル用の年表（CSV）</button>
+      </div>
+      <textarea id="out-text" rows="6" spellcheck="false" aria-label="年表" hidden></textarea>
+      <p class="msg" id="out-msg" role="status"></p>
+    </section>
+    <section class="panel rec">
+      <h2>バックアップ</h2>
+      <p class="note">ブラウザのデータを消すと、記録も消えます。ときどきエクスポートして、手元に残してください。全員の記録とマイスポットが入ります。</p>
+      <p class="note" id="bk-info"></p>
+      <h3>エクスポート</h3>
+      <div class="line">
+        <button type="button" class="btn primary" id="bk-save">ファイルに保存</button>
+        <button type="button" class="btn" id="bk-copy">クリップボードにコピー</button>
+      </div>
+      <textarea id="ex-text" rows="4" spellcheck="false" aria-label="エクスポートした内容" hidden></textarea>
+      <p class="msg" id="ex-msg" role="status"></p>
+      <h3>インポート</h3>
+      <p class="note">エクスポートしたものを読み込みます。いまの記録は消さずに、足し合わせます。</p>
+      <div class="line">
+        <label class="btn" for="bk-file" style="cursor:pointer">ファイルを選んでインポート</label>
+        <input type="file" id="bk-file" accept=".json,application/json,text/plain" hidden>
+      </div>
+      <label class="vwho" for="im-text">または、コピーしておいた内容をここに貼り付けて</label>
+      <textarea id="im-text" rows="4" spellcheck="false"></textarea>
+      <div class="line"><button type="button" class="btn" id="bk-load">貼り付けた内容をインポート</button></div>
+      <p class="msg" id="im-msg" role="status"></p>
+    </section>
+  </div>
+</main>
+
+<script src="data/geo.js"></script>
+<script src="data/shinkansen.js"></script>
+<script src="data/ikenai.js"></script>
+<script src="data/koei.js"></script>
+<script src="data/castles.js"></script>
+<script src="data/airports.js"></script>
+<script src="data/stations.js"></script>
+<script src="data/zoos.js"></script>
+<script src="data/capitals.js"></script>
+<script src="data/worldheritage.js"></script>
+<script src="data/scenic.js"></script>
+<script src="data/nature.js"></script>
+<script src="data/hyakumeizan.js"></script>
+<script src="data/aquariums.js"></script>
+<script src="data/gardens.js"></script>
+<script src="data/themeparks.js"></script>
+<script src="data/museums.js"></script>
+<script src="data/lakes.js"></script>
+<script src="site.js?v=20261026k"></script>
+<script src="core.js?v=20261026k"></script>
+<script src="xport.js?v=20261026k"></script>
+<script>
+/* 行った記録とバックアップ（地図のページから移した） */
+function afterVisChange() { renderProfiles(); renderBackupInfo(); }
+/* 人の管理 */
+function renderProfiles() {
+  const sel = $('prof-sel'); sel.innerHTML = '';
+  rec.profiles.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.id; o.textContent = p.name + '（' + Object.keys(rec.data[p.id]).length + '件）';
+    if (p.id === rec.cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+/* メッセージは、操作した欄のすぐ下に出す */
+function msgTo(id, t, err) { const m = $(id); m.textContent = t; m.className = 'msg' + (err ? ' err' : ''); }
+const whoMsg = (t, err) => msgTo('who-msg', t, err), outMsg = (t, err) => msgTo('out-msg', t, err), exMsg = (t, err) => msgTo('ex-msg', t, err), imMsg = (t, err) => msgTo('im-msg', t, err);
+function cleanName() { return $('prof-name').value.trim().slice(0, 20); }
+$('prof-sel').onchange = e => { rec.cur = e.target.value; saveRec(); afterVisChange(); };
+$('prof-add').onclick = () => {
+  const name = cleanName();
+  if (!name) { whoMsg('追加する人の名前を入れてください。', true); return; }
+  if (rec.profiles.some(p => p.name === name)) { whoMsg('同じ名前の人がいます。別の名前にしてください。', true); return; }
+  const p = { id:newId(), name };
+  rec.profiles.push(p); rec.data[p.id] = {}; rec.cur = p.id;
+  $('prof-name').value = ''; saveRec(); afterVisChange(); whoMsg(name + ' さんを追加しました。');
+};
+$('prof-ren').onclick = () => {
+  const name = cleanName();
+  if (!name) { whoMsg('新しい名前を入れてください。', true); return; }
+  if (rec.profiles.some(p => p.name === name && p.id !== rec.cur)) { whoMsg('同じ名前の人がいます。別の名前にしてください。', true); return; }
+  rec.profiles.find(p => p.id === rec.cur).name = name;
+  $('prof-name').value = ''; saveRec(); afterVisChange(); whoMsg('名前を変更しました。');
+};
+let delTimer = null;
+$('prof-del').onclick = () => {
+  const b = $('prof-del');
+  if (rec.profiles.length < 2) { whoMsg('最後の1人は削除できません。記録を消したいときは、各ページで「行った」を外してください。', true); return; }
+  if (!delTimer) {
+    b.textContent = 'もう一度押すと ' + curName() + ' さんを削除';
+    delTimer = setTimeout(() => { b.textContent = '削除'; delTimer = null; }, 5000);
+    return;
+  }
+  clearTimeout(delTimer); delTimer = null; b.textContent = '削除';
+  const gone = curName();
+  rec.profiles = rec.profiles.filter(p => p.id !== rec.cur);
+  delete rec.data[rec.cur]; rec.cur = rec.profiles[0].id;
+  saveRec(); afterVisChange(); whoMsg(gone + ' さんの記録を削除しました。');
+};
+
+/* バックアップ（エクスポート・インポート） */
+function exportText() {
+  return JSON.stringify({
+    app:'castle-park-records', v:2, exportedAt:new Date().toISOString(),
+    spots:MYS.map(m => ({ id:m.id, n:m.n, k:m.k, memo:m.memo, pf:m.pf, lo:m.lo, la:m.la })),
+    profiles:rec.profiles.map(p => ({ name:p.name, visits:rec.data[p.id] }))
+  }, null, 1);
+}
+function markExported() { store.set('jp-exportrev', String(rec.rev || 0)); store.set('jp-exportat', new Date().toLocaleString('ja-JP')); renderBackupInfo(); }
+function renderBackupInfo() {
+  const total = rec.profiles.reduce((s, p) => s + Object.keys(rec.data[p.id]).length, 0);
+  const at = store.get('jp-exportat'), er = parseInt(store.get('jp-exportrev'), 10);
+  let t = '全員で ' + total + ' 件を記録中。';
+  if (!storageOK) t += ' この画面ではブラウザへの保存が使えないため、閉じると記録は消えます。必ずエクスポートしてください。';
+  else if (!at) t += ' まだエクスポートしていません。';
+  else t += ' 最後のエクスポート：' + at + ((rec.rev || 0) > (er || 0) ? '（その後に変更があります）' : '');
+  $('bk-info').textContent = t;
+}
+$('bk-save').onclick = () => {
+  const name = 'tsutsu-urara-' + new Date().toLocaleDateString('sv-SE') + '.json';
+  saveFile(name, exportText(), 'application/json')
+    .then(() => { markExported(); exMsg('保存しました。'); })
+    .catch(e => { if (e && e.code === 'declined') exMsg('保存をやめました。'); else exMsg('ファイルに保存できませんでした。「クリップボードにコピー」を使ってください。', true); });
+};
+$('bk-copy').onclick = () => {
+  const text = exportText(), ta = $('ex-text');
+  ta.value = text;
+  const fallback = () => { ta.hidden = false; ta.focus(); ta.select(); exMsg('上の欄に出しました。全選択してコピーしてください。'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => { markExported(); exMsg('コピーしました。メモなどに貼り付けて保存してください。'); }, fallback);
+  } else fallback();
+};
+/* 年表（いま選んでいる人の記録） */
+function timelineRows() {
+  const idx = {};
+  KINDS.forEach(x => x.items.forEach(it => { idx[it.id] = { it, k:x.k }; }));
+  const rows = [], d = curData();
+  Object.keys(d).forEach(id => {
+    const e = idx[id]; if (!e) return;
+    d[id].forEach(day => rows.push({ day, name:e.k === 'stations' ? dn(e.it) : e.it.n, kind:MODE_LABEL[e.k], pf:prefFull(e.it.pf) }));
+  });
+  rows.sort((a, b) => ((a.day === '') - (b.day === '')) || (a.day < b.day ? -1 : a.day > b.day ? 1 : 0) || (a.day === '' ? a.kind.localeCompare(b.kind, 'ja') : 0) || a.name.localeCompare(b.name, 'ja'));
+  return rows;
+}
+function timelineText() {
+  const rows = timelineRows(), today = new Date().toLocaleDateString('sv-SE');
+  const yOf = r => r.day ? r.day.slice(0, 4) + '年' : '日付不明';
+  const out = ['行った記録の年表（' + curName() + ' さん）', '書き出し日：' + today + '　全 ' + rows.length + ' 回', ''];
+  let cur = null;
+  rows.forEach(r => {
+    const y = yOf(r);
+    if (y !== cur) { cur = y; out.push('■ ' + y + '（' + rows.filter(x => yOf(x) === y).length + ' 回）'); }
+    out.push((r.day || '　　　　　　　　') + '　' + r.name + '（' + r.pf + '）　' + r.kind);
+  });
+  return out.join('\n') + '\n';
+}
+function timelineCsv() {
+  const q = s => '"' + String(s).replace(/"/g, '""') + '"';
+  const lines = [['日付', '年', '名称', '区分', '都道府県'].map(q).join(',')];
+  timelineRows().forEach(r => lines.push([r.day, r.day ? r.day.slice(0, 4) : '日付不明', r.name, r.kind, r.pf].map(q).join(',')));
+  return '\ufeff' + lines.join('\r\n') + '\r\n';
+}
+function tlOut(csv) {
+  if (!timelineRows().length) { outMsg('年表にできる記録がありません。', true); return; }
+  const text = csv ? timelineCsv() : timelineText();
+  const name = 'visit-timeline-' + new Date().toLocaleDateString('sv-SE') + (csv ? '.csv' : '.txt');
+  const fallback = () => {
+    const ta = $('out-text'); ta.hidden = false; ta.value = text.replace(/^\ufeff/, '');
+    const done = () => outMsg('上の欄に年表を出しました' + (csv ? '（カンマ区切り。表計算ソフトに貼り付けられます）' : '') + '。コピーして保存してください。');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(() => outMsg('年表をコピーしました。上の欄にも出しています。'), done); else done();
+  };
+  saveFile(name, text, csv ? 'text/csv' : 'text/plain')
+    .then(() => outMsg('年表を保存しました' + (csv ? '（Excelで開けます）' : '') + '。'))
+    .catch(e => { if (e && e.code === 'declined') outMsg('保存をやめました。'); else fallback(); });
+}
+$('tl-txt').onclick = () => tlOut(false);
+$('tl-csv').onclick = () => tlOut(true);
+function importText(text) {
+  let j;
+  try { j = JSON.parse(text); } catch (e) { imMsg('読み込めませんでした。エクスポートした内容をそのまま貼り付けてください。', true); return; }
+  if (!j || j.app !== 'castle-park-records' || !Array.isArray(j.profiles)) { imMsg('このサイトのエクスポートではないようです。', true); return; }
+  let np = 0, nv = 0, nn = 0, ns = 0;
+  if (Array.isArray(j.spots)) { j.spots.slice(0, 500).forEach(o => { const r = addMySpot(o); if (r) { ALL_IDS.add(r.id); ns++; } }); if (ns) { saveMys(); rebuildAllx(); } }
+  j.profiles.slice(0, 30).forEach(pr => {
+    if (!pr || typeof pr !== 'object') return;
+    const name = (typeof pr.name === 'string' ? pr.name.trim().slice(0, 20) : '') || '名前なし';
+    let p = rec.profiles.find(x => x.name === name);
+    if (!p) { p = { id:newId(), name }; rec.profiles.push(p); rec.data[p.id] = {}; np++; }
+    const v = (pr.visits && typeof pr.visits === 'object') ? pr.visits : {};
+    Object.keys(v).forEach(id0 => {
+      const id = cid(ID_ALIAS[id0] || id0);
+      if (!ALL_IDS.has(id)) return;
+      const incoming = normList(v[id0]);
+      if (!incoming.length) return;
+      const cd = rec.data[p.id], cur = has(cd, id) ? cd[id] : [];
+      const before = cur.length;
+      incoming.forEach(d => { if (d === '' ? cur.length === 0 : !cur.includes(d)) cur.push(d); });
+      cur.sort();
+      if (cur.length > 50) cur.length = 50;
+      if (!before && cur.length) nv++;
+      nn += cur.length - before;
+      cd[id] = cur;
+    });
+  });
+  saveRec(); afterVisChange();
+  imMsg('インポートしました。新しい人 ' + np + ' 人、新しく「行った」になった所 ' + nv + ' 件、増えた記録 ' + nn + ' 回分です。' + (ns ? 'マイスポットが ' + ns + ' 件増えました。' : '') + '同じ名前の人には足し合わせています（同じ日付は重ねません）。');
+}
+$('bk-load').onclick = () => {
+  const t = $('im-text').value.trim();
+  if (!t) { imMsg('上の欄に、エクスポートした内容を貼り付けてください。', true); return; }
+  importText(t);
+};
+$('bk-file').onchange = e => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  if (f.size > 1000000) { imMsg('ファイルが大きすぎます。', true); e.target.value = ''; return; }
+  const r = new FileReader();
+  r.onload = () => importText(String(r.result));
+  r.onerror = () => imMsg('ファイルを読めませんでした。', true);
+  r.readAsText(f);
+  e.target.value = '';
+};
+renderProfiles(); renderBackupInfo();
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+
+</body></html>

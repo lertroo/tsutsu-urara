@@ -1,0 +1,1782 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
+<title>津々浦ラ</title>
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.lertroo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css?v=20261026k">
+
+<main class="app">
+  <header>
+    <div class="head">
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>ツツウララ</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
+      <div class="topbar prefs">
+        <button type="button" class="prefbtn" id="prefbtn" aria-label="表示の設定" title="表示の設定" aria-expanded="false" aria-controls="prefmenu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <div class="prefmenu" id="prefmenu" role="group" aria-label="表示の設定" hidden>
+          <div class="pmrow"><span class="pml">文字の大きさ</span><button type="button" id="fsm" aria-label="文字を小さく">A−</button><button type="button" id="fsp" aria-label="文字を大きく">A＋</button></div>
+          <div class="pmrow"><span class="pml">ライト/ダーク</span><button type="button" id="theme" aria-label="表示モードの切り替え">自動</button></div>
+          <div class="pmrow"><span class="pml">フォント</span><button type="button" id="fontsel" aria-label="フォントの切り替え（サイトの指定／端末の標準）" title="サイトで指定した書体と、この端末の標準の書体を切り替えます">サイト指定</button></div>
+          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォント・地図の高さ・一覧の高さ・名前の大きさ・表示する量・塗り・凡例を、初期状態に戻します（行った記録は消えません）">初期化</button></div>
+        </div>
+      </div>
+    </div>
+    <nav class="ptabs" aria-label="ページ"><a href="index.html" aria-current="page">地図</a><a href="ashiato.html">あしあと</a><a href="kiroku.html">出力・保存</a><a href="changelog.html">更新履歴</a><a href="about.html">このサイト</a></nav>
+  </header>
+
+
+  <div class="layout">
+    <section class="left" aria-label="分布図">
+      <div class="mapwrap" id="mapwrap">
+        <svg id="svg" viewBox="120 0 680 880" role="img" aria-label="日本列島の分布図">
+          <defs><filter id="tdark" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"></feColorMatrix><feColorMatrix type="hueRotate" values="180"></feColorMatrix><feColorMatrix type="matrix" values="0.8 0 0 0 0  0 0.8 0 0 0  0 0 0.8 0 0  0 0 0 1 0"></feColorMatrix></filter></defs>
+          <rect class="seabg" x="-3000" y="-3000" width="7000" height="7000"></rect>
+          <g id="g-tile"></g>
+          <g id="g-land"></g>
+          <g id="g-fill"></g>
+          <g id="g-sel"></g>
+          <g id="g-tky" class="tky"></g>
+          <g id="g-lake" class="lakes"></g>
+          <g id="g-tkyl"></g>
+          <g id="g-speed" class="speed" aria-hidden="true"></g>
+          <g id="g-lab"></g>
+          <g id="g-dots"></g>
+          <g id="g-clu"></g>
+        </svg>
+        <div class="ctrl">
+          <button type="button" id="zin" aria-label="拡大" title="地図を拡大します">＋</button>
+          <button type="button" id="zout" aria-label="縮小" title="地図を縮小します">－</button>
+          <button type="button" id="zfull" aria-label="全国を表示" title="日本全体が見える大きさに戻します">全国</button>
+          <button type="button" id="zfill" class="cgap" aria-pressed="false" aria-label="行った都道府県を塗って表示（点との切り替え）" title="行った都道府県を、行った数に応じて色で塗ります。もう一度押すと、点の表示に戻ります">県を塗る</button>
+          <button type="button" id="zbg" aria-pressed="false" aria-haspopup="menu" aria-expanded="false" aria-controls="bgmenu" aria-label="背景の地図を選ぶ" title="地図の下に敷く地図（淡色地図・航空写真など）を選びます"><span>背景</span><small id="zbgn">なし</small></button>
+          <button type="button" id="labm" class="cgap" aria-label="地図の名前の文字を小さく" title="地図に出す名前の文字を小さくします（ページ全体の文字の大きさは、右上の歯車で変えます）">名前 小</button>
+          <button type="button" id="labp" aria-label="地図の名前の文字を大きく" title="地図に出す名前の文字を大きくします（ページ全体の文字の大きさは、右上の歯車で変えます）">名前 大</button>
+        </div>
+        <div id="clum" role="group" aria-label="地図に出す点と名前の量" title="混み合う所では、点と名前を「数字の入った円」にまとめます。左ほど多くまとめて、右ほど一つずつ出します。"><span id="clul">表示する量：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="地図に出す点と名前の量（左ほど少なく、右ほど多く）"><span class="clue" aria-hidden="true"><span>少</span><span>多</span></span></div>
+        <div class="legend" id="legend" aria-hidden="true"></div>
+        <div class="ll" id="ll" aria-hidden="true"></div>
+        <div id="bgmenu" class="bgmenu" role="menu" aria-label="背景の地図" hidden></div>
+        <div id="tattr" hidden></div>
+        <div class="farbox" id="farbox" hidden></div>
+        <div class="fararrow" id="fararrow" hidden aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M3 17h25V6l17 18-17 18V31H3z"/></svg></div>
+        <button type="button" id="legtog" class="legtog" aria-expanded="false" aria-controls="legend">凡例</button>
+      </div>
+      <div class="maph" id="maph" role="separator" aria-orientation="horizontal" aria-label="地図の高さ（上下にドラッグ、ダブルタップで元に戻す）" tabindex="0"><i></i></div>
+      <p class="note" id="mapnote">種類をまたいで名前で探せます。選ぶと、詳細が開きます。</p>
+    </section>
+
+    <section class="mid" id="mid" aria-label="詳細"><p class="panel mid-empty" id="midempty">施設を選ぶと、ここに詳細が出ます。</p></section>
+
+    <section class="right" aria-label="詳細と一覧">
+  <div class="tabs" role="tablist" aria-label="表示する一覧">
+    <button type="button" class="tab" role="tab" id="tab-all" aria-selected="true" data-mode="all">横断検索</button>
+  </div>
+      <input type="search" id="q" aria-label="絞り込み" placeholder="施設名・県名で検索" autocomplete="off">
+      <ul class="list" id="list"></ul>
+      <div class="maph listh" id="listh" role="separator" aria-orientation="horizontal" aria-label="検索結果の高さ（上下にドラッグ、ダブルクリックで元に戻す）" tabindex="0"><i></i></div>
+      <aside class="panel" id="detail" aria-live="polite" hidden></aside>
+      <div class="chips" id="chips" role="group" aria-label="絞り込み"></div>
+      <div class="tools" id="tools"></div>
+      <div class="src" id="tkysrc" hidden>東京都の区市町村の境界：<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-2025.html" target="_blank" rel="noopener">「国土数値情報（行政区域データ）」</a>（国土交通省、2025年1月1日時点）をもとに作成（点を間引くなどの加工をしています）。国土交通省が作成したものではありません。測量法に基づく国土地理院長承認（複製）R 6JHf 503。</div>
+      <div class="src" id="citysrc" hidden>市区町村の境界：「国土数値情報（行政区域データ）」（国土交通省、2021年1月1日時点）を、スマートニュース メディア研究所が簡素化したもの（https://github.com/smartnews-smri/japan-topography）をもとに作成。国土交通省が作成したものではありません。</div>
+      <p class="src">出典と免責は、<a href="about.html#legal">「このサイト」のページ</a>にあります。</p>
+    </section>
+  </div>
+</main>
+
+<script src="data/geo.js"></script>
+<script src="data/lakes.js"></script>
+<script src="data/shinkansen.js"></script>
+<script src="data/ikenai.js"></script>
+<script src="data/koei.js"></script>
+<script src="data/castles.js"></script>
+<script src="data/airports.js"></script>
+<script src="data/stations.js"></script>
+<script src="data/zoos.js"></script>
+<script src="data/capitals.js"></script>
+<script src="data/worldheritage.js"></script>
+<script src="data/scenic.js"></script>
+<script src="data/nature.js"></script>
+<script src="data/hyakumeizan.js"></script>
+<script src="data/aquariums.js"></script>
+<script src="data/gardens.js"></script>
+<script src="data/themeparks.js"></script>
+<script src="data/museums.js"></script>
+<script src="data/photos.js"></script>
+<script src="site.js?v=20261026k"></script>
+<script src="core.js?v=20261026k"></script>
+<script src="xport.js?v=20261026k"></script>
+<script>
+
+/* ===== 状態 ===== */
+const svg = $('svg'), gLand = $('g-land'), gLake = $('g-lake'), gSel = $('g-sel'), gDots = $('g-dots'), gClu = $('g-clu'), gLab = $('g-lab');
+/* 地図の大きさ（幅・高さ）。測るたびに画面の計算が走るので、大きさが変わったときだけ測り直す（位置は変わるので、位置が要る所は今までどおり測る） */
+let svgSzC = null;
+function svgSz() { if (!svgSzC) { const r = svg.getBoundingClientRect(); if (!(r.width > 0 && r.height > 0)) return { width:r.width, height:r.height }; svgSzC = { width:r.width, height:r.height }; } return svgSzC; }
+try { new ResizeObserver(() => { svgSzC = null; }).observe(svg); } catch (e) {}
+window.addEventListener('resize', () => { svgSzC = null; });
+const NS = 'http://www.w3.org/2000/svg';
+const W0 = { x:120, y:0, w:680, h:880 };
+let vb = { ...W0 };
+let selId = null;
+const flt = { kinds:null, type:'all', region:'all', q:'', vis:'all', pfk:'' };
+
+function el(name, attrs, parent) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* ===== 県の形の細かさ =====
+   data/geo.js（全国用、GEO_PREFS）で描き、拡大すると data/geo_fine.js（拡大用、GEO_PREFS_FINE）に切り替える。
+   拡大用は、少し拡大したときに読み込む。切り替えるのは、画面に入っている県だけ。 */
+const FINE_LOAD = 300, FINE_IN = 120, FINE_OUT = 150;   // viewBox の幅（全体は680）。FINE_IN と FINE_OUT の差で、切り替えのちらつきを防ぐ
+let fineOn = false, fineState = 0;                       // fineState 0:未読み込み 1:読み込み中 2:読み込み済み 3:失敗（全国用のまま）
+const PREF_BOX = {};
+Object.keys(GEO_PREFS).forEach(k => {
+  const n = GEO_PREFS[k].match(/-?\d+\.?\d*/g).map(Number);
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (let i = 0; i + 1 < n.length; i += 2) { x0 = Math.min(x0, n[i]); x1 = Math.max(x1, n[i]); y0 = Math.min(y0, n[i + 1]); y1 = Math.max(y1, n[i + 1]); }
+  PREF_BOX[k] = [x0, y0, x1, y1];
+});
+const fineView = k => { const b = PREF_BOX[k], m = vb.w * 0.25; return b[2] > vb.x - m && b[0] < vb.x + vb.w + m && b[3] > vb.y - m && b[1] < vb.y + vb.h + m; };
+const wantFine = k => fineOn && fineState === 2 && fineView(k);
+const geoD = k => (wantFine(k) ? GEO_PREFS_FINE : GEO_PREFS)[k];
+function geoPath(k, attrs, parent) { const p = el('path', Object.assign({ d:geoD(k), 'data-gk':k }, attrs), parent); p.__f = wantFine(k); return p; }
+function refreshGeo() {
+  svg.querySelectorAll('path[data-gk]').forEach(p => {
+    const f = wantFine(p.dataset.gk);
+    if (p.__f !== f) { p.__f = f; p.setAttribute('d', (f ? GEO_PREFS_FINE : GEO_PREFS)[p.dataset.gk]); }
+  });
+}
+function loadFine() {
+  if (fineState) return;
+  fineState = 1;
+  const s = document.createElement('script');
+  s.src = 'data/geo_fine.js';
+  s.onload = () => { fineState = typeof GEO_PREFS_FINE === 'object' ? 2 : 3; refreshGeo(); };
+  s.onerror = () => { fineState = 3; };
+  document.head.appendChild(s);
+}
+function updateFine() {
+  if (vb.w < FINE_LOAD) loadFine();
+  fineOn = fineOn ? vb.w < FINE_OUT : vb.w < FINE_IN;
+  if (fineState === 2) refreshGeo();
+}
+
+/* ===== 区市町村の境界（県を選んで、幅が TKY_IN 未満に拡大したとき。東京都は data/geo_tokyo.js、ほかの県は data/city/NN.js を、そのときに読み込む）===== */
+const TKY_IN = 90, TKY_MINW = 1.5;   // viewBox の幅がこれより小さいとき境界線を出す／県を選んだときの最小幅
+const gTky = $('g-tky'), gTkyL = $('g-tkyl');
+const PREF_NAMES = ['北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県','茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県','新潟県','富山県','石川県','福井県','山梨県','長野県','岐阜県','静岡県','愛知県','三重県','滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県','鳥取県','島根県','岡山県','広島県','山口県','徳島県','香川県','愛媛県','高知県','福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県'];
+const cityCode = k => { const i = PREF_NAMES.indexOf(k); return i < 0 ? null : String(i + 1).padStart(2, '0'); };
+const cityState = {}, cityGrp = {};   // 県コード → 0:未読み込み 1:読み込み中 2:読み込み済み 3:失敗 ／ 描いたグループ
+const cityHide = document.head.appendChild(document.createElement('style'));
+let cityHideK = null;
+function loadCity(code) {
+  if (cityState[code]) return;
+  cityState[code] = 1;
+  const sc = document.createElement('script');
+  sc.src = code === '13' ? 'data/geo_tokyo.js' : 'data/city/' + code + '.js';
+  sc.onload = () => {
+    const data = code === '13' ? (typeof GEO_TOKYO === 'object' ? GEO_TOKYO : null) : (window.GEO_CITY && window.GEO_CITY[code]);
+    if (!data) { cityState[code] = 3; return; }
+    const gp = el('g', { style:'display:none' }, gTky), gl = el('g', { style:'display:none' }, gTkyL);
+    data.forEach(t => { el('path', { d:t.d }, gp); const tx = el('text', { x:t.x, y:t.y }, gl); tx.setAttribute('class', 'tkylab'); tx.textContent = t.n; tx.style.display = 'none'; tx.__w = t.w; tx.__x = t.x; tx.__y = t.y; });
+    cityGrp[code] = { p:gp, l:gl };
+    cityState[code] = 2; updateTky();
+  };
+  sc.onerror = () => { cityState[code] = 3; };
+  document.head.appendChild(sc);
+}
+/* いま見えている範囲にある県。県の簡略な形（簡略版の座標）に、範囲全体に敷いた格子点（縁の少し外まで）を当てて決める。
+   県を選んでいるときも、その県を先頭に、隣の県のうち見えているものを足す（足さないと、隣の県は別の出典の県の外形のままで、境界線が二重にずれて見える） */
+var PCP = {}, PBB = {}, pCtx = null;
+const VC_N = 15, VC_M = 0.05;
+function viewCodes() {
+  if (vb.w >= TKY_IN) return [];
+  const sel = flt.pfk ? cityCode(flt.pfk) : null;
+  if (flt.pfk && !sel) return [];
+  if (!pCtx) pCtx = document.createElement('canvas').getContext('2d');
+  const pts = [], out = sel ? [sel] : [];
+  for (let i = 0; i < VC_N; i++) for (let j = 0; j < VC_N; j++) pts.push([vb.x + vb.w * (-VC_M + (1 + 2 * VC_M) * i / (VC_N - 1)), vb.y + vb.h * (-VC_M + (1 + 2 * VC_M) * j / (VC_N - 1))]);
+  const x0 = vb.x - vb.w * VC_M, x1 = vb.x + vb.w * (1 + VC_M), y0 = vb.y - vb.h * VC_M, y1 = vb.y + vb.h * (1 + VC_M);
+  Object.keys(GEO_PREFS).forEach(k => {
+    const c = cityCode(k); if (!c || c === sel) return;
+    if (!PBB[k]) { const t = el('path', { d:GEO_PREFS[k] }, gLand), b = t.getBBox(); t.remove(); PBB[k] = { x:b.x, y:b.y, x2:b.x + b.width, y2:b.y + b.height }; PCP[k] = new Path2D(GEO_PREFS[k]); }
+    const bb = PBB[k]; if (bb.x2 < x0 || bb.x > x1 || bb.y2 < y0 || bb.y > y1) return;
+    if (pts.some(p => pCtx.isPointInPath(PCP[k], p[0], p[1]))) out.push(c);
+  });
+  return out;
+}
+function updateTky() {
+  const codes = viewCodes();
+  codes.forEach(loadCity);
+  const shown = codes.filter(c => cityState[c] === 2);
+  for (const c in cityGrp) { const want = shown.includes(c) ? '' : 'none'; cityGrp[c].p.style.display = cityGrp[c].l.style.display = want; }
+  /* 区市町村の境界が出ているあいだは、県の外形（簡略）の形とずれるので、外形と塗りは消し、区市町村の形を同じ色で塗る */
+  const mw_ = $('mapwrap'), names = shown.map(c => PREF_NAMES[+c - 1]), key = names.join(',');
+  if (cityHideK !== key) { cityHideK = key; cityHide.textContent = names.length ? names.map(k => '.mapwrap.cityshown .landp[data-k="' + k + '"], .mapwrap.cityshown .pfill[data-k="' + k + '"]').join(', ') + ', .mapwrap.cityshown .prefsel { display: none; }' : ''; }
+  mw_.classList.toggle('cityshown', shown.length > 0);
+  shown.forEach((code, i) => {
+    const pf_ = document.querySelector('#g-fill .pfill[data-k="' + names[i] + '"]');
+    const lv_ = pf_ ? (pf_.getAttribute('class').match(/lv(\d)/) || [])[1] : '';
+    cityGrp[code].p.style.setProperty('--tkyfill', lv_ ? 'color-mix(in srgb, var(--accent) ' + [30, 55, 82][lv_ - 1] + '%, var(--land))' : 'var(--land)');
+    cityGrp[code].p.style.setProperty('--tkyfillbg', lv_ ? 'color-mix(in srgb, var(--accent) ' + [30, 55, 82][lv_ - 1] + '%, transparent)' : 'transparent');
+  });
+  if (!shown.length) return;
+  const s = (svgSz().width / vb.w) || 1, fs = 11 / s;
+  const x0 = vb.x - vb.w * 0.05, x1 = vb.x + vb.w * 1.05, y0 = vb.y - vb.h * 0.05, y1 = vb.y + vb.h * 1.05;
+  shown.forEach(code => cityGrp[code].l.childNodes.forEach(tx => {
+    const ok = tx.__x > x0 && tx.__x < x1 && tx.__y > y0 && tx.__y < y1 && tx.__w * s >= tx.textContent.length * 11 * 0.75;
+    const want = ok ? '' : 'none';
+    if (tx.style.display !== want) tx.style.display = want;
+    if (ok) { tx.style.fontSize = fs + 'px'; tx.style.strokeWidth = (3 / s) + 'px'; }
+  }));
+}
+
+/* 地図の下地(都道府県) */
+LAKES.forEach(l => el('path', { d:l.d, 'data-lake':l.n }, gLake));   /* 大きな湖（海の色で重ねる） */
+Object.keys(GEO_PREFS).forEach(k => { const lp = geoPath(k, { class:'landp', 'data-k':k }, gLand); lp.addEventListener('click', () => { if (!moved && mapView === 'fill') setPfk(k); }); });
+
+/* ===== 表示範囲の操作 ===== */
+let ASPECT = W0.h / W0.w;
+const maxW = () => W0.h / ASPECT;
+function fitAll() {
+  const w = maxW();
+  vb = { x:W0.x - (w - W0.w) / 2, y:0, w, h:w * ASPECT }; applyVB();
+}
+let MINW = 5;   /* 県を選んでいるときは、さらに拡大できる（refresh() が切り替える） */
+function clampVB() {
+  if (!(ASPECT > 0 && isFinite(ASPECT))) ASPECT = W0.h / W0.w;   /* 縦横比や表示範囲が壊れたら、初期値に戻す（地図が消えて、操作も効かなくなるのを防ぐ） */
+  vb = clampBox(vb);
+}
+/* 表示範囲 v を、地図の外に出すぎない範囲に収めた新しい範囲を返す（flyTo の行き先にも使う） */
+function clampBox(v) {
+  if (![v.x, v.y, v.w].every(isFinite)) v = { ...W0 };
+  const w = Math.max(MINW, Math.min(maxW(), v.w)), h = w * ASPECT;
+  const x = w >= W0.w ? W0.x - (w - W0.w) / 2 : Math.max(W0.x - 110, Math.min(W0.x + W0.w - w + 40, v.x));
+  const y = h >= W0.h ? 0 : Math.max(-40, Math.min(W0.h - h + 40, v.y));
+  return { x, y, w, h };
+}
+/* 緯度経度の小さな表示：地図の中心と、マウスの位置（proj の逆変換） */
+var llPtr = null;
+const unproj = (x, y) => [x / (40 * 0.81) + 122, 46 - y / 40];
+function showLL() {
+  const e = $('ll'); if (!e) return;
+  const c = unproj(vb.x + vb.w / 2, vb.y + vb.h / 2), f = a => a.map(v => v.toFixed(2));
+  const [clo, cla] = f(c);
+  let t = '<span>中心</span><span>' + cla + '°N ' + clo + '°E</span>';
+  if (llPtr) { const [plo, pla] = f(unproj(llPtr[0], llPtr[1])); t = '<span>カーソル</span><span>' + pla + '°N ' + plo + '°E</span>' + t; }
+  e.innerHTML = t;
+}
+let usRaf = 0;
+function applyVB() {
+  clampVB();
+  svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
+  showLL();
+  updateFine();
+  updateTky();
+  updateTiles();
+  /* 指・ホイールで動かしている間は、点の大きさ・まとめ・名前を、画面の描き直し1回につき1度だけ直す（イベントは1回の描き直しの間に何度も来る） */
+  if (labBusy()) { if (!usRaf) usRaf = requestAnimationFrame(() => { usRaf = 0; updateSizes(); }); }
+  else { cancelAnimationFrame(usRaf); usRaf = 0; updateSizes(); }
+  drawSpeed();
+  drawFarArrow();
+}
+function zoomAt(f, cx, cy) {
+  const nw = Math.max(MINW, Math.min(maxW(), vb.w * f));
+  const r = nw / vb.w;
+  vb.x = cx - (cx - vb.x) * r; vb.y = cy - (cy - vb.y) * r; vb.w = nw;
+  applyVB();
+}
+$('zin').onclick = () => zoomAt(0.6, vb.x + vb.w / 2, vb.y + vb.h / 2);
+$('zout').onclick = () => zoomAt(1 / 0.6, vb.x + vb.w / 2, vb.y + vb.h / 2);
+$('zfull').onclick = () => fitAll();
+$('zfill').onclick = () => setMapView(mapView === 'fill' ? 'dots' : 'fill');
+
+/* ===== 背景の地図（地理院タイルの淡色地図・標準地図・航空写真と、OpenStreetMap から選ぶ）=====
+   タイルはウェブメルカトルなので、1枚を横長の帯に切り分け、帯ごとに上下の緯度をこの地図の投影に置いて引き伸ばす（帯は緯度0.5度ほど。1枚のまま引き伸ばすと、全国表示では真ん中が南北に数ピクセルずれる）。
+   縦横の比は緯度で少し変わる（北海道では縦に縮み、沖縄では縦に伸びる）。拡大の段階を変えたときは、新しいタイルがそろうまで前の段階のタイルを下に残す。 */
+const TILE_SRC = {
+  pale:  { n:'淡色地図', url:'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', zmax:18, gsi:true },
+  std:   { n:'標準地図', url:'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', zmax:18, gsi:true },
+  photo: { n:'航空写真', url:'https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', zmax:18, gsi:true, photo:true },
+  osm:   { n:'OpenStreetMap', short:'OSM', url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png', zmax:19 },
+};
+const TILE_ZMIN = 5, TILE_MAX = 120;
+const gTile = $('g-tile');
+let tileSrc = '', tileRaf = 0, tileZ = -1, tileWant = new Set();   /* tileSrc：TILE_SRC のキー。'' は背景なし */
+try { const v = localStorage.getItem('jp-bgmap'); tileSrc = v === '1' ? 'pale' : TILE_SRC[v] ? v : ''; } catch (e) {}
+const tileLo = (x, n) => x / n * 360 - 180;
+const tileLa = (y, n) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) * 180 / Math.PI;
+function updateTiles() { if (!tileRaf) tileRaf = requestAnimationFrame(drawTiles); }
+function drawTiles() {
+  tileRaf = 0;
+  if (!tileSrc) { gTile.replaceChildren(); tileZ = -1; tileWant = new Set(); return; }
+  const src = TILE_SRC[tileSrc];
+  const sz = svgSz(); if (!(sz.width > 0)) return;
+  const [lo0, la1] = unproj(vb.x, vb.y), [lo1, la0] = unproj(vb.x + vb.w, vb.y + vb.h);
+  const px = sz.width * Math.min(window.devicePixelRatio || 1, 1.5);
+  let z = Math.max(TILE_ZMIN, Math.min(src.zmax, Math.round(Math.log2(360 * px / (256 * (lo1 - lo0))))));
+  let n, x0, x1, y0, y1;
+  for (;;) {   /* 日本の周り（経度122〜154度、緯度20〜46度）だけ。枚数が多すぎるときは段階を下げる */
+    n = 2 ** z;
+    const tx = lo => Math.floor((lo + 180) / 360 * n);
+    const ty = la => { const r = la * Math.PI / 180; return Math.floor((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n); };
+    x0 = tx(Math.max(lo0, 122)); x1 = tx(Math.min(lo1, 154)); y0 = ty(Math.min(la1, 46)); y1 = ty(Math.max(la0, 20));
+    if ((x1 - x0 + 1) * (y1 - y0 + 1) <= TILE_MAX || z <= TILE_ZMIN) break;
+    z--;
+  }
+  const have = {};
+  Array.from(gTile.children).forEach(g => { have[g.__k] = g; });
+  const want = new Set();
+  for (let x = x0; x <= x1; x++) for (let y = y0; y <= y1; y++) {
+    const k = tileSrc + '/' + z + '/' + x + '/' + y; want.add(k);
+    if (have[k]) continue;
+    const ax = proj(tileLo(x, n), 0)[0], bx = proj(tileLo(x + 1, n), 0)[0];
+    const ns = Math.max(1, Math.min(16, Math.ceil((tileLa(y, n) - tileLa(y + 1, n)) * 2)));
+    const ov = (bx - ax) * 0.004;   /* 継ぎ目が透けないよう、少し重ねる */
+    const url = src.url.replace('{z}', z).replace('{x}', x).replace('{y}', y);
+    const g = el('g', {}, gTile);
+    g.__k = k; g.__z = z; g.__ok = false;
+    for (let i = 0; i < ns; i++) {   /* 帯 i：タイルの画素の行 256*i/ns 〜 256*(i+1)/ns を、その上下の緯度の位置に置く */
+      const sy0 = proj(0, tileLa(y + i / ns, n))[1], sy1 = proj(0, tileLa(y + (i + 1) / ns, n))[1];
+      const sv = el('svg', { x:ax, y:sy0, width:bx - ax + ov, height:sy1 - sy0 + ov, viewBox:'0 ' + (256 * i / ns) + ' 256 ' + (256 / ns), preserveAspectRatio:'none' }, g);
+      const im = el('image', { width:256, height:256 }, sv);
+      if (i === 0) {
+        im.addEventListener('load', () => { g.__ok = true; tileSweep(); });
+        im.addEventListener('error', () => { g.__ok = true; g.style.visibility = 'hidden'; tileSweep(); });
+      }
+      im.setAttribute('href', url);
+    }
+  }
+  tileZ = z; tileWant = want; tileSweep();
+}
+/* 要らなくなったタイルを外す。同じ段階で画面から出たものはすぐ、前の段階のものは、いまの段階のタイルがそろってから */
+function tileSweep() {
+  const ims = Array.from(gTile.children);
+  const done = ims.every(im => !tileWant.has(im.__k) || im.__ok);
+  ims.forEach(im => { if (!tileWant.has(im.__k) && (done || im.__z === tileZ || ims.length > TILE_MAX * 3)) im.remove(); });
+}
+function applyTileOn() {
+  const src = TILE_SRC[tileSrc];
+  $('zbg').setAttribute('aria-pressed', String(!!src));
+  $('zbgn').textContent = src ? (src.short || src.n) : 'なし';
+  $('mapwrap').classList.toggle('bgmap', !!src);
+  gTile.classList.toggle('photo', !!(src && src.photo));
+  $('mapwrap').classList.toggle('bgphoto', !!(src && src.photo));
+  $('tattr').hidden = !src;
+  if (src) $('tattr').innerHTML = src.gsi
+    ? '背景：<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル（' + src.n + '）</a>'
+    : '背景：© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+  $('bgmenu').querySelectorAll('button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.bg === tileSrc)));
+  updateTiles();
+}
+function setTileSrc(k) {
+  if (k !== tileSrc) { tileSrc = k; gTile.replaceChildren(); tileZ = -1; tileWant = new Set(); }
+  try { localStorage.setItem('jp-bgmap', k); } catch (e) {}
+  applyTileOn();
+}
+/* 「背景」ボタンで、選ぶ枠を開く（ボタンの左に出す） */
+function bgMenu(open) {
+  const m = $('bgmenu'), b = $('zbg');
+  if (open) { const c = b.parentNode; m.style.top = (b.offsetTop + c.offsetTop) + 'px'; m.style.right = (c.offsetParent.clientWidth - c.offsetLeft + 6) + 'px'; }
+  m.hidden = !open; b.setAttribute('aria-expanded', String(open));
+  if (open) (m.querySelector('[aria-checked="true"]') || m.querySelector('button')).focus();
+}
+$('bgmenu').innerHTML = [['', 'なし']].concat(Object.keys(TILE_SRC).map(k => [k, TILE_SRC[k].n]))
+  .map(([k, n]) => '<button type="button" role="menuitemradio" data-bg="' + k + '">' + esc(n) + '</button>').join('');
+$('bgmenu').onclick = e => { const b = e.target.closest('button'); if (!b) return; setTileSrc(b.dataset.bg); bgMenu(false); $('zbg').focus(); };
+$('zbg').onclick = e => { e.stopPropagation(); bgMenu($('bgmenu').hidden); };
+document.addEventListener('click', e => { if (!$('bgmenu').hidden && !e.target.closest('#bgmenu')) bgMenu(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('bgmenu').hidden) { bgMenu(false); $('zbg').focus(); } });
+window.addEventListener('resize', updateTiles);
+applyTileOn();
+$('labm').onclick = () => setLabs(LABS - 0.1);
+$('labp').onclick = () => setLabs(LABS + 0.1);
+$('clus').addEventListener('input', e => setClu(+e.target.value));
+/* 地図の高さを変える（下の取っ手をドラッグ、または上下キー。ダブルタップで元に戻す） */
+const mapH = { min:220, key:'jp-maph' };
+const mapHMax = () => Math.round(svg.clientWidth * W0.h / W0.w);
+const mapHDef = () => {
+  if (window.matchMedia('(min-width: 1100px)').matches) {
+    const top = $('mapwrap').getBoundingClientRect().top + window.scrollY;
+    return Math.round(Math.min(mapHMax(), Math.max(480, window.innerHeight - top - 44)));
+  }
+  return Math.round(Math.min(mapHMax(), window.innerHeight * 0.78));
+};
+function setMapH(px, save) {
+  if (!(svg.clientWidth > 0)) return;   /* 地図が一時的に0幅になったとき（画面の大きさが変わる途中など）に、縦横比が無限大になって地図が消えるのを防ぐ */
+  const h = Math.max(mapH.min, Math.min(mapHMax(), Math.round(px)));
+  svg.style.height = h + 'px'; svg.style.maxHeight = 'none';
+  ASPECT = h / svg.clientWidth;
+  if (save) { try { localStorage.setItem(mapH.key, String(h)); } catch (e) {} }
+  const hd = $('maph'); if (hd) { hd.setAttribute('aria-valuenow', String(h)); hd.setAttribute('aria-valuemin', String(mapH.min)); hd.setAttribute('aria-valuemax', String(mapHMax())); }
+  applyVB();
+}
+function initMapH() {
+  let st = null; try { st = parseFloat(localStorage.getItem(mapH.key)); } catch (e) {}
+  setMapH(st > 0 ? st : mapHDef(), false);
+  const hd = $('maph');
+  let drag0 = null;
+  hd.addEventListener('pointerdown', ev => { drag0 = { y:ev.clientY, h:svg.clientHeight }; hd.setPointerCapture(ev.pointerId); ev.preventDefault(); });
+  hd.addEventListener('pointermove', ev => { if (drag0) setMapH(drag0.h + ev.clientY - drag0.y, false); });
+  const end = () => { if (drag0) { drag0 = null; setMapH(svg.clientHeight, true); } };
+  hd.addEventListener('pointerup', end); hd.addEventListener('pointercancel', end);
+  hd.addEventListener('dblclick', () => { try { localStorage.removeItem(mapH.key); } catch (e) {} setMapH(mapHDef(), false); });
+  hd.addEventListener('keydown', ev => {
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') { ev.preventDefault(); setMapH(svg.clientHeight + (ev.key === 'ArrowDown' ? 40 : -40), true); }
+  });
+  window.addEventListener('resize', () => setMapH(svg.clientHeight, false));
+}
+function toUser(ev) {
+  const r = svg.getBoundingClientRect();
+  const s = Math.min(r.width / vb.w, r.height / vb.h);
+  const ox = (r.width - vb.w * s) / 2, oy = (r.height - vb.h * s) / 2;
+  return { x:vb.x + (ev.clientX - r.left - ox) / s, y:vb.y + (ev.clientY - r.top - oy) / s, s };
+}
+svg.addEventListener('wheel', ev => {
+  ev.preventDefault(); busyUntil = performance.now() + 150;
+  const p = toUser(ev);
+  zoomAt(ev.deltaY < 0 ? 0.8 : 1.25, p.x, p.y);
+}, { passive:false });
+let drag = null, moved = false, pinch = null;
+const ptrs = new Map();
+const mid = () => { const a = [...ptrs.values()]; return { x:(a[0].x + a[1].x) / 2, y:(a[0].y + a[1].y) / 2, d:Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y) || 1 }; };
+const startDrag = pt => { drag = { x:pt.x, y:pt.y, vx:vb.x, vy:vb.y, s:toUser({ clientX:pt.x, clientY:pt.y }).s }; };
+svg.addEventListener('pointerdown', ev => {
+  /* 最初の1本の指は新しい操作の始まり。前の操作の指が残っていたら（指を離した通知が届かなかった場合など）捨てる。
+     残ったままだと、1本指なのに2本指の拡大縮小として扱われ、全国表示まで縮んでしまう */
+  if (ev.isPrimary && ptrs.size) { ptrs.clear(); pinch = null; drag = null; }
+  ptrs.set(ev.pointerId, { x:ev.clientX, y:ev.clientY });
+  if (ptrs.size === 1) { moved = false; startDrag(ptrs.get(ev.pointerId)); $('mapwrap').classList.add('drag'); }
+  else if (ptrs.size === 2) {
+    drag = null; moved = true;
+    const m = mid(), u = toUser({ clientX:m.x, clientY:m.y });
+    pinch = { d0:m.d, w0:vb.w, ux:u.x, uy:u.y };
+  }
+});
+svg.addEventListener('pointermove', ev => {
+  if (!ptrs.has(ev.pointerId)) return;
+  ptrs.set(ev.pointerId, { x:ev.clientX, y:ev.clientY });
+  if (pinch && ptrs.size >= 2) {
+    const m = mid();
+    vb.w = Math.max(MINW, Math.min(maxW(), pinch.w0 * pinch.d0 / m.d)); vb.h = vb.w * ASPECT;
+    const r = svg.getBoundingClientRect(), s = Math.min(r.width / vb.w, r.height / vb.h);
+    const ox = (r.width - vb.w * s) / 2, oy = (r.height - vb.h * s) / 2;
+    vb.x = pinch.ux - (m.x - r.left - ox) / s; vb.y = pinch.uy - (m.y - r.top - oy) / s;
+    applyVB();
+    return;
+  }
+  if (!drag) return;
+  const dx = ev.clientX - drag.x, dy = ev.clientY - drag.y;
+  if (!moved && Math.abs(dx) + Math.abs(dy) > 4) { moved = true; try { svg.setPointerCapture(ev.pointerId); } catch (e) {} }
+  vb.x = drag.vx - dx / drag.s; vb.y = drag.vy - dy / drag.s;
+  applyVB();
+});
+const endDrag = ev => {
+  ptrs.delete(ev.pointerId);
+  if (ptrs.size < 2) pinch = null;
+  if (ptrs.size === 1) startDrag([...ptrs.values()][0]);
+  else if (ptrs.size === 0) { const was = drag && moved; drag = null; $('mapwrap').classList.remove('drag'); if (was) updateSizes(true); }
+};
+svg.addEventListener('pointerup', endDrag);
+svg.addEventListener('pointercancel', endDrag);
+/* 指が地図の外や、作り直された要素の上で離れても、操作を終わらせる */
+window.addEventListener('pointerup', ev => { if (ptrs.has(ev.pointerId)) endDrag(ev); });
+window.addEventListener('pointercancel', ev => { if (ptrs.has(ev.pointerId)) endDrag(ev); });
+
+/* ===== 一覧データ ===== */
+const PF_IDX = {}; Object.keys(GEO_PREFS).forEach((k, i) => { PF_IDX[k] = i; });
+const pfIdx = it => { const v = PF_IDX[PREF_KEY[it.pf]]; return v === undefined ? 99 : v; };
+function matchScore(it, q) {
+  const t = qterms()[0] || '', n = fold(it.n + (it.o || ''));
+  if (n === t) return 0;
+  if (n.startsWith(t)) return 1;
+  const i = n.indexOf(t);
+  return i >= 0 ? 2 + Math.min(i, 60) / 100 : 3;
+}
+const jaCmp = new Intl.Collator('ja').compare;
+function orderItems(a) {
+  const q = flt.q;
+  const base = (x, y) => (isVisited(y.id) - isVisited(x.id)) || (pfIdx(x) - pfIdx(y)) || jaCmp(x.n, y.n);
+  return a.slice().sort(q ? (x, y) => (matchScore(x, q) - matchScore(y, q)) || base(x, y) : base);
+}
+/* 1回の画面の更新で何度も呼ばれるので、条件（絞り込み・記録・データの数）が同じあいだは、前の結果を返す */
+let ciKey = '', ciVal = null;
+function currentItems() {
+  const key = [flt.q, flt.vis, flt.region, flt.type, flt.pfk, flt.kinds ? [...flt.kinds].join() : '-', rec.cur, rec.rev, dataRev].join('|');
+  if (key === ciKey) return ciVal;
+  let a = ALLX;
+  if (flt.kinds && flt.kinds.size < KORDER.length) a = a.filter(kindOn);
+  const tk = typeKind(), tf = tk && flt.type !== 'all' && (TYPEF[tk].find(t => t[1] === flt.type) || [])[2];
+  if (tf) a = a.filter(tf);
+  if (flt.region !== 'all') a = a.filter(x => (x.rg || REGION_OF[x.pf]) === flt.region);
+  if (flt.q) a = a.filter(qm);
+  if (flt.pfk) a = a.filter(x => PREF_KEY[x.pf] === flt.pfk);
+  ciKey = key; ciVal = orderItems(a.filter(visOK));
+  return ciVal;
+}
+
+/* ===== 地図の点 ===== */
+let dotEls = {};
+let mapView = 'dots';
+function hasVisitedAny() { return ALLX.some(x => isVisited(x.id)); }
+function drawFill() {
+  const g = $('g-fill'); g.innerHTML = '';
+  if (mapView !== 'fill') return;
+  const cnt = {};
+  ALLX.forEach(x => { if (!isVisited(x.id)) return; const k = PREF_KEY[x.pf]; if (k) cnt[k] = (cnt[k] || 0) + 1; });
+  Object.keys(cnt).forEach(k => {
+    if (!GEO_PREFS[k]) return;
+    const pa = geoPath(k, { class:'pfill lv' + (cnt[k] >= 5 ? 3 : cnt[k] >= 2 ? 2 : 1), 'data-k':k }, g);
+    const ti = el('title', {}, pa); ti.textContent = k + '：' + cnt[k] + 'か所';
+  });
+}
+/* 凡例の最後に付ける、地図の右のボタンの説明（スマホでは押す前の説明が出せないため） */
+const CTRL_HELP = '<div class="lghelp"><b>右のボタン</b>'
+  + '<span><b>＋ －</b>拡大・縮小</span><span><b>全国</b>日本全体を表示</span>'
+  + '<span><b>県を塗る</b>行った都道府県を色で塗る（点と切り替え）</span>'
+  + '<span><b>背景</b>下に敷く地図を選ぶ</span><span><b>名前 小・大</b>地図の名前の文字の大きさ</span></div>';
+function applyMapView() {
+  $('mapwrap').classList.toggle('fillview', mapView === 'fill');
+  $('zfill').setAttribute('aria-pressed', String(mapView === 'fill'));
+  if (mapView === 'fill') $('legend').innerHTML += hasVisitedAny() ? '<span><i class="lg lv1"></i>行った都道府県</span><span><i class="lg lv2"></i>2か所以上</span><span><i class="lg lv3"></i>5か所以上</span>' : '<span>行った記録がまだありません</span>';
+  $('legend').insertAdjacentHTML('beforeend', CTRL_HELP);
+  drawFill();
+}
+function setMapView(v) { mapView = v; renderLegend(); applyMapView(); }
+function curKind(it) { return KIND.get(it.id) || 'themes'; }
+function baseR(it) { const r = KIND_BY[curKind(it)].r; return typeof r === 'function' ? r(it) : r; }
+/* 点の集まりは変わらない（絞り込みで変わるのは「薄くするか」だけ）ので、初回に作った点を使い回す。
+   データが変わった（マイスポットの追加・削除、読み込み）ときは、initAll() が dotsStale を立てて作り直す */
+let dotsStale = true;
+function drawDots() {
+  drawFill();
+  const shown = new Set(currentItems().map(x => x.id));
+  if (!dotsStale) {
+    gLab.innerHTML = '';
+    for (const id in dotEls) { const d = dotEls[id]; d.g.classList.toggle('dim', !shown.has(id)); d.g.classList.toggle('vis', isVisited(id)); }
+    markSel(true); updateSizes();
+    return;
+  }
+  gDots.innerHTML = ''; gLab.innerHTML = ''; dotEls = {};
+  dotsStale = false;
+  ALLX.filter(it => typeof it.la === 'number').reverse().forEach(it => {
+    const xy = proj(it.lo, it.la);
+    const g = el('g', { 'data-id':it.id }, gDots);
+    const k = curKind(it);
+    const mk = el('rect', { class:'mk' + (k === 'koei' && it.x ? ' gone' : ''), style:'--kc:' + KCOL[k] }, g);
+    const title = el('title', {}, g); title.textContent = k === 'stations' ? dn(it) : it.n;
+    if (!shown.has(it.id)) g.classList.add('dim');
+    if (isVisited(it.id)) g.classList.add('vis');
+    dotEls[it.id] = { g, mk, it, xy, hr:10 };   /* hr：押したとみなす半径（地図の単位） */
+  });
+  selOn = null; markSel(true); updateSizes();
+}
+let usLast = null;   /* 最後に点の大きさ・まとめ・名前を直したときの、画面の中心と幅 */
+function updateSizes(force) {
+  const k = vb.h / W0.h, f = Math.pow(k, 0.72), key = f + '|' + LABS;
+  /* 1本の指で動かしている間は、幅が変わらず、前に直した位置から画面の幅の35%以内なら、点・まとめ・名前を直さない
+     （直す範囲を、画面の幅の0.6倍だけ外まで広げてあるので、その間は足りている）。指を離したときに、1回だけ直す */
+  if (!force && drag && moved && !pinch && usLast && usLast.w === vb.w && usLast.key === key && Math.abs(vb.x + vb.w / 2 - usLast.cx) < vb.w * 0.35 && Math.abs(vb.y + vb.h / 2 - usLast.cy) < vb.h * 0.35) return;
+  usLast = { w: vb.w, key, cx: vb.x + vb.w / 2, cy: vb.y + vb.h / 2 };
+  drawClusters();   /* まとめ表示かどうかを先に決める（まとめ中の個別の点は大きさを直さない） */
+  const mx = vb.w * 0.6, my = vb.h * 0.6, x0 = vb.x - mx, x1 = vb.x + vb.w + mx, y0 = vb.y - my, y1 = vb.y + vb.h + my;
+  for (const id in dotEls) {
+    const d = dotEls[id];
+    if (d.sk === key) continue;
+    /* 隠れている点・画面の外の点は後回し（画面に入ったときに直す）。全点を毎回直すと、動かすたびに重くなる */
+    if (d.g.style.display === 'none' || d.g.classList.contains('dim') || d.xy[0] < x0 || d.xy[0] > x1 || d.xy[1] < y0 || d.xy[1] > y1) continue;
+    d.sk = key;
+    const r = baseR(d.it) * f;
+    { const h = r * 0.6 * (LABS / 0.8); d.mk.setAttribute('x', d.xy[0] - h); d.mk.setAttribute('y', d.xy[1] - h); d.mk.setAttribute('width', 2 * h); d.mk.setAttribute('height', 2 * h); d.mk.dataset.r = h; }
+    d.hr = Math.max(r * 1.3, 10 * k + 6 * f);
+  }
+  if (labBusy()) drawLabelSoon(); else drawLabel();
+}
+/* 指やホイールで動かしている間は、名前の描き直し（重い）を止め、止まってから描く。名前は地図と一緒に動くので、動かす間は見た目はほぼ変わらない */
+let busyUntil = 0, labT = 0;
+const labBusy = () => (typeof drag !== 'undefined' && drag && moved) || (typeof pinch !== 'undefined' && !!pinch) || performance.now() < busyUntil;
+function drawLabelSoon() { clearTimeout(labT); labT = setTimeout(() => { if (labBusy()) drawLabelSoon(); else drawLabel(); }, 120); }
+/* 引いた表示では近くの施設を件数でまとめ、寄ると個別の点に戻す */
+const CL_W = 136, CL_PX = 46, CROWD_PX = 7000, TEXT_PXU = 38;   // TEXT_PXU：1単位が画面で何pxか。これ以上に拡大したら、数が多くても名前を出す（スマホの都内で、23区の中心が約45）   // CROWD_PX：画面の中に出す点の数の上限 = 地図の面積(px²) / CROWD_PX（スマホで約16、パソコンで約70）
+let clusterOn = false;
+/* 円と数字にまとめる基準：画面の中の点の上限に掛ける倍率。「まとめない」は、最大拡大に近づく前でも個別の点と名前を出す */
+/* 円にまとめる強さ（画面の点の上限に掛ける倍率）。スライダーの左ほど多く円にまとめて（表示する量が少ない）、右端は「すべて」（まとめない） */
+/* [名前, 上限に掛ける倍率, 円にまとめる範囲の広さ（標準が1）] */
+const CLU_LV = [['最少', 0.12, 2.1], ['とても少なめ', 0.2, 1.75], ['少なめ', 0.35, 1.45], ['やや少なめ', 0.8, 1.2], ['標準', 2.5, 1], ['多め', 6, 0.8], ['すべて', 1e9, 1]];
+let CLUL = 4;
+try { const v = parseInt(localStorage.getItem('jp-clul3'), 10); if (v >= 0 && v < CLU_LV.length) CLUL = v; } catch (e) {}
+function showClu() { const l = document.getElementById('clul'), r = document.getElementById('clus'); if (l) l.textContent = '表示する量：' + CLU_LV[CLUL][0]; if (r) r.value = String(CLUL); }
+function setClu(v) { CLUL = v; try { localStorage.setItem('jp-clul3', String(v)); } catch (e) {} showClu(); if (typeof refresh === 'function') refresh(); }
+showClu();
+function fewMode() { let n = 0, t = 0; for (const id in dotEls) { t++; if (!dotEls[id].g.classList.contains('dim')) n++; } return n <= 80 && n < t; }   /* 0件のときも、除外された施設の薄い点は出さない（全部オフで、うっすら四角が残るのを防ぐ） */
+function drawClusters() {
+  gClu.innerHTML = '';
+  clusterOn = CLU_LV[CLUL][1] < 1e9 && vb.h > CL_W * W0.h / W0.w;   /* 「なし」は、引いた表示でも円にまとめない */
+  /* 画面の中の点が多すぎるとき（小さい画面ほど少ない数で）、名前と円を出さずに丸でまとめる。最大拡大では、まとめない */
+  if (!clusterOn && vb.w > MINW * 1.04 && svgSz().width / vb.w < TEXT_PXU / Math.min(1, CLU_LV[CLUL][1])) {
+    const r0 = svgSz(), cap = Math.max(5, Math.round(Math.max(12, Math.round(r0.width * r0.height / CROWD_PX)) * CLU_LV[CLUL][1]));
+    const bx0 = vb.x - vb.w * 0.05, bx1 = vb.x + vb.w * 1.05, by0 = vb.y - vb.h * 0.05, by1 = vb.y + vb.h * 1.05;
+    let cnt = 0;
+    for (const id in dotEls) { const d = dotEls[id]; if (d.xy[0] > bx0 && d.xy[0] < bx1 && d.xy[1] > by0 && d.xy[1] < by1 && !d.g.classList.contains('dim') && ++cnt > cap) { clusterOn = true; break; } }
+  }
+  if (!clusterOn) { for (const id in dotEls) { const g = dotEls[id].g; const want = g.classList.contains('dim') ? 'none' : ''; if (g.style.display !== want) g.style.display = want; } return; }
+  const r = svgSz(), s = (Math.min(r.width / vb.w, r.height / vb.h)) || 1;
+  const cs = CL_PX * CLU_LV[CLUL][2] / s, cells = new Map(), cmx = Math.max(40, vb.w * 0.6), cmy = Math.max(40, vb.h * 0.6);
+  for (const id in dotEls) {
+    const d = dotEls[id];
+    if (d.g.classList.contains('dim')) { d.g.style.display = 'none'; continue; }
+    if (id === selId) { d.g.style.display = ''; continue; }
+    const key = Math.floor(d.xy[0] / cs) + ',' + Math.floor(d.xy[1] / cs);
+    const c = cells.get(key); if (c) c.push(d); else cells.set(key, [d]);
+  }
+  /* 丸の大きさ：件数が2件なら今の0.6倍、いま描いている中でいちばん多い丸（20件に満たないときは20件）なら今の1.5倍。間は対数でなめらかに */
+  let cmax = 20; cells.forEach(l => { if (l.length > cmax) cmax = l.length; });
+  cells.forEach(list => {
+    if (list.length < 2) { list[0].g.style.display = ''; return; }
+    let sx = 0, sy = 0, x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, vis = false;
+    list.forEach(d => { d.g.style.display = 'none'; sx += d.xy[0]; sy += d.xy[1]; x0 = Math.min(x0, d.xy[0]); x1 = Math.max(x1, d.xy[0]); y0 = Math.min(y0, d.xy[1]); y1 = Math.max(y1, d.xy[1]); if (isVisited(d.it.id)) vis = true; });
+    const cx = sx / list.length, cy = sy / list.length;
+    if (cx < vb.x - cmx || cx > vb.x + vb.w + cmx || cy < vb.y - cmy || cy > vb.y + vb.h + cmy) return;
+    const half = (11 + 4 * Math.log10(list.length)) * (0.6 + 0.15 * Math.min(1, Math.log(list.length / 2) / Math.log(cmax / 2))) / s;
+    const g = el('g', { class:'clu' + (vis ? ' vis' : '') }, gClu);
+    el('circle', { cx:cx, cy:cy, r:half, class:'cmk' }, g);
+    const t = el('text', { x:cx, y:cy, class:'ctx' }, g); t.style.fontSize = (13 / s) + 'px'; t.style.strokeWidth = (3 / s) + 'px'; t.textContent = list.length;
+    g.addEventListener('click', () => {
+      if (moved) return;
+      const bw = Math.max(x1 - x0, y1 - y0);
+      flyTo((x0 + x1) / 2, (y0 + y1) / 2, Math.max(MINW, Math.min(vb.w * 0.5, Math.max(bw * 1.6, 40))));
+    });
+  });
+}
+/* 地図の名前の文字の大きさ（0.5〜1.6倍。既定0.8倍。字−／字＋で変更） */
+/* 名前のふちどりの太さ（文字の下に先に描くので、太くしても文字の内側には食い込まない） */
+const LAB_STROKE = 3.8;
+let LABS = 0.8;
+try { const v = parseFloat(localStorage.getItem('jp-labs')); if (v >= 0.5 && v <= 1.6) LABS = v; } catch (e) {}
+function setLabs(v) { LABS = Math.max(0.5, Math.min(1.6, Math.round(v * 20) / 20)); try { localStorage.setItem('jp-labs', String(LABS)); } catch (e) {} updateSizes(); }
+/* 最大拡大：名前が重なる施設は、位置の点を中心にした円を描き、円の外周に名前の一部が重なるように置く */
+function labHit(bb, sc0) { const sc = sc0 || (svgSz().width / vb.w) || 1, u = px => px / sc, h = Math.max(bb.height + u(8), u(30)); return { x:bb.x - u(7), y:bb.y + bb.height / 2 - h / 2, width:bb.width + u(14), height:h, class:'lhit' }; }
+function dodgeLabels(arr, fs, k) {
+  const sc = (svgSz().width / vb.w) || 1, u = px => px / sc;
+  const tw = s => { let w = 0; for (const ch of s) w += ch.charCodeAt(0) > 0x2000 ? 1 : 0.6; return w * fs * 1.03 + 2 * k; }, th_ = fs * 1.25;
+  const lh_ = fs * 1.12;
+  const wrap = name => {   /* 長い名前は2行に分ける（「・」「（」などの切れ目を優先） */
+    if (tw(name) <= fs * 12.5) return [name];
+    const m = name.length / 2; let best = -1;
+    for (let i = 2; i < name.length - 1; i++) { const c = name[i - 1]; if ('・　 '.includes(c) || (name[i] === '（' )) if (best < 0 || Math.abs(i - m) < Math.abs(best - m)) best = i; }
+    if (best < 0 || best < name.length * 0.25 || best > name.length * 0.75) best = Math.ceil(m);
+    return [name.slice(0, best).replace(/[・　 ]$/, '・').replace(/^(.*)・$/, '$1・'), name.slice(best)];
+  };
+  const box = (name, x, y, anc, lines) => { const ls = lines || [name], w = Math.max(...ls.map(tw)), h = th_ + (ls.length - 1) * lh_; return { x:anc === 'start' ? x : anc === 'end' ? x - w : x - w / 2, y:y - h / 2, width:w, height:h }; };
+  const hit = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+  const sqs = arr.map(d => { const r = parseFloat(d.mk.dataset.r); return { x:d.xy[0] - r, y:d.xy[1] - r, width:2 * r, height:2 * r, d:d }; });
+  const boxHit = (bb, placed, self) => { let n = 0; for (const p of placed) if (hit(bb, p)) n++; for (const q of sqs) if (q.d !== self && hit(bb, q)) n++; return n; };
+  const mk = (d, x, y, anc, bb, cls, lines) => {
+    const t = el('text', { x:x, y:y, class:'lab' + (cls ? ' ' + cls : '') }, gLab);
+    t.style.fontSize = fs + 'px'; t.style.dominantBaseline = 'central'; t.style.strokeWidth = (LAB_STROKE * k * LABS) + 'px'; t.setAttribute('text-anchor', anc);
+    if (lines && lines.length > 1) lines.forEach((s, i) => { const ts = el('tspan', { x:x, dy:(i === 0 ? -(lines.length - 1) * lh_ / 2 : lh_) + 'px' }, t); ts.textContent = s; });
+    else t.textContent = d.it.n;
+    /* 名前の下地（半透明）。名前ごとの幅は、初回だけ測って覚える（LABM：文字の大きさに対する比） */
+    { const n0 = d.it.n; let m = LABM.get(n0);
+      if (!m) { const r0 = t.getBBox(); m = [r0.width / fs, r0.height / fs, (r0.y - y) / fs]; LABM.set(n0, m); }
+      const w0 = m[0] * fs, h0 = m[1] * fs, pad = u(3), l0 = anc === 'start' ? x : anc === 'end' ? x - w0 : x - w0 / 2;
+      const bg2 = el('rect', { x:l0 - pad, y:y + m[2] * fs - pad * 0.5, width:w0 + pad * 2, height:h0 + pad, rx:pad, class:'labbg2' }, gLab); gLab.insertBefore(bg2, t); }
+    const hb = labHit(bb), hr = el('rect', hb, gLab); gLab.insertBefore(hr, t);
+    d.labT = t; d.labH = hr; d.labBox = hb;   /* 押したかどうかは、この箱を使って自分で判定する（pickAt） */
+    return t;
+  };
+  /* パソコン・スマホ共通：円は使わない。名前が重ならない分は、点の右（だめなら左）に置く。重なる分は、点のまわり（上下左右・斜め）の近い空きへ、直線の引き出し線でつなぐ（線の色は点と同じ）。近くに空きがない分だけ、地図の端へ並べる。入りきらない分は名前を出さない */
+  {
+    const placed = [], pitch = th_ * 1.15, gapX = u(8);
+    const byId = id => document.getElementById(id), rect = e => e ? e.getBoundingClientRect() : null;
+    const sr = svg.getBoundingClientRect(), cb = rect(document.querySelector('#mapwrap .ctrl'));
+    const ctlBot = cb ? vb.y + u(cb.bottom - sr.top + 4) : vb.y, ctlLeft = cb ? vb.x + u(cb.left - sr.left - 6) : vb.x + vb.w - u(6);
+    /* 凡例ボタン（開いているときは凡例の枠も）の右と上：下の段と左の列は、ここを避ける */
+    const lg = rect(byId('legtog')), lp = byId('legend') && !byId('legend').classList.contains('off') ? rect(byId('legend')) : null;
+    const legRight = vb.x + u(Math.max(lg ? lg.right - sr.left : 0, lp ? lp.right - sr.left : 0) + 6);
+    const legTop = vb.y + u(Math.min(lg ? lg.top - sr.top : 1e6, lp ? lp.top - sr.top : 1e6) - 4);
+    const xL = vb.x + u(6), xR = vb.x + vb.w - u(6), yT = vb.y + u(8), yB = vb.y + vb.h - u(12);
+    const botL = Math.min(yB - u(46), legTop);
+    const cxm = vb.x + vb.w / 2, cym = vb.y + vb.h / 2;
+    const lineG = el('g', {}, gLab);
+    const line = (d, x2, y2) => {
+      const col = KCOL[KIND.get(d.it.id)] || 'var(--ink)';
+      const ln = el('line', { x1:d.xy[0], y1:d.xy[1], x2:x2, y2:y2, stroke:col, 'vector-effect':'non-scaling-stroke' }, lineG);
+      ln.style.strokeWidth = '1.4px'; ln.style.pointerEvents = 'none';
+    };
+    /* --- 1：点の右（だめなら左）に、そのまま置ける名前（画面の中の点は、名前が画面からはみ出す・操作ボタンや凡例にかかる置き方は選ばない） --- */
+    const bnd = { x0:vb.x + u(4), x1:vb.x + vb.w - u(4), y0:vb.y + u(4), y1:vb.y + vb.h - u(4) };
+    const cl = rect(byId('clum')), cluLeft = cl ? vb.x + u(cl.left - sr.left - 6) : vb.x + vb.w, cluTop = cl ? vb.y + u(cl.top - sr.top - 6) : vb.y + vb.h;
+    const blockers = [{ x:ctlLeft, y:vb.y, width:vb.x + vb.w - ctlLeft, height:ctlBot - vb.y }, { x:vb.x, y:legTop, width:legRight - vb.x, height:vb.y + vb.h - legTop }, { x:cluLeft, y:cluTop, width:vb.x + vb.w - cluLeft, height:vb.y + vb.h - cluTop }];
+    const inView = d => d.xy[0] > vb.x && d.xy[0] < vb.x + vb.w && d.xy[1] > vb.y && d.xy[1] < vb.y + vb.h;
+    const crowd = [];
+    arr.forEach(d => {
+      const r = parseFloat(d.mk.dataset.r), y = d.xy[1], iv = inView(d);
+      for (const [anc, x] of [['start', d.xy[0] + r + 3 * k], ['end', d.xy[0] - r - 3 * k]]) {
+        const bb = box(d.it.n, x, y, anc);
+        if (iv && (bb.x < bnd.x0 || bb.x + bb.width > bnd.x1 || blockers.some(q => hit(bb, q)))) continue;
+        if (boxHit(bb, placed, d) === 0) { placed.push(bb); mk(d, x, y, anc, bb); return; }
+      }
+      crowd.push(d);
+    });
+    /* --- 2：重なる名前は、点のまわりの近い空きへ。近い順に、上下左右→斜めを試し、線が他の名前・点・線を通らない所を選ぶ --- */
+    const rest = [];
+    if (crowd.length) {
+      const segs = [];
+      const DIRS = [[1, 0, 'start'], [-1, 0, 'end'], [0, -1, 'middle'], [0, 1, 'middle'], [.71, -.71, 'start'], [.71, .71, 'start'], [-.71, -.71, 'end'], [-.71, .71, 'end']];
+      const STEPS = [4, 18, 34, 54, 80, 110];   /* 点から名前までの距離（px） */
+      const inRect = (x, y, b, m) => x > b.x - m && x < b.x + b.width + m && y > b.y - m && y < b.y + b.height + m;
+      const segHitRect = (s, b, m) => { for (let i = 0; i <= 20; i++) { const t = i / 20; if (inRect(s.x1 + (s.x2 - s.x1) * t, s.y1 + (s.y2 - s.y1) * t, b, m)) return true; } return false; };
+      const ccw = (ax, ay, bx, by, cx, cy) => (cy - ay) * (bx - ax) > (by - ay) * (cx - ax);
+      const segCross = (a, b) => ccw(a.x1, a.y1, b.x1, b.y1, b.x2, b.y2) !== ccw(a.x2, a.y2, b.x1, b.y1, b.x2, b.y2) && ccw(a.x1, a.y1, a.x2, a.y2, b.x1, b.y1) !== ccw(a.x1, a.y1, a.x2, a.y2, b.x2, b.y2);
+      const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+      const cand = (d, dir, st) => {
+        const r = parseFloat(d.mk.dataset.r), D = r + u(st), ux = dir[0], uy = dir[1];
+        let x = d.xy[0] + ux * D, y = d.xy[1] + uy * D;
+        if (ux === 0) y += uy * th_ / 2; else if (uy !== 0) y += uy * th_ * 0.3;
+        const bb = box(d.it.n, x, y, dir[2]);
+        const ex = clamp(d.xy[0], bb.x, bb.x + bb.width), ey = clamp(d.xy[1], bb.y, bb.y + bb.height);
+        const need = Math.hypot(ex - d.xy[0], ey - d.xy[1]) > r + u(5);
+        return { x, y, anc:dir[2], bb, need, seg:need ? { x1:d.xy[0], y1:d.xy[1], x2:ex, y2:ey } : null };
+      };
+      const ok = (c, d, strict) => {
+        const b = c.bb;
+        if (b.x < bnd.x0 || b.x + b.width > bnd.x1 || b.y < bnd.y0 || b.y + b.height > bnd.y1) return false;
+        if (blockers.some(q => hit(b, q))) return false;
+        if (boxHit(b, placed, d) !== 0) return false;
+        if (segs.some(s => segHitRect(s, b, u(2)))) return false;
+        if (strict && c.seg) {
+          if (segs.some(s => segCross(c.seg, s))) return false;
+          if (placed.some(p => segHitRect(c.seg, p, u(2)))) return false;
+          if (sqs.some(q => q.d !== d && segHitRect(c.seg, q, u(1)))) return false;
+        }
+        return true;
+      };
+      const find = (d, strict) => { for (const st of STEPS) for (const dir of DIRS) { const c = cand(d, dir, st); if (ok(c, d, strict)) return c; } return null; };
+      crowd.forEach(d => {
+        if (!inView(d)) return;   /* 画面の外の点は名前を出さない */
+        const c = find(d, true) || find(d, false);
+        if (!c) { rest.push(d); return; }
+        placed.push(c.bb);
+        if (c.seg) { segs.push(c.seg); line(d, c.seg.x2, c.seg.y2); }
+        mk(d, c.x, c.y, c.anc, c.bb, c.need ? 'ld' : '');
+      });
+    }
+    /* --- 3：近くに空きがない分だけ、地図の端（左右は縦に、上下は横に）へ並べて直線でつなぐ --- */
+    if (false && rest.length) {   /* 少数だけなら端へ。多いときは遠い線だらけになるので出さない（点をタップで名前） */
+      const inV = rest.sort((a, b) => Math.hypot(a.xy[0] - cxm, a.xy[1] - cym) - Math.hypot(b.xy[0] - cxm, b.xy[1] - cym));
+      inV.forEach(d => { d.ln = wrap(d.it.n); d.hh = th_ + (d.ln.length - 1) * lh_; d.w1 = tw(d.it.n); d.wl = Math.max(...d.ln.map(tw)); });
+      const cap = { L:9, R:9, T:6, B:6 }, lists = { L:[], R:[], T:[], B:[] };
+      inV.forEach(d => {
+        const dist = { L:d.xy[0] - xL, R:xR - d.xy[0], T:d.xy[1] - yT, B:yB - d.xy[1] };
+        const okS = { L:dist.L > d.wl + u(14), R:dist.R > d.wl + u(14), T:dist.T > th_ + u(10) && d.w1 <= xR - xL, B:dist.B > th_ + u(10) && d.w1 <= xR - xL };
+        const s = ['L', 'R', 'T', 'B'].sort((a, b) => dist[a] - dist[b]).find(s => okS[s] && lists[s].length < cap[s]);
+        if (s) lists[s].push(d);
+      });
+      const packRows = (list, isTop) => {
+        list.sort((a, b) => a.xy[0] - b.xy[0]);
+        const rows = [];
+        list.forEach(d => {
+          for (let ri = 0; ri < 3; ri++) {
+            const y = isTop ? yT + th_ / 2 + ri * pitch : yB - th_ / 2 - ri * pitch;
+            const lo = (!isTop && y + th_ / 2 > botL) ? Math.max(xL, legRight) : xL;
+            const hi = (isTop && y - th_ / 2 < ctlBot) ? Math.min(xR, ctlLeft) : xR;
+            if (hi - lo < d.w1) continue;
+            if (isTop ? y + th_ / 2 + u(4) > d.xy[1] : y - th_ / 2 - u(4) < d.xy[1]) continue;
+            const row = rows[ri] || (rows[ri] = []), last = row[row.length - 1];
+            let cx = Math.max(lo + d.w1 / 2, Math.min(hi - d.w1 / 2, d.xy[0]));
+            if (last) cx = Math.max(cx, last.cx + last.d.w1 / 2 + gapX + d.w1 / 2);
+            const over = c => sqs.find(q => hit({ x:c - d.w1 / 2, y:y - th_ / 2, width:d.w1, height:th_ }, q));
+            for (let g = 0, q; g < 6 && (q = over(cx)); g++) cx = Math.max(cx, q.x + q.width + gapX + d.w1 / 2);
+            if (cx + d.w1 / 2 > hi || over(cx)) continue;
+            row.push({ d:d, cx:cx }); d.tx = cx; d.ty = y; return;
+          }
+          d.ty = null;
+        });
+        return rows.reduce((n, r, i) => r && r.length ? i + 1 : n, 0);
+      };
+      const nT = packRows(lists.T, true), nB = packRows(lists.B, false);
+      [['T', true], ['B', false]].forEach(([s, isTop]) => lists[s].forEach(d => {
+        if (d.ty == null) return;
+        const bb = box(d.it.n, d.tx, d.ty, 'middle');
+        placed.push(bb);
+        const ax = Math.max(bb.x, Math.min(bb.x + bb.width, d.xy[0]));
+        line(d, ax, isTop ? bb.y + bb.height + u(3) : bb.y - u(3));
+        mk(d, d.tx, d.ty, 'middle', bb, 'ld');
+      }));
+      const topC = yT + (nT ? nT * pitch + u(2) : 0) + th_ / 2, botRc = yB - (nB ? nB * pitch + u(2) : 0) - th_ / 2, botLc = Math.min(botL, botRc);
+      const gapOf = (a, b) => (a.hh + b.hh) / 2 * 1.08;
+      const spread = (list, bot) => {
+        list.sort((a, b) => a.xy[1] - b.xy[1]);
+        const ys = list.map(d => Math.max(topC, Math.min(bot, d.xy[1])));
+        for (let it = 0; it < 40; it++) { for (let i = 1; i < ys.length; i++) { const g = gapOf(list[i - 1], list[i]); if (ys[i] - ys[i - 1] < g) { const m = (ys[i] + ys[i - 1]) / 2; ys[i - 1] = m - g / 2; ys[i] = m + g / 2; } } }
+        for (let i = 0; i < ys.length; i++) ys[i] = Math.max(topC, Math.min(bot, ys[i]));
+        for (let i = ys.length - 2; i >= 0; i--) { const g = gapOf(list[i], list[i + 1]); if (ys[i + 1] - ys[i] < g) ys[i] = ys[i + 1] - g; }
+        return ys;
+      };
+      const put = (list, side, bot) => {
+        list.splice(Math.max(1, Math.floor((bot - topC) / pitch)));
+        const ys = spread(list, bot);
+        list.forEach((d, i) => {
+          const ly = ys[i], edge = side === 'L' ? xL : (ly < ctlBot ? ctlLeft : xR), anc = side === 'L' ? 'start' : 'end';
+          const bb = box(d.it.n, edge, ly, anc, d.ln), ex = side === 'L' ? bb.x + bb.width + u(4) : bb.x - u(4);
+          placed.push(bb);
+          line(d, ex, ly);
+          mk(d, edge, ly, anc, bb, 'ld', d.ln);
+        });
+      };
+      put(lists.L, 'L', botLc); put(lists.R, 'R', botRc);
+    }
+    return true;
+  }
+}
+/* 名前が多すぎる所では、操作のじゃまにならない注意書きを一瞬だけ出す(冗談) */
+const CROWD_MSGS = ['⚠ この範囲に、名前が {n} 件あります（表示は {m} 件）。', '⚠ 表示中の名前は {m} 件で、重なっています（範囲内は {n} 件）。', '⚠ 名前が多いため、読みにくくなっています（{n} 件中 {m} 件を表示）。', '⚠ この範囲は密集しています（{n} 件中 {m} 件を表示）。拡大すると読みやすくなります。'];
+let crowdOn = false, crowdN = 0, crowdT = 0, crowdEl = null;
+function crowdCheck(n) {
+  const over = n > 70;
+  if (!over) { crowdOn = false; return; }
+  if (crowdOn) return;
+  crowdOn = true;
+  if (!crowdEl) { crowdEl = document.createElement('div'); crowdEl.className = 'crowd'; crowdEl.setAttribute('role', 'status'); crowdEl.setAttribute('aria-live', 'polite'); $('mapwrap').appendChild(crowdEl); }
+  crowdEl.textContent = CROWD_MSGS[crowdN++ % CROWD_MSGS.length].replace('{n}', n).replace('{m}', Math.min(n, 160));
+  crowdEl.classList.add('on'); clearTimeout(crowdT);
+  crowdT = setTimeout(() => crowdEl.classList.remove('on'), 4500);
+}
+const LABM = new Map();
+try { document.fonts && document.fonts.addEventListener('loadingdone', () => LABM.clear()); } catch (e) {}
+function drawLabel() {
+  gLab.innerHTML = '';
+  const k = vb.h / W0.h;
+  const fs = 13 * Math.pow(k, 0.85) * LABS;
+  const showAll = CLU_LV[CLUL][1] >= 1e9 || k < 0.2;
+  /* 画面の外に出す余白は、画面の大きさに合わせる（固定だと、拡大したとき画面外の名前が160件の枠を使い切り、画面の中の名前が出ない） */
+  const mgx = Math.min(10, vb.w * 0.15), mgy = Math.min(10, vb.h * 0.15);
+  let nLab = 0; const few = fewMode(), dq = [];
+  for (const id in dotEls) {
+    const d = dotEls[id];
+    if (d.g.classList.contains('dim')) continue;
+    if (!(showAll || few) || clusterOn) continue;   /* まとめ表示中は個別の名前を出さない */
+    if (d.xy[0] < vb.x - mgx || d.xy[0] > vb.x + vb.w + mgx || d.xy[1] < vb.y - mgy || d.xy[1] > vb.y + vb.h + mgy) continue;
+    if (++nLab > 160) continue;
+    dq.push(d);
+  }
+  const leader = dodgeLabels(dq, fs, k);
+  crowdCheck(leader ? 0 : nLab);   /* 引き出し線で並べたときは、名前が多いという注意書きは出さない */
+  const sd = dotEls[selId];
+  if (sd && !sd.g.classList.contains('dim')) {
+    if (sd.labT && sd.labT.parentNode === gLab) {   /* 並べ直さず、いまの位置のまま最前面に描き直す */
+      const b = sd.labT.getBBox(), pad = 4 * k;
+      const bg = el('rect', { x:b.x - pad, y:b.y - pad * 0.6, width:b.width + pad * 2, height:b.height + pad * 1.2, rx:pad, class:'labbg' }, gLab);
+      gLab.appendChild(sd.labH); gLab.insertBefore(bg, sd.labT); gLab.appendChild(sd.labT);
+      gLab.appendChild(sd.labH);
+    } else {
+      const st = el('text', { x:sd.xy[0] + (parseFloat(sd.mk.dataset.r) || 0) + 3 * k, y:sd.xy[1], class:'lab' }, gLab);
+      st.style.fontSize = (fs * 1.2) + 'px';
+      st.style.dominantBaseline = 'central';
+      st.style.strokeWidth = '0px';
+      st.textContent = sd.it.n;
+      const b = st.getBBox(), pad = 4 * k;
+      const bg = el('rect', { x:b.x - pad, y:b.y - pad * 0.6, width:b.width + pad * 2, height:b.height + pad * 1.2, rx:pad, class:'labbg' }, gLab);
+      gLab.insertBefore(bg, st);
+    }
+  }
+}
+let selOn = null;   /* いま印（on）を付けている点 */
+function markSel(noLabel) {
+  if (selOn && selOn !== dotEls[selId]) selOn.g.classList.remove('on');
+  selOn = dotEls[selId] || null;
+  if (selOn) selOn.g.classList.add('on');
+  gSel.innerHTML = '';
+  const it = selId && findItem(selId);
+  if (it && PREF_KEY[it.pf]) geoPath(PREF_KEY[it.pf], { class:'prefsel' }, gSel);
+  else if (!it && flt.pfk && GEO_PREFS[flt.pfk]) geoPath(flt.pfk, { class:'prefsel' }, gSel);
+  if (dotEls[selId]) dotEls[selId].g.parentNode.appendChild(dotEls[selId].g);
+  if (!noLabel) drawLabel();
+}
+
+/* ===== 詳細 ===== */
+function mReg(it) { return it.rj === '登録・指定の一覧に掲載なし' ? '一覧に掲載なし' : (it.rj || ''); }
+function fmtZooHa(a) { const h = a / 10000; return (h >= 10 ? Math.round(h) : h.toFixed(1)) + ' ha'; }
+function fmtKm(a) { return (a >= 10 ? a.toFixed(1) : a.toFixed(2)) + ' km²'; }
+/* 日本百名山にも入っている場所は、詳細に「日本百名山」の印と、本の番号・山名・標高を足す */
+function decorateTwin(it) {
+  const h = HM_OF[it.id], box = $('detail');
+  if (!h || it.id === h.id) return;
+  const kk = box.querySelector('.kicker');
+  if (kk) kk.insertAdjacentHTML('beforeend', '<span class="badge" style="--kc:' + KCOL.hyaku + '">日本百名山</span>');
+  const dl = box.querySelector('dl.facts');
+  if (dl) dl.insertAdjacentHTML('afterbegin', '<div class="row"><dt>日本百名山</dt><dd>第' + h.no + '座「' + esc(h.n) + '」・標高 ' + h.el.toLocaleString() + ' m（' + esc(h.rg) + '）</dd></div>');
+}
+/* ===== 注釈の編集（アーティファクトの共有データベース notes/）=====
+   読めるのは、ログインして開いた人。書けるのは、アーティファクトのオーナーだけ（公開時の rules で固定）。
+   元の注釈（データ側の nt）は消さずに、編集した文を上に重ねて見せる。ドキュメント名は、日本語が使えないので id のハッシュ */
+var NOTES = new Map(), NOTE_DOC = new Map(), noteDb = null, noteOwner = false, noteEditing = null;
+function noteKey(id) {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < id.length; i++) { const c = id.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 'n' + (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+function decorateNote() {
+  const box = $('detail'); if (!box || box.hidden || !selId) return;
+  const it = findItem(selId); if (!it) return;
+  const facts = box.querySelector('dl.facts'); if (!facts) return;
+  const mine = NOTES.get(it.id), orig = it.nt || '';
+  let row = [...facts.querySelectorAll('.row')].find(r => { const t = r.querySelector('dt'); return t && t.textContent === '注釈'; });
+  if (!row) { if (mine == null && !noteOwner) return; row = document.createElement('div'); row.className = 'row'; row.innerHTML = '<dt>注釈</dt><dd></dd>'; facts.appendChild(row); }
+  const dd = row.querySelector('dd'); if (!dd) return;
+  const key = NOTE_DOC.get(it.id) || noteKey(it.id);
+  if (noteEditing === it.id) {
+    dd.innerHTML = '<textarea class="notea" rows="4" aria-label="注釈"></textarea><div class="noteb"><button type="button" class="btn" data-na="save">保存</button><button type="button" class="btn" data-na="cancel">取消</button>' + (mine != null ? '<button type="button" class="btn" data-na="reset">元に戻す</button>' : '') + '</div><div class="notem" role="status"></div>';
+    const ta = dd.querySelector('textarea'); ta.value = mine != null ? mine : orig; ta.focus();
+    const msg = t => { dd.querySelector('.notem').textContent = t; };
+    dd.querySelector('[data-na=cancel]').onclick = () => { noteEditing = null; renderDetail(); };
+    dd.querySelector('[data-na=save]').onclick = async () => {
+      const t = ta.value.trim();
+      try {
+        if (!t || t === orig) await noteDb.doc('notes/' + key).delete(); else await noteDb.doc('notes/' + key).set({ id:it.id, t:t, at:Date.now() });
+        if (!t || t === orig) NOTES.delete(it.id); else NOTES.set(it.id, t);
+        noteEditing = null; renderDetail();
+      } catch (e) { msg('保存できませんでした（' + (e && e.code ? e.code : '不明') + '）'); }
+    };
+    const rs = dd.querySelector('[data-na=reset]');
+    if (rs) rs.onclick = async () => { try { await noteDb.doc('notes/' + key).delete(); NOTES.delete(it.id); noteEditing = null; renderDetail(); } catch (e) { msg('戻せませんでした（' + (e && e.code ? e.code : '不明') + '）'); } };
+    return;
+  }
+  if (mine != null) dd.innerHTML = '<span class="notet">' + esc(mine) + '</span>' + (orig ? '<div class="notem">元の注釈：' + esc(orig) + '</div>' : '') + '<div class="notem">編集した注釈</div>';
+  if (noteOwner && noteDb) { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn noteedit'; b.textContent = '編集'; b.onclick = () => { noteEditing = it.id; renderDetail(); }; dd.appendChild(b); }
+}
+(async () => {
+  try {
+    if (!(window.claude && claude.use)) return;
+    const db = await claude.use('db'); if (!db) return;
+    const user = await claude.use('user');
+    noteOwner = !!(user && user.isOwner && user.isOwner()); noteDb = db;
+    db.collection('notes').onSnapshot(snap => {
+      NOTES.clear(); NOTE_DOC.clear();
+      snap.docs.forEach(d => { const x = d.data(); if (x && x.id && typeof x.t === 'string') { const id = ID_ALIAS[x.id] || x.id; NOTES.set(id, x.t); NOTE_DOC.set(id, noteKey(x.id)); } });
+      if (!noteEditing) renderDetail();
+    }, () => {});
+  } catch (e) { /* データベースが使えない表示（ログインしていないなど）では、元の注釈だけを出す */ }
+})();
+/* 地図の範囲外の施設（lo/la がなく、ll［北緯, 東経］だけある）を選んでいるときだけ、左上に小窓を出す。
+   小窓には、点と名前、東京（東京駅）からの方角と距離を出す */
+const DIR16 = ['北', '北北東', '北東', '東北東', '東', '東南東', '南東', '南南東', '南', '南南西', '南西', '西南西', '西', '西北西', '北西', '北北西'];
+function drawFarBox() {
+  const box = $('farbox'); if (!box) return;
+  const it = selId && findItem(selId);
+  if (!it || typeof it.la === 'number' || !Array.isArray(it.ll)) { if (!box.hidden) { box.hidden = true; box.innerHTML = ''; } drawFarArrow(); return; }
+  const R = Math.PI / 180, la1 = 35.681 * R, lo1 = 139.767 * R, la2 = it.ll[0] * R, lo2 = it.ll[1] * R;
+  const d = 2 * 6371 * Math.asin(Math.sqrt(Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2));
+  const br = (Math.atan2(Math.sin(lo2 - lo1) * Math.cos(la2), Math.cos(la1) * Math.sin(la2) - Math.sin(la1) * Math.cos(la2) * Math.cos(lo2 - lo1)) / R + 360) % 360;
+  const km = d >= 100 ? Math.round(d / 10) * 10 : Math.round(d);
+  box.style.setProperty('--kc', KCOL[KIND.get(it.id)] || 'var(--accent)');
+  box.innerHTML = '<b>地図の範囲外</b>' +
+    '<svg viewBox="0 0 120 64" aria-hidden="true"><rect class="fsea" width="120" height="64"/>' +
+    [15, 45, 75, 105].map(x => '<line class="fgrid" x1="' + x + '" y1="0" x2="' + x + '" y2="64"/>').join('') +
+    [12, 32, 52].map(y => '<line class="fgrid" x1="0" y1="' + y + '" x2="120" y2="' + y + '"/>').join('') +
+    '<rect class="fdot" x="55" y="27" width="10" height="10" rx="2"/></svg>' +
+    '<div class="fn">' + esc(it.n) + '</div>' +
+    '<div class="fd">北緯 ' + it.ll[0].toFixed(2) + '、東経 ' + it.ll[1].toFixed(2) + '</div>' +
+    '<div class="fd">東京から' + DIR16[Math.round(br / 22.5) % 16] + 'へ 約' + km.toLocaleString('ja-JP') + 'km</div>';
+  box.hidden = false;
+  drawFarArrow();
+}
+/* 範囲外の施設を選んでいるとき、地図の中心からその施設へ向かう線が、画面のはしと交わるところに赤い矢印を出す。
+   地図を動かすたびに置き直す（applyVB と flyTo から呼ぶ） */
+function drawFarArrow() {
+  const a = $('fararrow'); if (!a) return;
+  const it = selId && findItem(selId);
+  const hide = () => { if (!a.hidden) a.hidden = true; };
+  if (!it || typeof it.la === 'number' || !Array.isArray(it.ll)) return hide();
+  const wr = $('mapwrap').getBoundingClientRect(), sr = svg.getBoundingClientRect();
+  if (!(sr.width > 0 && sr.height > 0)) return hide();
+  const p = proj(it.ll[1], it.ll[0]), W = sr.width, H = sr.height;
+  const dx = (p[0] - vb.x) / vb.w * W - W / 2, dy = (p[1] - vb.y) / vb.h * H - H / 2;
+  const m = 40, t = Math.min(Math.abs(dx) > 0 ? (W / 2 - m) / Math.abs(dx) : Infinity, Math.abs(dy) > 0 ? (H / 2 - m) / Math.abs(dy) : Infinity);
+  if (!(t > 0) || t >= 1) return hide();   /* 施設が画面の中に入っているときは出さない */
+  a.style.left = (sr.left - wr.left + W / 2 + dx * t) + 'px';
+  a.style.top = (sr.top - wr.top + H / 2 + dy * t) + 'px';
+  a.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
+  a.hidden = false;
+}
+/* 詳細の部品。fRow の html は、呼ぶ側でエスケープしておく */
+const wikiUrl = wp => /^ja:/.test(wp || '') ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(wp.slice(3)) : /^Q\d+$/.test(wp || '') ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + wp : '';
+const fRow = (dt, html, num) => '<div class="row"><dt>' + dt + '</dt><dd' + (num ? ' class="num"' : '') + '>' + html + '</dd></div>';
+const fTxt = (dt, v, num) => v ? fRow(dt, esc(v), num) : '';
+const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
+const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
+const fPos = (it, what, after) => typeof it.la === 'number' ? fRow('位置（' + esc(what || '目安') + '）', fLL(it.la, it.lo) + (after || ''), 1) : fRow('位置', '地図には表示していません（位置情報なし）');
+const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '') + '">' + esc(t) + '</span>';
+/* 見出し：種類などの印と地方、名前、名前の下の一行 */
+const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' +
+  '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
+/* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
+const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
+function detailHTML(it, k) {
+  const pfs = prefFull(it.pf), nt = fTxt('注釈', it.nt), wiki = fLink('Wikipedia', wikiUrl(it.wp), '記事を開く');
+  const web = /^https?:\/\//.test(it.web || '') ? fLink('公式サイト', it.web, '開く') : '';
+  const rp = it.rp ? it.rp + '・目安' : '';
+  const facts = (...rows) => '<dl class="facts">' + rows.join('') + '</dl>';
+  if (FAC[k]) return dHead(badge(FAC[k]) + (it.x ? badge('閉園済み（' + it.x + '年）', 1) : '') + (it.tg ? badge(FAC[k] + '＋' + it.tg.split('、').join('＋'), 1) : ''), it, pfs) +
+    facts(fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+  if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, fPos(it, '県庁舎・目安'));
+  if (k === 'scenic') return dHead(badge('日本百景（' + it.ty + '）') + badge(it.cl, 1), it, it.ps) +
+    facts(fTxt('選定', '昭和2年（1927年）・' + it.ty), fTxt('景観の区分', it.cl), fTxt('所在', it.ps), nt, wiki, fPos(it, rp));
+  if (k === 'nature') return dHead(badge('自然') + badge(it.ty, 1), it, it.ps) +
+    facts(fTxt('国立公園', it.pk), fTxt('選定', it.sl), fTxt('種類', it.ty), nt, wiki, fPos(it, rp));
+  if (k === 'hyaku') return dHead(badge('日本百名山') + badge('第' + it.no + '座', 1), it, it.ps + (it.al ? '（記事名：' + it.al + '）' : '')) +
+    facts(fRow('標高', it.el.toLocaleString() + ' m', 1), fTxt('山系', it.rg), fTxt('国立公園', it.pk), wiki, fPos(it, rp));
+  if (k === 'shin') return dHead(badge('新幹線の駅'), it, pfs) + facts(fTxt('路線', it.ln.join('・')), fTxt('所在', pfs), nt, fPos(it, rp));
+  if (k === 'ik') {
+    const ll = typeof it.la === 'number' ? [it.la, it.lo] : it.ll;
+    return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
+      facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
+  }
+  if (k === 'koei') return dHead(badge(it.sh) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, fPos(it));
+  if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
+  if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
+    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, fPos(it, rp));
+  if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
+    facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
+    '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
+  if (k === 'museums') return dHead(badge('博物・美術館') + badge(it.kb, 1) + badge(mReg(it), 1), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj + '（文化庁の一覧・2026年10月8日版）'), fTxt('備考', it.rm),
+      it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+  if (k === 'airports') {
+    const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
+    const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
+    return dHead(badge('空港') + badge(AIR_FL_SHORT[it.fl], 1), it, pfs + '（' + (AIR_ST[it.st] || '') + '）') +
+      facts(fRow('面積（概算）', '約 ' + fmtKm(it.ar), 1), fTxt('区分', AIR_TYPE[it.t]), fTxt('定期便', AIR_FL[it.fl]), fTxt('滑走路', rws || '不明', 1),
+        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), fPos(it, '標点'));
+  }
+  if (k === 'stations') {
+    const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
+    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
+  }
+  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fPos(it), fTxt('備考', it.rm));   /* 城 */
+}
+function renderDetail() {
+  const box = $('detail');
+  const it = selId && findItem(selId);
+  box.hidden = !it;
+  if (!it) { box.innerHTML = ''; drawFarBox(); return; }
+  const k = curKind(it);
+  box.innerHTML = detailHTML(it, k);
+  if (k === 'my') {
+    $('my-edit').onclick = () => openMyForm(it);
+    let armed = false;
+    $('my-del').onclick = () => { const b = $('my-del'); if (!armed) { armed = true; b.textContent = '本当に削除（記録も消えます）'; setTimeout(() => { armed = false; if ($('my-del')) $('my-del').textContent = '削除'; }, 4000); } else delMySpot(it.id); };
+  }
+  const nbS = nearItems(it, 5, true, k), nbO = nearItems(it, 5, false, k);
+  const nbRow = o => '<button type="button" class="nbr" data-id="' + esc(o.it.id) + '"><span>' + (o.m !== k ? '<i class="nbk">' + MODE_LABEL[o.m] + '</i>' : '') + esc(o.m === 'stations' ? dn(o.it) : o.it.n) + '</span><span class="nbd">' + (o.d < 10 ? o.d.toFixed(1) : Math.round(o.d)) + ' km</span></button>';
+  if (nbS.length || nbO.length) {
+    box.insertAdjacentHTML('beforeend', '<div class="nbrs">' +
+      (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join('') : '') +
+      (nbO.length ? '<div class="nbh" style="margin-top:12px">近くのほかの種類</div>' + nbO.map(nbRow).join('') : '') + '</div>');
+    box.querySelectorAll('.nbr').forEach(b => b.onclick = () => {
+      const d = dotEls[b.dataset.id];
+      if (d) flyToDot(d);
+      select(b.dataset.id, false);
+    });
+  }
+  const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
+  if (vAnchor) vAnchor.insertAdjacentHTML('afterend', photoHTML(it) + actionsHTML(it) + visBlock(it)); else box.insertAdjacentHTML('beforeend', visBlock(it));
+  bindVis(it);
+  const ph = box.querySelector('h2.place');
+  if (ph && dotEls[it.id]) {   /* 施設名を押すと、地図をその位置へ動かす（位置がない施設は何もしない） */
+    const go = () => { const d = dotEls[it.id]; if (!d) return; flyToDot(d); try { $('mapwrap').scrollIntoView({ block:'nearest', behavior:'smooth' }); } catch (e) {} };
+    ph.classList.add('fly'); ph.setAttribute('role', 'button'); ph.tabIndex = 0; ph.title = '地図でこの位置へ';
+    ph.onclick = go; ph.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+  }
+  box.querySelectorAll('.photo img').forEach(im => im.addEventListener('error', () => { const f = im.closest('figure'); if (f) f.remove(); }));
+  box.style.setProperty('--kc', KCOL[k]);
+  decorateTwin(it);
+  decorateNote();
+  drawFarBox();
+}
+/* 写真（data/photos.js の PHOTOS。作者・ライセンス・出典つき）。写真のファイルは photos/ に置く */
+function photoHTML(it) {
+  const p = typeof PHOTOS === 'object' && (PHOTOS[it.id] || (it.na && PHOTOS[it.na]));
+  if (!p || !/^photos\/[\w.\-]+$/.test(p.f || '')) return '';
+  const lk = (u, t) => /^https:\/\//.test(u || '') ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
+  return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '') + '</figcaption></figure>';
+}
+/* 近くの施設。TWIN の副（ほかの種類の同じ場所）は、主のほうで数える */
+function nearItems(it, n, same, k) {
+  if (typeof it.la !== 'number') return [];
+  const R = Math.PI / 180, out = [];
+  KORDER.forEach(m => {
+    if ((m === k) !== same) return;
+    modeItems(m).forEach(o => {
+      if (o.id === it.id || TWIN[o.id] || typeof o.la !== 'number') return;
+      const dx = (o.lo - it.lo) * Math.cos(it.la * R), dy = o.la - it.la;
+      const d = Math.sqrt(dx * dx + dy * dy) * 111.2;
+      if (d < 0.3 && o.n === it.n) return;
+      out.push({ it:o, d, m });
+    });
+  });
+  return out.sort((a, b) => a.d - b.d).slice(0, n);
+}
+
+/* ===== 一覧 ===== */
+/* 一覧は、最初に見える分だけ作り、下へ動かしたら足していく（4,000行を毎回作ると重い）。
+   選んだ項目が下の方にあるときは、そこまで作る（listEnsure） */
+let listEntries = [], listPos = 0, listNear = false;
+const LIST_CHUNK = 120;
+function listMore(n) {
+  const ul = $('list'), frag = document.createDocumentFragment();
+  for (let c = 0; c < n && listPos < listEntries.length; c++) { const e = listEntries[listPos++]; frag.appendChild(e.nodeType ? e : e.build()); }
+  ul.appendChild(frag);
+}
+function listEnsure(id) {
+  if (listPos >= listEntries.length) return;
+  const k = listEntries.findIndex(e => !e.nodeType && e.id === id);
+  if (k >= listPos) listMore(k - listPos + 20);
+}
+var kindAskNo = null;   /* 「いいえ」と答えた検索語（同じ語では聞き直さない） */
+function otherKindHits() {
+  const hit = {};
+  ALLX.forEach(x => { if (flt.region !== 'all' && (x.rg || REGION_OF[x.pf]) !== flt.region) return; if (!qm(x) || !visOK(x)) return; if (flt.pfk && PREF_KEY[x.pf] !== flt.pfk) return; kindsOf(x).forEach(k => { if (!flt.kinds.has(k)) hit[k] = (hit[k] || 0) + 1; }); });
+  return hit;
+}
+/* 一覧の行の2行目（種類を1つだけ選んでいるとき）。名前の後ろの（○年廃止）などは、行を作る側で付ける */
+const noPos = it => typeof it.la === 'number' ? '' : ' / 地図には未表示';
+const facSub = k => it => esc(prefFull(it.pf)) + (it.tg ? ' / ' + FAC[k] + '＋' + esc(it.tg.split('、').join('＋')) : '') + (it.nt && /閉園/.test(it.nt) ? ' / 閉園等の可能性' : '') + noPos(it);
+const ROW_SUB = {
+  zoos:facSub('zoos'), aquas:facSub('aquas'), bots:facSub('bots'), themes:facSub('themes'),
+  my: it => esc(prefFull(it.pf)) + (it.k ? ' / ' + esc(it.k) : ''),
+  scenic: it => esc(it.ps) + ' / ' + esc(it.ty) + '・' + esc(it.cl),
+  nature: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.pk || it.sl ? '・' + esc(it.pk || it.sl) : ''),
+  shin: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ln.map(l => l.replace('新幹線', '')).join('・')) + noPos(it),
+  koei: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + (it.kb ? '・' + esc(it.kb) : '') + (it.st ? '・' + esc(it.st) : ''),
+  ik: it => esc(it.ps) + ' / ' + esc(it.ky) + noPos(it),
+  biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
+  whs: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録',
+  capitals: it => esc(prefFull(it.pf)),
+  museums: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.kb) + ' / ' + esc(mReg(it)) + noPos(it),
+  airports: it => esc(prefFull(it.pf)) + ' / ' + esc(AIR_FL_SHORT[it.fl]) + (it.st !== 1 ? ' / ' + esc(AIR_ST[it.st] || '') : ''),
+  stations: it => esc(prefFull(it.pf)) + (it.x ? '' : noPos(it)),
+};
+function renderList(keepCount) {
+  const items = currentItems(), ul = $('list');
+  ul.innerHTML = ''; listEntries = []; listPos = 0;
+  if (!items.length) {
+    const oh = (flt.kinds && qterms().length && kindAskNo !== flt.q) ? otherKindHits() : null, ks = oh ? KORDER.filter(k => oh[k]) : [];
+    if (ks.length) {   /* 選んでいない種類にだけ該当があるときは、その種類も出すかを聞く */
+      const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
+      li.innerHTML = '<div>「' + esc(flt.q) + '」は、選んでいない種類（' + ks.map(k => esc(MODE_LABEL[k]) + ' ' + oh[k] + '件').join('・') + '）にあります。表示しますか？</div><div class="noteb"><button type="button" class="btn" data-ka="yes">はい</button><button type="button" class="btn" data-ka="no">いいえ</button></div>';
+      li.querySelector('[data-ka=yes]').onclick = () => { ks.forEach(k => flt.kinds.add(k)); refresh(); };
+      li.querySelector('[data-ka=no]').onclick = () => { kindAskNo = flt.q; renderList(); };
+      ul.appendChild(li); return;
+    }
+    ul.innerHTML = '<li style="padding:14px 16px;color:var(--muted)">' + (flt.kinds && !flt.kinds.size && !qterms().length ? '下の「種類」を選ぶと、ここに一覧が出ます。' : '条件に合うものがありません。') + '</li>'; return;
+  }
+  let lastGrp = null; const entries = [];
+  const nVisAll = items.filter(x => isVisited(x.id)).length;
+  const rk1 = flt.kinds && flt.kinds.size === 1 ? flt.kinds.values().next().value : null;   /* 種類を1つだけ選んでいるときは、その種類の行の形で出す */
+  const rowLi = it => {
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'row-btn'; b.dataset.id = it.id;
+    if (it.id === selId) b.setAttribute('aria-current', 'true');
+    const k = KIND.get(it.id), hmr = rk1 === 'hyaku' ? HM_OF[it.id] : null;
+    const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + sub + '</span>';
+    const name = k === 'stations' ? esc(dn(it)) : esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + (it.xw || '閉園')) + '）</span>' : '');
+    if (hmr) b.innerHTML = row(esc(hmr.n), esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg), hmr.no);
+    else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
+    else if (k === rk1 && ROW_SUB[k]) b.innerHTML = row(name, ROW_SUB[k](it), '', it.x);
+    else b.innerHTML = row(name, '<i class="nbk">' + MODE_LABEL[k] + '</i> ' + esc(prefFull(it.pf)), '', it.x);
+    b.onclick = () => select(it.id, true);
+    li.appendChild(b);
+    if (listNear) { const v = b.querySelector('.rval'); if (v) v.insertAdjacentHTML('afterbegin', '<b class="rdist">' + fmtDist(distKm(it)) + '</b> '); }
+    return li;
+  };
+  items.forEach(it => {
+    if (!listNear && !flt.q && nVisAll > 0) {
+      const g2 = isVisited(it.id) ? '行った' : '記録なし';
+      if (g2 !== lastGrp) {
+        lastGrp = g2;
+        const gh = document.createElement('li'); gh.className = 'grp'; gh.textContent = g2 + '（' + (g2 === '行った' ? nVisAll : items.length - nVisAll) + '）';
+        entries.push(gh);
+      }
+    }
+    entries.push({ id: it.id, build: () => rowLi(it) });
+  });
+  const want = Math.max(LIST_CHUNK, keepCount || 0);
+  listEntries = entries; listMore(want); if (selId) listEnsure(selId);
+}
+function renderControls() {
+  const chips = $('chips'), tools = $('tools');
+  chips.innerHTML = ''; tools.innerHTML = '';
+  const add = (label, val, key, n) => {
+    const c = document.createElement('button');
+    c.type = 'button'; c.className = 'chip';
+    c.setAttribute('aria-pressed', String(flt[key] === val));
+    c.innerHTML = esc(label) + (n != null ? '<span class="n">' + n + '</span>' : '');
+    c.onclick = () => { flt[key] = val; if (key === 'region' && val !== 'all' && flt.pfk && REGION_OF[pfShort(flt.pfk)] !== val) setPfk(''); else refresh(); };
+    chips.appendChild(c);
+    return c;
+  };
+  const brk = () => { const b0 = document.createElement('div'); b0.style.flexBasis = '100%'; b0.style.height = '0'; chips.appendChild(b0); };
+  const nVis = ALLX.filter(x => isVisited(x.id)).length;
+  if (flt.pfk) { const pc = document.createElement('button'); pc.type = 'button'; pc.className = 'chip pf'; pc.setAttribute('aria-pressed', 'true'); pc.textContent = flt.pfk + ' ✕'; pc.onclick = () => setPfk(''); chips.appendChild(pc); }
+  add('記録:すべて', 'all', 'vis');
+  add('行った', 'yes', 'vis', nVis);
+  add('記録なし', 'no', 'vis');
+  brk();
+  {
+    /* 種類を複数選べる */
+    const kn = {}, kv = {}; ALLX.forEach(x => { const k = KIND.get(x.id); kn[k] = (kn[k] || 0) + 1; if (isVisited(x.id)) kv[k] = (kv[k] || 0) + 1; });
+    const allOn = flt.kinds.size === KORDER.length;
+    const kg = document.createElement('div'); kg.className = 'kgrid';
+         const mk = (k, label, n, on, fn, cls) => { const c = document.createElement('button'); c.type = 'button'; c.className = 'kb' + (cls ? ' ' + cls : ''); if (k) c.dataset.k = k; c.style.setProperty('--kc', k ? KCOL[k] : 'var(--ink)'); c.setAttribute('aria-pressed', String(on)); c.innerHTML = '<span class="ti">' + icon(k || 'all') + '</span><span class="tl">' + esc(label) + '</span>' + (n ? '<span class="tn">' + n + '</span>' : ''); c.onclick = fn; kg.appendChild(c); };
+         mk(null, '種類：すべて', KORDER.length + '種', allOn, () => { flt.kinds = new Set(allOn ? [] : KORDER); refresh(); }, 'all');
+         KORDER.forEach(k => mk(k, MODE_LABEL[k], '', flt.kinds.has(k), () => { if (allOn) flt.kinds = new Set(KORDER.filter(x => x !== k)); else { if (flt.kinds.has(k)) flt.kinds.delete(k); else flt.kinds.add(k); } refresh(); if (flt.kinds.size === 1 && flt.kinds.has('biwa')) focusBiwa(); }));
+         chips.appendChild(kg);
+         brk();
+    const tk = typeKind();
+    if (tk) { const src = ALLX.filter(kindOn); TYPEF[tk].forEach(t => add(t[0], t[1], 'type', t[2] ? src.filter(t[2]).length : src.length)); brk(); }
+  }
+  const base = ALLX.filter(kindOn), regOf = x => x.rg || REGION_OF[x.pf];
+  const sep = document.createElement('div'); sep.style.flexBasis = '100%'; sep.style.height = '0';
+  chips.appendChild(sep);
+  /* 地方：種類を選んでいなくても出す（数は、種類を選んでいないときは全種類）。押すと、全種類をその地方で表示する。
+     選んだ地方のすぐ後ろに、その地方の県を出す（押すと県で絞り、区市町村まで拡大できる。もう一度押すと解除） */
+  const cbase = flt.kinds.size ? base : ALLX;
+  add('全国', 'all', 'region');
+  REGIONS.forEach(r => {
+    const n = cbase.filter(x => regOf(x) === r).length; if (!n) return;
+    const c = add(r, r, 'region');
+    c.onclick = () => { flt.kinds = new Set(KORDER); flt.region = r; if (flt.pfk && REGION_OF[pfShort(flt.pfk)] !== r) setPfk(''); else refresh(); };
+    if (flt.region !== r) return;
+    Object.keys(GEO_PREFS).filter(k => REGION_OF[pfShort(k)] === r).forEach(k => {
+      const pc = add(pfShort(k), null, '');
+      pc.classList.add('pfc'); pc.setAttribute('aria-pressed', String(flt.pfk === k)); pc.onclick = () => setPfk(k);
+    });
+  });
+  { const ab = document.createElement('button'); ab.type = 'button'; ab.className = 'btn'; ab.textContent = '＋ 地点を追加'; ab.onclick = () => openMyForm(null); tools.appendChild(ab); }
+  $('q').value = flt.q;
+}
+function renderStat() { /* 「表示中 ○件、○都道府県に分布…」の一文は表示しない */ }
+function renderLegend() {
+  $('legend').innerHTML = KORDER.map(m => '<span><i style="background:' + KCOL[m] + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
+}
+
+/* ===== 選択 ===== */
+function select(id, fromList, jump) {
+  /* 横断検索のまま詳細を開く（種類ごとの表示は renderDetail が切り替える）。地図の点を押したとき（jump）は、地図は動かさず、スマホでは詳細へ送る */
+  selId = id;
+  const d = dotEls[id];
+  if (fromList && d) {
+    flyToDot(d);
+  }
+  markSel(); renderDetail();
+  if ((fromList || jump) && window.innerWidth < 920) { const dt = $('detail').getBoundingClientRect(); if (dt.top < 0 || dt.top > window.innerHeight * 0.6) $('detail').scrollIntoView({ behavior:'smooth', block:'start' }); }
+  else if (fromList) { const dt = $('detail').getBoundingClientRect(); if (dt.top > window.innerHeight - 140) $('detail').scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+  listEnsure(id);
+  document.querySelectorAll('.row-btn').forEach(b => {
+    const on = b.dataset.id === id;
+    if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    if (on && !fromList) { const ul = $('list'), fix = () => { ul.scrollTop += b.getBoundingClientRect().top - ul.getBoundingClientRect().top - 40; }; fix(); requestAnimationFrame(fix); }
+  });
+}
+function refresh() {
+  if (selId && !currentItems().some(x => x.id === selId)) selId = null;
+  renderControls(); renderList(); drawDots(); renderDetail(); renderStat();
+  /* 県を選んでいるときは、さらに拡大できる。境界線と出典もここで切り替える（東京都だけ、境界のデータが別） */
+  const mw = flt.pfk ? TKY_MINW : 5;   /* 県を選んでいるときは、区市町村まで拡大できる */
+  if (mw !== MINW) { MINW = mw; if (vb.w < MINW) applyVB(); }
+  $('tkysrc').hidden = flt.pfk !== '東京都'; $('citysrc').hidden = !(flt.pfk && flt.pfk !== '東京都' && cityCode(flt.pfk)); updateTky();
+  drawSpeed();
+}
+let mvInit = false;
+/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類） */
+function resetAll(keepQ, keepView, kinds) {
+  initAll();
+  dotEls = {}; selId = null; flt.kinds = new Set(kinds || []); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
+  if (!mvInit) { mvInit = true; mapView = 'dots';   /* 塗りは、初期状態ではオフ */ }
+  if (keepView) applyVB(); else fitAll();
+  renderLegend(); applyMapView(); refresh();
+  try { history.replaceState(null, '', '#all'); } catch (e) {}
+}
+/* 凡例の開閉(この端末に保存。初期値は、狭い画面では閉じる) */
+let legOpen = store.get('jp-legend') ? store.get('jp-legend') === '1' : window.innerWidth >= 700;
+function applyLegend() { $('legend').classList.toggle('off', !legOpen); $('legtog').setAttribute('aria-expanded', String(legOpen)); $('legtog').textContent = legOpen ? '凡例 ✕' : '凡例'; }
+$('legtog').onclick = () => { legOpen = !legOpen; store.set('jp-legend', legOpen ? '1' : '0'); applyLegend(); };
+applyLegend();
+/* 画面の表示設定を初期状態に戻す（行った記録・自分の地点・書き出しの設定は、そのまま） */
+$('prefreset').onclick = () => {
+  ['jp-fs', 'jp-theme', 'jp-font', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  tileSrc = ''; gTile.replaceChildren(); bgMenu(false); applyTileOn();
+  fsPct = 100; theme = 'auto'; fontSys = false; applyPrefs();
+  legOpen = window.innerWidth >= 700; applyLegend();
+  $('list').style.maxHeight = '';
+  LABS = 0.8; CLUL = 4; showClu(); updateSizes();
+  setMapH(mapHDef(), false);
+  setMapView('dots'); fitAll(); refresh();
+  const b = $('prefreset'), t0 = b.textContent; b.textContent = '戻しました'; setTimeout(() => { b.textContent = t0; }, 1500);
+};
+
+let pickCb = null;
+function nearestPf(lo, la) {
+  initAll();
+  let best = null, bd = Infinity;
+  ALLX.forEach(x => { if (x.my || typeof x.la !== 'number') return; const dx = (x.lo - lo) * Math.cos(la * Math.PI / 180), dy = x.la - la, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = x; } });
+  return best ? best.pf : '東京';
+}
+function delMySpot(id) {
+  const i = MYS.findIndex(m => m.id === id); if (i < 0) return;
+  MYS.splice(i, 1); ALL_IDS.delete(id);
+  rec.profiles.forEach(p => { delete rec.data[p.id][id]; });
+  saveRec(); saveMys(); rebuildAllx(); selId = null; refresh();
+}
+let myEl = null, pickBar = null;
+function closeMyForm() { if (myEl) myEl.hidden = true; }
+function openMyForm(it) {
+  if (!myEl) {
+    myEl = document.createElement('div'); myEl.id = 'mymodal'; myEl.className = 'xmodalx'; myEl.hidden = true; myEl.setAttribute('role', 'dialog'); myEl.setAttribute('aria-modal', 'true');
+    myEl.style.cssText = 'position:fixed;inset:0;z-index:50;background:rgba(10,14,18,.62);overflow-y:auto;padding:12px;display:flex;justify-content:center;align-items:flex-start';
+    document.body.appendChild(myEl);
+    pickBar = document.createElement('div'); pickBar.id = 'pickbar'; pickBar.hidden = true;
+    pickBar.innerHTML = '<span>地図をタップして位置を指定してください。</span><button type="button" class="btn" id="pick-cancel">やめる</button>';
+    document.body.appendChild(pickBar);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && myEl && !myEl.hidden) closeMyForm(); });
+  }
+  const prefOpts = PREF_ORDER.map(p => '<option value="' + esc(p) + '">' + esc(prefFull(p)) + '</option>').join('');
+  myEl.innerHTML = '<div class="xpanel"><div class="xhead"><h2>' + (it ? 'マイスポットを編集' : 'マイスポットを追加') + '</h2><button type="button" class="btn" id="my-x">閉じる</button></div>' +
+    '<div class="myform">' +
+    '<label>名前（必須）<input id="my-n" maxlength="60" autocomplete="off"></label>' +
+    '<label>種類（自由に。例：神社、温泉、思い出の場所）<input id="my-k" maxlength="30" autocomplete="off"></label>' +
+    '<label>メモ<textarea id="my-m" maxlength="500"></textarea></label>' +
+    '<div class="two"><label>緯度<input id="my-la" inputmode="decimal" placeholder="35.6812"></label><label>経度<input id="my-lo" inputmode="decimal" placeholder="139.7671"></label></div>' +
+    '<div class="xact"><button type="button" class="btn" id="my-pick">地図をタップして指定</button><span class="xhint">または緯度・経度を直接入力</span></div>' +
+    '<label>都道府県<select id="my-pf">' + prefOpts + '</select></label>' +
+    '<p class="xhint">位置を決めると、最寄りの既存の地点から都道府県を自動で選びます（変更できます）。</p>' +
+    '<p class="err" id="my-err"></p>' +
+    '<div class="xact"><button type="button" class="btn" id="my-save">保存</button><button type="button" class="btn" id="my-cancel">キャンセル</button></div></div></div>';
+  const g = id => myEl.querySelector('#' + id);
+  let pfTouched = !!it;
+  g('my-n').value = it ? it.n : ''; g('my-k').value = it ? it.k : ''; g('my-m').value = it ? it.memo : '';
+  g('my-la').value = it ? it.la : ''; g('my-lo').value = it ? it.lo : ''; g('my-pf').value = it ? it.pf : '東京';
+  g('my-pf').onchange = () => { pfTouched = true; };
+  const autoPf = () => { const lo = parseFloat(g('my-lo').value), la = parseFloat(g('my-la').value); if (!pfTouched && lo >= 122 && lo <= 154 && la >= 20 && la <= 46) g('my-pf').value = nearestPf(lo, la); };
+  g('my-la').onchange = autoPf; g('my-lo').onchange = autoPf;
+  g('my-x').onclick = g('my-cancel').onclick = closeMyForm;
+  g('my-pick').onclick = () => {
+    myEl.hidden = true; pickBar.hidden = false;
+    $('mapwrap').classList.add('picking');
+    try { $('mapwrap').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+    pickCb = (lo, la) => { g('my-lo').value = lo.toFixed(4); g('my-la').value = la.toFixed(4); autoPf(); myEl.hidden = false; };
+  };
+  pickBar.querySelector('#pick-cancel').onclick = () => { pickCb = null; $('mapwrap').classList.remove('picking'); pickBar.hidden = true; myEl.hidden = false; };
+  g('my-save').onclick = () => {
+    const err = t => { g('my-err').textContent = t; };
+    const n = g('my-n').value.trim(), lo = parseFloat(g('my-lo').value), la = parseFloat(g('my-la').value);
+    if (!n) return err('名前を入れてください。');
+    if (!(lo >= 122 && lo <= 154 && la >= 20 && la <= 46)) return err('位置が決まっていません。地図をタップするか、日本国内の緯度・経度を入れてください。');
+    const f = { n, k:g('my-k').value.trim().slice(0, 30), memo:g('my-m').value.trim().slice(0, 500), pf:g('my-pf').value, lo, la };
+    let m = it;
+    if (m) { Object.assign(m, f); m.rg = REGION_OF[m.pf]; }
+    else { m = addMySpot(f); if (!m) return err('保存できませんでした。'); ALL_IDS.add(m.id); }
+    saveMys(); rebuildAllx(); closeMyForm();
+    refresh();
+    select(m.id, true);
+  };
+  myEl.hidden = false;
+  g('my-n').focus();
+}
+function visOK(it) { return flt.vis === 'all' || (flt.vis === 'yes') === isVisited(it.id); }
+function visList(id) { return isVisited(id) ? curData()[cid(id)] : []; }
+function visMark(id) { const n = visList(id).length; return n ? '<span class="vm" aria-label="行った' + n + '回">行' + (n > 1 ? '×' + n : '') + '</span>' : ''; }
+function visBlock(it) {
+  const list = visList(it.id);
+  let h = '<div class="visbox"><div class="vhead"><b>' + (list.length ? '<span class="hanko">行</span>' : '') + (list.length ? '行った回数:' + list.length + '回' : '行った記録はありません') + '</b><span class="vwho">記録する人:' + esc(curName()) + '</span></div>';
+  list.forEach((d, i) => {
+    h += '<div class="vrow"><span class="vn">' + (i + 1) + '回目</span><input type="date" class="vd" data-i="' + i + '" value="' + esc(d) + '" aria-label="' + (i + 1) + '回目の日付">' + (d ? '' : '<span class="vwho">日付不明</span>') + '<button type="button" class="btn warn vx" data-i="' + i + '" aria-label="' + (i + 1) + '回目を削除">削除</button></div>';
+  });
+  h += '<button type="button" id="vis-add" class="chip big">' + (list.length ? '＋ もう1回行った' : '行ったら記録する') + '</button>';
+  if (list.length) h += '<p class="vwho" style="margin:0">日付は初めは「不明」です。分かる回だけ、あとから入れられます。</p>';
+  return h + '</div>';
+}
+function bindVis(it) {
+  $('vis-add').onclick = () => {
+    const cd = curData(), k = cid(it.id), l = has(cd, k) ? cd[k] : (cd[k] = []);
+    if (l.length >= 50) return;
+    l.push(''); l.sort();
+    saveRec(); afterVisChange();
+  };
+  $('detail').querySelectorAll('.vd').forEach(inp => {
+    inp.onchange = () => {
+      const l = curData()[cid(it.id)];
+      l[+inp.dataset.i] = DATE_RE.test(inp.value) ? inp.value : '';
+      l.sort(); saveRec(); afterVisChange();
+    };
+  });
+  $('detail').querySelectorAll('.vx').forEach(b => {
+    b.onclick = () => {
+      const cd = curData(), k = cid(it.id), l = cd[k];
+      l.splice(+b.dataset.i, 1);
+      if (!l.length) delete cd[k];
+      saveRec(); afterVisChange();
+    };
+  });
+}
+function afterVisChange() {
+  /* 一覧は、いまの位置まで見えている分だけ作り直す（地図から下のほうの施設を選ぶと、そこまでの行が全部作られていて、毎回作り直すと重い） */
+  const ul = $('list'), st = ul.scrollTop, rh = (ul.querySelector('.row-btn') || {}).offsetHeight || 28;
+  renderControls(); renderList(Math.min(listPos, Math.ceil((st + ul.clientHeight) / rh) + 40)); ul.scrollTop = st;
+  drawDots(); renderDetail(); renderStat();
+}
+
+
+initMapH();
+/* 検索結果の高さ：下の取っ手をドラッグ（保存される）。ダブルクリックで元に戻す */
+(function () {
+  const ul = $('list'), hd = $('listh'), KEY = 'jp-listh'; let d0 = null;
+  const set = (h, save) => {
+    h = Math.max(80, Math.min(2000, Math.round(h)));
+    ul.style.maxHeight = h + 'px'; hd.setAttribute('aria-valuenow', String(h));
+    if (save) { try { localStorage.setItem(KEY, String(h)); } catch (e) {} }
+  };
+  const cur = () => ul.getBoundingClientRect().height;
+  let st = null; try { st = parseFloat(localStorage.getItem(KEY)); } catch (e) {}
+  if (st > 0) set(st, false);
+  hd.addEventListener('pointerdown', ev => { d0 = { y: ev.clientY, h: parseFloat(ul.style.maxHeight) || cur() }; hd.setPointerCapture(ev.pointerId); ev.preventDefault(); });
+  hd.addEventListener('pointermove', ev => { if (d0) set(d0.h + ev.clientY - d0.y, false); });
+  const end = () => { if (d0) { d0 = null; set(parseFloat(ul.style.maxHeight), true); } };
+  hd.addEventListener('pointerup', end); hd.addEventListener('pointercancel', end);
+  hd.addEventListener('dblclick', () => { try { localStorage.removeItem(KEY); } catch (e) {} ul.style.maxHeight = ''; });
+  hd.addEventListener('keydown', ev => {
+    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') { ev.preventDefault(); set((parseFloat(ul.style.maxHeight) || cur()) + (ev.key === 'ArrowDown' ? 40 : -40), true); }
+  });
+})();
+/* 検索は、入力中にはかけない。Enter（変換の確定ではないもの）、入力欄から離れたとき、空にしたときに実行する */
+function applySearch() {
+  const v = $('q').value.trim(); if (v === flt.q) return;
+  flt.q = v;
+  renderList(); drawDots(); renderStat();
+}
+$('q').setAttribute('enterkeyhint', 'search');
+$('q').addEventListener('input', () => { if (!$('q').value.trim()) applySearch(); });
+$('q').addEventListener('change', applySearch);
+$('q').addEventListener('keydown', e => {
+  if (e.key !== 'Enter' || e.isComposing || e.keyCode === 229) return;
+  e.preventDefault();
+  applySearch();
+  const hits = currentItems().filter(x => typeof x.la === 'number');
+  if (!hits.length) return;
+  if (hits.length === 1) { select(hits[0].id, false); return; }
+  let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  hits.forEach(x => { const xy = proj(x.lo, x.la); x0 = Math.min(x0, xy[0]); x1 = Math.max(x1, xy[0]); y0 = Math.min(y0, xy[1]); y1 = Math.max(y1, xy[1]); });
+  flyTo((x0 + x1) / 2, (y0 + y1) / 2, Math.max((x1 - x0) * 1.35, (y1 - y0) * 1.35 / ASPECT, 40));
+});
+document.querySelectorAll('.tab').forEach(t => { t.onclick = () => resetAll(true, true); });
+/* ===== リッチ版の機能 ===== */
+const ICON_P = {
+  my: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><path d="M12 7.2v5.6M9.2 10h5.6"/>',
+  shin: '<path d="M5 18V9.5C5 6 8 4 12 4s7 2 7 5.5V18zM5 13.5h14M8.5 21l-1-3M15.5 21l1-3"/><circle cx="8.8" cy="16" r=".7"/><circle cx="15.2" cy="16" r=".7"/>',
+  ik: '<rect x="5" y="11" width="14" height="9.5" rx="1.6"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+  koei: '<path d="M5 21V4"/><path d="M5 4h14l-2.5 4 2.5 4H5"/><path d="M9 4v8M13 4v8M5 8h12"/>',
+  biwa: '<path d="M12.5 3.5c-3 1.5-4 4-3.2 6.6.6 2-1.6 3.2-1.6 5.4 0 2.2 2 4.2 4.8 4.6 2.2-.6 3.2-2.4 2.6-4.4-.6-2 1.6-3.4 1-6C15.7 6 14.4 4.2 12.5 3.5z"/>',
+  scenic: '<path d="M2.5 19l6-9 4 6 3-4 6 7z"/><circle cx="17.5" cy="6.5" r="2"/>',
+  nature: '<path d="M12 21v-4.5"/><path d="M12 3L6 11.5h3L5.5 16.5h13L15 11.5h3z"/>',
+  hyaku: '<path d="M2.5 20.5l7-11 3.5 5 2.5-3.5 6 9.5z"/><path d="M9.5 9.5V3.5l4.5 1.6-4.5 1.6"/>',
+  whs: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3 3 3 14 0 17M12 3.5c-3 3-3 14 0 17"/>',
+  capitals: '<path d="M4 20h16M6 20V10l6-3 6 3v10M10 20v-5h4v5M12 7V3l3 1.2L12 5.4"/>',
+  pin: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  all: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
+  castles: '<path d="M12 2.8l3.4 3.4H8.6zM7.5 9.2h9l2 3.2H5.5zM6 12.4V21h12v-8.6M10.2 21v-4.2h3.6V21"/>',
+  themes: '<circle cx="12" cy="10.5" r="6.8"/><circle cx="12" cy="10.5" r="1.2"/><path d="M12 3.7v13.6M5.2 10.5h13.6M7.2 5.7l9.6 9.6M16.8 5.7l-9.6 9.6M7 21l5-10.5L17 21"/>',
+  zoos: '<circle cx="6.6" cy="9.4" r="2"/><circle cx="11.2" cy="6.2" r="2"/><circle cx="16.8" cy="6.9" r="2"/><circle cx="20" cy="11.4" r="1.8"/><path d="M7.4 18c-.4-3 2.2-5.8 5-5.8s5.2 2.6 4.4 5.4c-.5 1.7-2.4 1.6-4.4 1.3s-4.6.6-5-.9z"/>',
+  aquas: '<path d="M2.8 12c2.8-4.8 9.2-6 13.2-2.6l5.2-3.2v11.6L16 14.6C12 18 5.6 16.8 2.8 12z"/><circle cx="7.6" cy="11" r=".9"/>',
+  bots: '<path d="M4.5 19.5C4.2 10.8 9.6 4.8 20 4c.3 10-5.2 15.8-14.5 15.5zM4.5 19.5L14 10"/>',
+  museums: '<path d="M3 9.2L12 4l9 5.2zM5.2 10.6v7.2M9.4 10.6v7.2M14.6 10.6v7.2M18.8 10.6v7.2M3 20.2h18"/>',
+  airports: '<path d="M21 12.2l-8-3.1V4.6a1.5 1.5 0 00-3 0v4.5l-8 3.1v2l8-1.6V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5.4l8 1.6z"/>',
+  stations: '<path d="M4.5 20.5V9.2L12 3.8l7.5 5.4v11.3zM9 20.5v-6.4h6v6.4M2.5 20.5h19"/>',
+  map: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
+  route: '<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8 18h6.5a3 3 0 000-6h-5a3 3 0 010-6H16"/>'
+};
+function icon(k) { return '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICON_P[k] || '') + '</svg>'; }
+
+/* タブ：アイコンと名前 */
+function buildTabs() {
+  document.querySelectorAll('.tab').forEach(t => {
+    const m = t.dataset.mode;
+    t.style.setProperty('--kc', KCOL[m] || 'var(--accent)');
+    t.innerHTML = '<span class="ti">' + icon(m) + '</span><span class="tl">' + esc(m === 'all' ? '横断検索' : MODE_LABEL[m]) + '</span>';
+  });
+}
+/* 検索：複数語（空白区切り）、かな・全半角のゆらぎ、種類名や県名でも当たる */
+function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)); }
+let _qk = null, _qt = [];
+function qterms() { if (_qk !== flt.q) { _qk = flt.q; _qt = fold(flt.q).split(/\s+/).filter(Boolean); } return _qt; }
+function qm(x) {
+  const t = qterms(); if (!t.length) return true;
+  const k = KIND.get(cid(x.id)) || '';
+  const hay = fold([x.n, x.o, x.inc, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.ow, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' '));
+  return t.every(w => hay.includes(w));
+}
+
+/* 県をタップして絞り込む */
+function setPfk(k) {
+  flt.pfk = (flt.pfk === k) ? '' : (k || '');
+  if (flt.pfk && flt.region !== 'all' && REGION_OF[pfShort(flt.pfk)] !== flt.region) flt.region = REGION_OF[pfShort(flt.pfk)];   /* 別の地方の県を選んだら、地方もそちらに */
+  selId = null;
+  refresh(); markSel();
+  if (flt.pfk) zoomToPref(flt.pfk);
+}
+const PREF_BB = {};   /* 県の外枠（初回に1度だけ測って覚える。非表示の形は測ると0になるので、クラスのない仮の線で測る） */
+function prefBox(k, d) {
+  const tmp = el('path', { d:d }, gLand); tmp.style.display = 'inline'; tmp.setAttribute('visibility', 'hidden');
+  const b = tmp.getBBox(); tmp.remove();
+  return { x:b.x, y:b.y, width:b.width, height:b.height };
+}
+function zoomToPref(k) {
+  const p = gLand.querySelector('path[data-k="' + k + '"]'); if (!p) return;
+  const dd = p.getAttribute('d') || '';
+  let bb = PREF_BB[k] || (PREF_BB[k] = prefBox(k, dd)), minw = 40;
+  if (k === '東京都') {   /* 小笠原などの離島を含む外枠では、中心が太平洋の真ん中になるので、本土（いちばん大きい部分）に寄せる */
+    if (!PREF_BB['東京都#']) { let best = 0, bx = bb; (dd.match(/M[^M]*/g) || []).forEach(sd => { const b2 = prefBox(k, sd); if (b2.width * b2.height > best) { best = b2.width * b2.height; bx = b2; } }); PREF_BB['東京都#'] = bx; }
+    bb = PREF_BB['東京都#']; minw = 30;
+  }
+  if (!(bb.width > 0 && bb.height > 0)) return;   /* 測れなかったときは動かさない（座標0へ飛んで、海だけになるのを防ぐ） */
+  flyTo(bb.x + bb.width / 2, bb.y + bb.height / 2, Math.max(bb.width * 1.35, bb.height * 1.35 / ASPECT, minw));
+}
+
+/* 種類「琵琶湖」だけを選んだとき：湖全体が入るようにズームして、詳細を開く */
+function focusBiwa() {
+  select('sc:琵琶湖', false, false);
+  const p = gLake.querySelector('path[data-lake="琵琶湖"]'); if (!p) return;
+  const b = p.getBBox(); if (!(b.width > 0)) return;
+  flyTo(b.x + b.width / 2, b.y + b.height / 2, Math.max(b.width * 1.5, b.height * 1.5 / ASPECT));
+}
+
+/* 種類「琵琶湖」だけのとき：湖に向かう集中線（マンガの効果線）。線の太さや湖まわりの余白が画面上で同じに見えるよう、表示範囲が変わるたびに描き直す */
+let biwaBB = null;
+const SPEED = (() => { let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647; return Array.from({ length:110 }, (_, i) => ({ a:(i + rnd() * 0.8) / 110 * Math.PI * 2, f:1 + rnd() * 0.9, w:0.35 + rnd() * rnd() * 1.4 })); })();
+function drawSpeed() {
+  const g = document.getElementById('g-speed'); if (!g) return;
+  const on = flt.kinds && flt.kinds.size === 1 && flt.kinds.has('biwa');
+  if (!on) { if (g.firstChild) g.textContent = ''; return; }
+  if (!biwaBB) { const p = gLake.querySelector('path[data-lake="琵琶湖"]'); if (!p) return; const b = p.getBBox(); if (!(b.width > 0)) return; biwaBB = b; }
+  const b = biwaBB, cx = b.x + b.width / 2, cy = b.y + b.height / 2, m = vb.w * 0.05;
+  const rx = b.width * 0.75 + m, ry = b.height * 0.62 + m;   /* 湖のまわりは空けておく（縦長の楕円） */
+  const R = Math.hypot(Math.max(cx - vb.x, vb.x + vb.w - cx), Math.max(cy - vb.y, vb.y + vb.h - cy)) + vb.w * 0.1;
+  let d = '';
+  SPEED.forEach(s => {
+    const c = Math.cos(s.a), n = Math.sin(s.a), k = s.f / Math.hypot(c / rx, n / ry);
+    if (k >= R) return;
+    const hw = vb.w * 0.0045 * s.w, ox = cx + c * R, oy = cy + n * R;
+    d += 'M' + (cx + c * k).toFixed(2) + ' ' + (cy + n * k).toFixed(2) + 'L' + (ox - n * hw).toFixed(2) + ' ' + (oy + c * hw).toFixed(2) + 'L' + (ox + n * hw).toFixed(2) + ' ' + (oy - c * hw).toFixed(2) + 'Z';
+  });
+  let p = g.firstChild; if (!p) p = el('path', {}, g);
+  p.setAttribute('d', d);
+}
+
+/* 地図のなめらかな移動 */
+let flyRaf = 0;
+/* 施設へ移動：倍率はそのまま、選んだ施設を地図の中央に */
+function flyToDot(d) { flyTo(d.xy[0], d.xy[1], vb.w); }
+function flyTo(cx, cy, w) {
+  if (!isFinite(cx) || !isFinite(cy) || !isFinite(w)) return;
+  cancelAnimationFrame(flyRaf);
+  w = Math.max(MINW, Math.min(maxW(), w));
+  /* 行き先を先に収めておく（端の施設で、いったん中央に寄せてから引き戻されるのを防ぐ） */
+  const h = w * ASPECT, from = { x:vb.x, y:vb.y, w:vb.w, h:vb.h }, to = clampBox({ x:cx - w / 2, y:cy - h / 2, w:w, h:h });
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { vb = to; applyVB(); return; }
+  const t0 = performance.now(), D = 380;
+  const step = now => {
+    if (ptrs && ptrs.size > 0) { applyVB(); return; }
+    const t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3);
+    const cur = { x:from.x + (to.x - from.x) * e, y:from.y + (to.y - from.y) * e, w:from.w + (to.w - from.w) * e, h:from.h + (to.h - from.h) * e };
+    if (t < 1) { vb = cur; svg.setAttribute('viewBox', cur.x + ' ' + cur.y + ' ' + cur.w + ' ' + cur.h); drawSpeed(); drawFarArrow(); flyRaf = requestAnimationFrame(step); }
+    else { vb = to; applyVB(); }
+  };
+  flyRaf = requestAnimationFrame(step);
+}
+
+/* 詳細の置き場所：PCは地図と一覧のあいだ、それ以外は一覧の下 */
+const midMQ = window.matchMedia('(min-width: 1360px)');
+function placeDetail() { const d = $('detail'); if (midMQ.matches) $('mid').prepend(d); else $('listh').after(d); }   /* 一覧の高さを変えるバーは、一覧のすぐ下に残す */
+if (midMQ.addEventListener) midMQ.addEventListener('change', placeDetail); else if (midMQ.addListener) midMQ.addListener(placeDetail);
+placeDetail();
+
+/* 詳細の操作リンク（地図アプリ） */
+function actionsHTML(it) {
+  if (typeof it.la !== 'number') return '';
+  const q = it.la.toFixed(5) + ',' + it.lo.toFixed(5);
+  return '<div class="actions"><a class="act" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + q + '">' + icon('map') + '地図アプリで開く</a></div>';
+}
+
+/* ---------- 近い順（現在地 / 地図で指定した基準点から） ---------- */
+const ORG_KEY = 'jp-origin-v1';
+let ORG = null, nearOn = false, picking = false, nearMsg = '';
+try { const o = JSON.parse(localStorage.getItem(ORG_KEY) || 'null'); if (o && typeof o.lo === 'number' && typeof o.la === 'number') ORG = o; } catch (e) {}
+if (ORG && ORG.src === 'claude') { ORG = null; try { localStorage.removeItem(ORG_KEY); } catch (e) {} }
+function distKm(it) {
+  if (!ORG || typeof it.la !== 'number') return Infinity;
+  const R = Math.PI / 180, dx = (it.lo - ORG.lo) * Math.cos((it.la + ORG.la) / 2 * R), dy = it.la - ORG.la;
+  return Math.sqrt(dx * dx + dy * dy) * 111.2;
+}
+function fmtDist(d) { return d === Infinity ? '' : d < 10 ? d.toFixed(1) + ' km' : Math.round(d).toLocaleString() + ' km'; }
+const _ciBase = currentItems;
+currentItems = function () {
+  const a = _ciBase();
+  if (!nearOn || !ORG) return a;
+  return a.map(x => ({ x, d: distKm(x) })).sort((p, q) => p.d - q.d).map(p => p.x);
+};
+$('list').addEventListener('scroll', () => { const ul = $('list'); if (listPos < listEntries.length && ul.scrollTop + ul.clientHeight > ul.scrollHeight - 900) listMore(LIST_CHUNK); }, { passive: true });
+const _rlBase = renderList;
+renderList = function () {
+  listNear = !!(nearOn && ORG);   /* 近い順のときは、グループの見出しを出さず、各行に距離を付ける（rowLi） */
+  _rlBase.apply(this, arguments);
+};
+function saveOrg() { try { localStorage.setItem(ORG_KEY, JSON.stringify(ORG)); } catch (e) {} }
+function setOrg(lo, la, src) {
+  ORG = { lo, la, src, t: Date.now() }; saveOrg(); nearOn = true; picking = false; nearMsg = '';
+  $('mapwrap').classList.remove('picking'); posOrigin(); refresh();
+}
+function askGps() {
+  nearOn = true; nearMsg = '現在地を取得中…'; renderNearUI();
+  const fail = why => { nearMsg = why + 'この画面では現在地を取れないため、地図をタップして基準点を指定してください。'; startPick(true); };
+  if (!navigator.geolocation) return fail('');
+  let done = false;
+  const t = setTimeout(() => { if (!done) { done = true; fail(''); } }, 8000);
+  try {
+    navigator.geolocation.getCurrentPosition(p => { if (done) return; done = true; clearTimeout(t); setOrg(p.coords.longitude, p.coords.latitude, 'gps'); },
+      () => { if (done) return; done = true; clearTimeout(t); fail(''); }, { enableHighAccuracy: false, timeout: 7000, maximumAge: 300000 });
+  } catch (e) { done = true; clearTimeout(t); fail(''); }
+}
+function startPick(keep) {
+  picking = true; nearOn = true; if (!keep) nearMsg = '地図をタップして基準点を指定してください。';
+  $('mapwrap').classList.add('picking'); renderNearUI(); refresh();
+  try { $('mapwrap').scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {}
+}
+function toggleNear() {
+  if (nearOn) { nearOn = false; picking = false; nearMsg = ''; $('mapwrap').classList.remove('picking'); refresh(); return; }
+  if (ORG) { nearOn = true; refresh(); } else askGps();
+}
+svg.addEventListener('click', ev => {
+  if ((!picking && !pickCb) || moved) return;
+  ev.stopPropagation(); ev.preventDefault();
+  const u = toUser(ev);
+  if (pickCb) { const cb = pickCb; pickCb = null; $('mapwrap').classList.remove('picking'); $('pickbar').hidden = true; cb(u.x / (SCALE * KX) + 122, 46 - u.y / SCALE); return; }
+  setOrg(u.x / (SCALE * KX) + 122, 46 - u.y / SCALE, 'map');
+}, true);
+/* 点と名前を押す判定は、自分で計算する。
+   ブラウザのSVGの当たり判定は、拡大すると実際の見た目より約0.5単位（拡大時は60px前後）ふくらみ、隣の名前や点と重なって、違うものが選ばれた。
+   点の近く（9px以内）→ 名前の箱の中 → 点の当たり半径の中、の順に、いちばん近いものを選ぶ */
+function pickAt(ev) {
+  const u = toUser(ev), s = u.s;
+  let bestDot = null, bd = Infinity, bestLab = null, bl = Infinity, bestFar = null, bf = Infinity;
+  for (const id in dotEls) {
+    const d = dotEls[id];
+    if (d.g.style.display === 'none' || d.g.classList.contains('dim')) continue;
+    const dist = Math.hypot(d.xy[0] - u.x, d.xy[1] - u.y) * s, r = d.hr * s;
+    if (dist <= 9 && dist < bd) { bd = dist; bestDot = id; }
+    if (dist <= r && dist < bf) { bf = dist; bestFar = id; }
+    const b = d.labBox;
+    if (b && d.labH && d.labH.isConnected && u.x >= b.x && u.x <= b.x + b.width && u.y >= b.y && u.y <= b.y + b.height) {
+      const cd = Math.hypot(b.x + b.width / 2 - u.x, b.y + b.height / 2 - u.y);
+      if (cd < bl) { bl = cd; bestLab = id; }
+    }
+  }
+  return bestDot || bestLab || bestFar;
+}
+svg.addEventListener('click', ev => {
+  if (ev.cancelBubble || picking || pickCb || moved) return;
+  if (ev.target.closest && ev.target.closest('.clu')) return;
+  const id = pickAt(ev); if (!id) return;
+  ev.stopPropagation(); ev.preventDefault();
+  select(id, false, true);
+}, true);
+svg.addEventListener('pointerleave', () => { llPtr = null; showLL(); });
+svg.addEventListener('pointermove', ev => { if (ev.pointerType === 'mouse') { const m = svg.getScreenCTM(); if (m) { const p = new DOMPoint(ev.clientX, ev.clientY).matrixTransform(m.inverse()); llPtr = [p.x, p.y]; showLL(); } } });
+svg.addEventListener('pointermove', ev => { if (ev.pointerType === 'mouse' && !drag && !picking) svg.style.cursor = pickAt(ev) ? 'pointer' : ''; });
+function posOrigin() {
+  let g = $('g-org');
+  if (!g) { g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.id = 'g-org'; g.style.pointerEvents = 'none'; svg.appendChild(g); }
+  g.innerHTML = '';
+  if (!ORG) return;
+  const [x, y] = proj(ORG.lo, ORG.la), k = vb.w / 680;
+  g.innerHTML = '<circle class="orgr" cx="' + x + '" cy="' + y + '" r="' + (11 * k) + '" stroke-width="' + (2 * k) + '"/><circle class="orgd" cx="' + x + '" cy="' + y + '" r="' + (4.2 * k) + '"/>';
+}
+const _usBase = updateSizes;
+updateSizes = function () { _usBase.apply(this, arguments); posOrigin(); };
+function renderNearUI() {
+  const tools = $('tools'); if (!tools) return;
+  let r = $('nearrow'); if (r) r.remove();
+  r = document.createElement('div'); r.id = 'nearrow'; r.className = 'nearrow';
+  const tg = document.createElement('button'); tg.type = 'button'; tg.className = 'chip nearbtn'; tg.setAttribute('aria-pressed', String(nearOn));
+  tg.innerHTML = icon('pin') + '近い順';
+  tg.onclick = toggleNear;
+  r.appendChild(tg);
+  if (nearOn) {
+    const g = document.createElement('button'); g.type = 'button'; g.className = 'chip'; g.textContent = '現在地から'; g.onclick = askGps;
+    const m = document.createElement('button'); m.type = 'button'; m.className = 'chip'; m.textContent = picking ? '指定をやめる' : '地図で指定'; m.onclick = () => { if (picking) { picking = false; $('mapwrap').classList.remove('picking'); nearMsg = ''; renderNearUI(); } else startPick(false); };
+    r.appendChild(g); r.appendChild(m);
+    const s = document.createElement('span'); s.className = 'nearmsg';
+    s.textContent = nearMsg || (ORG ? '基準点：' + (ORG.src === 'gps' ? '現在地' : '地図で指定した地点') + '（地図の青い印）' : '');
+    r.appendChild(s);
+  }
+  tools.appendChild(r);
+}
+const _rcBase = renderControls;
+renderControls = function () { _rcBase(); renderNearUI(); };
+posOrigin();
+
+/* 項目の分類が、地図で選んでいる種類に入っているか（双子（TWIN）で重なる分類も見る。twinKinds は core.js） */
+const kindOn = x => kindsOf(x).some(k => flt.kinds.has(k));
+
+buildTabs();
+/* ほかのページへ移るときに、地図の範囲・選んだ施設・絞り込み・検索・画面の位置を覚えておく（このタブを閉じるまで） */
+const MAPST_KEY = 'jp-mapstate';
+addEventListener('pagehide', () => {
+  try { sessionStorage.setItem(MAPST_KEY, JSON.stringify({ vb, selId, mapView, y:window.scrollY, flt:{ kinds:[...flt.kinds], type:flt.type, region:flt.region, q:flt.q, vis:flt.vis, pfk:flt.pfk } })); } catch (e) {}
+});
+function restoreMapState(st) {
+  const f = st.flt;
+  resetAll(false, false, (f.kinds || []).filter(k => KORDER.includes(k)));
+  flt.type = f.type || 'all'; flt.region = REGIONS.includes(f.region) ? f.region : 'all'; flt.vis = f.vis || 'all';
+  flt.q = typeof f.q === 'string' ? f.q : ''; $('q').value = flt.q;
+  flt.pfk = GEO_PREFS[f.pfk] ? f.pfk : '';
+  if (st.mapView === 'fill' || st.mapView === 'dots') setMapView(st.mapView);
+  refresh();
+  const v = st.vb;
+  if (v && v.w > 0 && v.h > 0) { const cx = v.x + v.w / 2, cy = v.y + v.h / 2, h = v.w * ASPECT; vb = { x:cx - v.w / 2, y:cy - h / 2, w:v.w, h }; applyVB(); }
+  if (st.selId && currentItems().some(x => x.id === st.selId)) select(st.selId);
+  if (st.y > 0) requestAnimationFrame(() => window.scrollTo(0, st.y));
+}
+/* 初めの表示は、全種類を選んだ状態。#種類 で開いたときは、その種類だけ。
+   #sel=id は、その施設を選んで開く（あしあとのページから）。
+   どれでもないときは、このタブで前に見ていた状態に戻す（ほかのページから戻ったとき） */
+{
+  const h = decodeURIComponent(location.hash.slice(1));
+  let st = null; try { st = JSON.parse(sessionStorage.getItem(MAPST_KEY) || 'null'); } catch (e) {}
+  if (KORDER.includes(h)) resetAll(false, false, [h]);
+  else if (st && st.flt && !h.startsWith('sel=')) { try { restoreMapState(st); } catch (e) { resetAll(false, false, []); } }
+  else resetAll(false, false, []);
+  if (h.startsWith('sel=') && findItem(h.slice(4))) select(h.slice(4), true);
+}
+</script>
+<!-- 文字の CSS は、スクリプトの後ろで読む（前に置くと、届くまでスクリプト全体が待たされる） -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+
+</body></html>

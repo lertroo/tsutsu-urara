@@ -1,0 +1,138 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
+<title>津々浦ラ - このサイト</title>
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.lertroo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="style.css?v=20261026k">
+
+<main class="app">
+  <header>
+    <div class="head">
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>ツツウララ</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
+      <div class="topbar prefs">
+        <button type="button" class="prefbtn" id="prefbtn" aria-label="表示の設定" title="表示の設定" aria-expanded="false" aria-controls="prefmenu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+        <div class="prefmenu" id="prefmenu" role="group" aria-label="表示の設定" hidden>
+          <div class="pmrow"><span class="pml">文字の大きさ</span><button type="button" id="fsm" aria-label="文字を小さく">A−</button><button type="button" id="fsp" aria-label="文字を大きく">A＋</button></div>
+          <div class="pmrow"><span class="pml">ライト/ダーク</span><button type="button" id="theme" aria-label="表示モードの切り替え">自動</button></div>
+          <div class="pmrow"><span class="pml">フォント</span><button type="button" id="fontsel" aria-label="フォントの切り替え（サイトの指定／端末の標準）" title="サイトで指定した書体と、この端末の標準の書体を切り替えます">サイト指定</button></div>
+          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォントを、初期状態に戻します（行った記録はそのまま）">初期化</button></div>
+        </div>
+      </div>
+    </div>
+    <nav class="ptabs" aria-label="ページ"><a href="index.html">地図</a><a href="ashiato.html">あしあと</a><a href="kiroku.html">出力・保存</a><a href="changelog.html">更新履歴</a><a href="about.html" aria-current="page">このサイト</a></nav>
+  </header>
+  <div class="page">
+    <section class="panel">
+      <h2>更新情報</h2>
+      <p class="note">施設データの最終更新：<span id="dupd2"></span>。追加・修正の中身は<a href="changelog.html">更新履歴</a>にあります。</p>
+    </section>
+    <section class="panel">
+      <h2>登録状況</h2>
+      <p class="note">種類ごとの登録件数です。同じ場所が2つの種類にあるもの（例：姫路城は城と世界遺産）は、それぞれで数えています。</p>
+      <div id="stat"></div>
+    </section>
+    <section class="panel">
+      <h2>採用基準</h2>
+      <ul class="crit">
+        <li><b>城</b>：日本城郭協会の「日本100名城」の100城。</li>
+        <li><b>動物園・水族館・植物園・テーマパーク</b>：地図データ（OpenStreetMap）・国土数値情報・Wikipedia から作った一覧。</li>
+        <li><b>博物・美術館</b>：国立・国立大学・都道府県立の館（文化庁「全国の博物館」の登録博物館・指定施設など）と、国宝を収蔵する館（Wikipedia「日本の国宝一覧」で国宝の所在がその館になっているもの。寄託を含む）と、lertroo基準の館。</li>
+        <li><b>空港</b>：国土数値情報の空港データ（C28-21）にある空港。</li>
+        <li><b>新幹線の駅</b>：フル規格の新幹線の駅と、ミニ新幹線（山形・秋田）の駅、ガーラ湯沢。</li>
+        <li><b>道の駅</b>：mach-tools「道の駅オープンデータ」にある駅。</li>
+        <li><b>県庁所在地</b>：47都道府県の県庁舎。</li>
+        <li><b>世界遺産</b>：日本の世界遺産のすべて（ユネスコ世界遺産センターの日本のページによる）。</li>
+        <li><b>日本百景</b>：1927年（昭和2年）に選ばれた日本新八景・日本二十五勝・日本百景。</li>
+        <li><b>自然</b>：国立公園の景勝地と、名水百選・滝百選・ラムサール条約登録湿地の一部など。</li>
+        <li><b>日本百名山</b>：深田久弥『日本百名山』（1964年）の100座。</li>
+        <li><b>琵琶湖</b>：琵琶湖（地図の湖の形と合わせて表示）。</li>
+        <li><b>公営競技場</b>：競馬場・競輪場・競艇場・オートレース場の、いまあるすべてと、2000年以降に廃止・休止した場。</li>
+        <li><b>レアスポット</b>：立ち入りが制限されている、上陸できない、見学の機会が少ないなどで、行くのが難しい場所。</li>
+        <li><b>マイスポット</b>：使う人が自分で足した地点（この端末のブラウザにだけ保存）。</li>
+      </ul>
+    </section>
+    <section class="panel src" id="legal">
+    <h2>出典と免責</h2>
+      <ul>
+        <li>© OpenStreetMap contributors（ODbL）：施設の区域と位置。面積はこの区域から計算した概算です。</li>
+        <li>空港：国土交通省「国土数値情報（空港データ C28-21）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-C28-v3_0.html）をもとに、Tsutsu-Urara が面積の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
+        <li>新幹線の駅：国土交通省「国土数値情報（鉄道データ N02-20）」（https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-v3_1.html）をもとに、Tsutsu-Urara が駅の抽出と位置の計算などの編集・加工をして作成しています。国土交通省が作成した情報ではありません。</li>
+        <li>県の形：japonyol.net「47都道府県のGeoJSON」（https://japonyol.net/editor/article/47-prefectures-geojson.html）をもとに、Tsutsu-Urara が投影と簡略化をして作成しています。配布元のファイルには「出典も明示する必要も利用制限もありません」と記載されています（元のデータの出典は記載されていません）。</li>
+        <li>動物園・水族館・植物園・テーマパーク・博物・美術館：位置と区域は OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取り、Wikipedia 日本語版（CC BY-SA 4.0）で補っています。一部は手で調べて入れています。</li>
+        <li>博物・美術館：館の一覧、登録博物館・指定施設の区分、設置者は、文化庁「全国の博物館」（https://museum.bunka.go.jp/guide/ ）の一覧（2026年10月8日版）をもとにしています。</li>
+        <li>道の駅：駅名と都道府県は、mach-tools「道の駅オープンデータ」（CC BY 4.0）をもとにしています。位置は、OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取っています。</li>
+        <li>公営競技場（競馬場・競輪場・競艇場・オートレース場）：一覧と位置は、Wikipedia 日本語版（CC BY-SA 4.0）の一覧の記事と各場の記事をもとにしています。2000年以降に廃止・休止した場も含めています。</li>
+        <li>日本百景（日本新八景・日本二十五勝を含む）：一覧は Wikipedia（CC BY-SA 4.0）の表をもとにしています。位置は、各景勝地を代表する地点の概算です。</li>
+        <li>自然：場所は Wikipedia 日本語版（CC BY-SA 4.0）の各国立公園の記事などをもとに選んでいます。位置は、各地の記事の座標（ないものは Wikidata（CC0）の座標か、地図で調べた位置）をもとにした目安です。</li>
+        <li>日本百名山：深田久弥『日本百名山』（1964年）の100座です。山名・標高・山系は Wikipedia 日本語版（CC BY-SA 4.0）の「日本百名山」の表によります。位置は「自然」と同じく各山の記事の座標で、阿寒岳は雌阿寒岳としています。</li>
+        <li>城：日本城郭協会の「日本100名城」の100城です。位置と天守の区分は目安です。</li>
+        <li>世界遺産：一覧・種別・登録年は、ユネスコ世界遺産センター「日本」のページ（https://whc.unesco.org/en/statesparties/jp ）で確認しています。位置は、各遺産を代表する地点の概算です。</li>
+        <li>県庁所在地：各都道府県の県庁舎の位置を、公開されている情報をもとに作成しています（目安）。</li>
+        <li>レアスポット：位置は、島は島の中心付近の概略、地下施設などは Wikipedia・地図サービスを参照した目安です。</li>
+        <li>写真：Wikimedia Commons の写真です。作者・ライセンス・出典は、各写真の下に出しています。</li>
+        <li>市区町村の境界（東京都以外）：国土交通省「国土数値情報（行政区域データ）」（2021年1月1日時点）を、スマートニュース メディア研究所が簡素化したもの（https://github.com/smartnews-smri/japan-topography）をもとに作成しています。国土交通省が作成したものではありません。</li>
+        <li>背景の地図（「背景」ボタン）：国土地理院「地理院タイル」の淡色地図・標準地図・航空写真（全国最新写真（シームレス））（https://maps.gsi.go.jp/development/ichiran.html ）と、© OpenStreetMap contributors（ODbL、https://www.openstreetmap.org/copyright ）の地図タイルから選べます。この地図の投影に合わせて引き伸ばして表示しています。暗い表示では、航空写真のほかは色を反転しています。</li>
+        <li>Wikipedia・Wikidata：施設の選定、位置の補い、記事へのリンクに使っています。</li>
+      </ul>
+      <ul>
+        <li>個人利用の記録用ツールです。内容の正確さ、新しさ、網羅性は保証しません。</li>
+        <li>位置は目安で、数km ずれることがあります。</li>
+        <li>閉園・閉館・改名した施設が含まれることがあります。新しくできた施設は反映されていないことがあります。</li>
+        <li>読み仮名と並び順は作業側で付けたため、誤りが混じる可能性があります。</li>
+        <li>このページの利用で生じた損害について、責任は負いません。</li>
+        <li>このページは、アクセスの日時・IPアドレス・おおよその地域・ブラウザの種類などを記録しています。</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<script src="data/geo.js"></script>
+<script src="data/shinkansen.js"></script>
+<script src="data/ikenai.js"></script>
+<script src="data/koei.js"></script>
+<script src="data/castles.js"></script>
+<script src="data/airports.js"></script>
+<script src="data/stations.js"></script>
+<script src="data/zoos.js"></script>
+<script src="data/capitals.js"></script>
+<script src="data/worldheritage.js"></script>
+<script src="data/scenic.js"></script>
+<script src="data/nature.js"></script>
+<script src="data/hyakumeizan.js"></script>
+<script src="data/aquariums.js"></script>
+<script src="data/gardens.js"></script>
+<script src="data/themeparks.js"></script>
+<script src="data/museums.js"></script>
+<script src="data/lakes.js"></script>
+<script src="site.js?v=20261026k"></script>
+<script src="core.js?v=20261026k"></script>
+<script>
+/* 登録状況：種類ごとの件数と、ある都道府県の数（マイスポットは数えない） */
+initAll();
+{
+  let h = '<table class="stat"><thead><tr><th>種類</th><th class="num">件数</th><th class="num">都道府県</th></tr></thead><tbody>';
+  let tot = 0;
+  KINDS.filter(x => x.k !== 'my').forEach(x => {
+    const pfs = new Set(x.items.map(it => it.pf).filter(Boolean));
+    tot += x.items.length;
+    h += '<tr style="--kc:' + x.col + '"><td><i></i>' + esc(x.label) + '</td><td class="num">' + x.items.length.toLocaleString() + '</td><td class="num">' + pfs.size + '</td></tr>';
+  });
+  h += '</tbody><tfoot><tr><th>合計（のべ）</th><th class="num">' + tot.toLocaleString() + '</th><th></th></tr></tfoot></table>';
+  $('stat').innerHTML = h;
+  $('dupd2').textContent = DATA_DATE;
+}
+</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+
+</body></html>
