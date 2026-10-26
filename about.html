@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026k">
+<link rel="stylesheet" href="style.css?v=20261026l">
 
 <main class="app">
   <header>
@@ -33,6 +33,15 @@
     <nav class="ptabs" aria-label="ページ"><a href="index.html">地図</a><a href="ashiato.html">あしあと</a><a href="kiroku.html">出力・保存</a><a href="changelog.html">更新履歴</a><a href="about.html" aria-current="page">このサイト</a></nav>
   </header>
   <div class="page">
+    <section class="panel prof" id="profile">
+      <h2>作業者</h2>
+      <p class="pname">letroo（レトルー）</p>
+      <p>最近は、ClaudeCodeで自分用のツールを作ったりしてます。<br>方向音痴のくせに地図を見るのは好きかもしれません。<br>問い合わせはGitHubかnote経由でなんとかどうぞ。</p>
+      <ul class="plinks">
+        <li><a href="https://lertroo.github.io/" target="_blank" rel="noopener">GitHubで作ったもの一覧</a></li>
+        <li><a href="https://note.com/letroo" target="_blank" rel="noopener">note</a></li>
+      </ul>
+    </section>
     <section class="panel">
       <h2>更新情報</h2>
       <p class="note">施設データの最終更新：<span id="dupd2"></span>。追加・修正の中身は<a href="changelog.html">更新履歴</a>にあります。</p>
@@ -47,7 +56,7 @@
       <ul class="crit">
         <li><b>城</b>：日本城郭協会の「日本100名城」の100城。</li>
         <li><b>動物園・水族館・植物園・テーマパーク</b>：地図データ（OpenStreetMap）・国土数値情報・Wikipedia から作った一覧。</li>
-        <li><b>博物・美術館</b>：国立・国立大学・都道府県立の館（文化庁「全国の博物館」の登録博物館・指定施設など）と、国宝を収蔵する館（Wikipedia「日本の国宝一覧」で国宝の所在がその館になっているもの。寄託を含む）と、lertroo基準の館。</li>
+        <li><b>博物・美術館</b>：国立・国立大学・都道府県立の館（文化庁「全国の博物館」の登録博物館・指定施設など）と、国宝を収蔵する館（Wikipedia「日本の国宝一覧」で国宝の所在がその館になっているもの。寄託を含む）と、letroo基準の館。</li>
         <li><b>空港</b>：国土数値情報の空港データ（C28-21）にある空港。</li>
         <li><b>新幹線の駅</b>：フル規格の新幹線の駅と、ミニ新幹線（山形・秋田）の駅、ガーラ湯沢。</li>
         <li><b>道の駅</b>：mach-tools「道の駅オープンデータ」にある駅。</li>
@@ -115,8 +124,8 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/lakes.js"></script>
-<script src="site.js?v=20261026k"></script>
-<script src="core.js?v=20261026k"></script>
+<script src="site.js?v=20261026l"></script>
+<script src="core.js?v=20261026l"></script>
 <script>
 /* 登録状況：種類ごとの件数と、ある都道府県の数（マイスポットは数えない） */
 initAll();

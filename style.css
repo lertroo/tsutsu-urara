@@ -520,3 +520,9 @@ a.btn { display: inline-block; text-decoration: none; }
 .atiles .tile { cursor: pointer; }
 .atiles .tile:disabled { cursor: default; opacity: .6; }
 .apref { scroll-margin-top: 12px; }
+/* このサイト：作業者 */
+.prof p { margin: 0 0 8px; line-height: 1.8; }
+.prof .pname { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; }
+.plinks { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
+.plinks a { display: inline-block; padding: 6px 14px; font-weight: 700; color: var(--accent); text-decoration: none; background: var(--btn-bg); border: 1px solid var(--btn-line); border-radius: 8px; }
+.plinks a:hover { border-color: var(--accent); }
