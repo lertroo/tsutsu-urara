@@ -1,7 +1,7 @@
 /* ===== Tsutsu-Urara：全ページで共通の上部（文字の大きさ・表示モード・データ更新の日付）=====
    どのページも、本文の最後でこのファイルを読む。地図のページなどは、このあと core.js も読む。 */
 /* データ更新の日付。changelog.html に新しい日付の欄を足したら、ここも同じ日付にする */
-const DATA_DATE = '2026年10月25日';
+const DATA_DATE = '2026年10月26日';
 
 const $ = id => document.getElementById(id);
 

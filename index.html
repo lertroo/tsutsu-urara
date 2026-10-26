@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026m">
+<link rel="stylesheet" href="style.css?v=20261026o">
 
 <main class="app">
   <header>
@@ -26,7 +26,7 @@
           <div class="pmrow"><span class="pml">文字の大きさ</span><button type="button" id="fsm" aria-label="文字を小さく">A−</button><button type="button" id="fsp" aria-label="文字を大きく">A＋</button></div>
           <div class="pmrow"><span class="pml">ライト/ダーク</span><button type="button" id="theme" aria-label="表示モードの切り替え">自動</button></div>
           <div class="pmrow"><span class="pml">フォント</span><button type="button" id="fontsel" aria-label="フォントの切り替え（サイトの指定／端末の標準）" title="サイトで指定した書体と、この端末の標準の書体を切り替えます">サイト指定</button></div>
-          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォント・地図の高さ・一覧の高さ・名前の大きさ・表示する量・塗り・凡例を、初期状態に戻します（行った記録は消えません）">初期化</button></div>
+          <div class="pmrow"><button type="button" id="prefreset" aria-label="画面の表示設定を初期状態に戻す" title="文字の大きさ・ライト/ダーク・フォント・地図の高さ・一覧の高さ・名前の大きさ・表示量・塗り・凡例を、初期状態に戻します（行った記録は消えません）">初期化</button></div>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
           <button type="button" id="labm" class="cgap" aria-label="地図の名前の文字を小さく" title="地図に出す名前の文字を小さくします（ページ全体の文字の大きさは、右上の歯車で変えます）">名前 小</button>
           <button type="button" id="labp" aria-label="地図の名前の文字を大きく" title="地図に出す名前の文字を大きくします（ページ全体の文字の大きさは、右上の歯車で変えます）">名前 大</button>
         </div>
-        <div id="clum" role="group" aria-label="地図に出す点と名前の量" title="混み合う所では、点と名前を「数字の入った円」にまとめます。左ほど多くまとめて、右ほど一つずつ出します。"><span id="clul">表示する量：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="地図に出す点と名前の量（左ほど少なく、右ほど多く）"><span class="clue" aria-hidden="true"><span>少</span><span>多</span></span></div>
+        <div id="clum" role="group" aria-label="地図に出す点と名前の量" title="混み合う所では、点と名前を「数字の入った円」にまとめます。左ほど多くまとめて、右ほど一つずつ出します。"><span id="clul">表示量：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="地図に出す点と名前の量（左ほど少なく、右ほど多く）"><span class="clue" aria-hidden="true"><span>少</span><span>多</span></span></div>
         <div class="legend" id="legend" aria-hidden="true"></div>
         <div class="ll" id="ll" aria-hidden="true"></div>
         <div id="bgmenu" class="bgmenu" role="menu" aria-label="背景の地図" hidden></div>
@@ -112,9 +112,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261026m"></script>
-<script src="core.js?v=20261026m"></script>
-<script src="xport.js?v=20261026m"></script>
+<script src="site.js?v=20261026o"></script>
+<script src="core.js?v=20261026o"></script>
+<script src="xport.js?v=20261026o"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -618,7 +618,7 @@ let clusterOn = false;
 const CLU_LV = [['最少', 0.12, 2.1], ['とても少なめ', 0.2, 1.75], ['少なめ', 0.35, 1.45], ['やや少なめ', 0.8, 1.2], ['標準', 2.5, 1], ['多め', 6, 0.8], ['すべて', 1e9, 1]];
 let CLUL = 4;
 try { const v = parseInt(localStorage.getItem('jp-clul3'), 10); if (v >= 0 && v < CLU_LV.length) CLUL = v; } catch (e) {}
-function showClu() { const l = document.getElementById('clul'), r = document.getElementById('clus'); if (l) l.textContent = '表示する量：' + CLU_LV[CLUL][0]; if (r) r.value = String(CLUL); }
+function showClu() { const l = document.getElementById('clul'), r = document.getElementById('clus'); if (l) l.textContent = '表示量：' + CLU_LV[CLUL][0]; if (r) r.value = String(CLUL); }
 function setClu(v) { CLUL = v; try { localStorage.setItem('jp-clul3', String(v)); } catch (e) {} showClu(); if (typeof refresh === 'function') refresh(); }
 showClu();
 function fewMode() { let n = 0, t = 0; for (const id in dotEls) { t++; if (!dotEls[id].g.classList.contains('dim')) n++; } return n <= 80 && n < t; }   /* 0件のときも、除外された施設の薄い点は出さない（全部オフで、うっすら四角が残るのを防ぐ） */

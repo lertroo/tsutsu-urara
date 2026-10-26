@@ -104,7 +104,7 @@ h1 { margin: 0; }
 
 .legend { position: absolute; left: 10px; display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 5px 10px; font-size: 0.75rem; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--line); border-radius: 8px; max-width: calc(100% - 70px); }
 .legend { bottom: 56px; } .legend.off { display: none; }
-#mapwrap .legend { box-sizing: border-box; max-width: calc(100% - 160px); }   /* 右下の「表示する量」（幅120px）と重ならないように */
+#mapwrap .legend { box-sizing: border-box; max-width: calc(100% - 160px); }   /* 右下の「表示量」（幅120px）と重ならないように */
 .lghelp { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 3px; padding-top: 5px; border-top: 1px solid var(--line); }
 .lghelp b { color: var(--ink); margin-right: 4px; white-space: nowrap; }
 .lghelp > b { flex: 1 1 100%; margin: 0; }
