@@ -24,10 +24,12 @@ const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
 const AIR_FL = { 1:'ジェット機の定期便あり', 2:'プロペラ機の定期便あり', 3:'定期便なし' };
 const AIR_FL_SHORT = { 1:'ジェット便', 2:'プロペラ便', 3:'定期便なし' };
+/* 博物・美術館のタグ（tag。区分とは別に付ける分け方。「、」区切り） */
+const hasTag = (x, t) => !!x.tag && x.tag.split('、').includes(t);
 /* 横断検索で種類を1つだけ選んだときに出す、その種類の細かい絞り込み。[ボタンの名前, 値, 条件]。先頭は「すべて」 */
 const TYPEF = {
   castles: [['すべて', 'all'], ['現存天守', 'tower', c => c.t === 'N' || c.t === 'k'], ['国宝天守', 'N', c => c.t === 'N'], ['復元などの天守', 's', c => c.t === 's'], ['城跡など', 'a', c => c.t === 'a']],
-  museums: [['すべて', 'all'], ['県立', 'pref', x => x.kb === '都道府県立'], ['国立（大学を含む）', 'nat', x => x.kb === '国立' || x.kb === '国立大学'], ['国宝所蔵', 'kokuho', x => x.kb === '国宝所蔵'], ['登録博物館', 'reg', x => x.rj === '登録博物館'], ['指定施設', 'des', x => x.rj === '指定施設'], ['地図に未表示', 'nopos', x => typeof x.la !== 'number']],
+  museums: [['すべて', 'all'], ['県立', 'pref', x => x.kb === '都道府県立'], ['国立（大学を含む）', 'nat', x => x.kb === '国立' || x.kb === '国立大学'], ['国宝所蔵', 'kokuho', x => x.kb === '国宝所蔵'], ['恐竜', 'dino', x => hasTag(x, '恐竜')], ['登録博物館', 'reg', x => x.rj === '登録博物館'], ['指定施設', 'des', x => x.rj === '指定施設'], ['地図に未表示', 'nopos', x => typeof x.la !== 'number']],
   airports: [['定期便:すべて', 'all'], [AIR_FL_SHORT[1], '1', x => x.fl === 1], [AIR_FL_SHORT[2], '2', x => x.fl === 2], [AIR_FL_SHORT[3], '3', x => x.fl === 3]],
   zoos: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
   aquas: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
@@ -86,6 +88,8 @@ const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王
 CASTLES.forEach(c => { ID_ALIAS['c' + c.no] = c.id; });
 /* 2026-10-26 に番号を直した城（金沢城と七尾城、萩城と岩国城）と、名前を変えた城。古い id は、直す前の番号・名前のもの */
 Object.assign(ID_ALIAS, { c34:'cs:金沢城', c35:'cs:七尾城', c74:'cs:萩城', c75:'cs:岩国城', c24:'cs:武田氏館（躑躅ヶ崎館）', 'cs:武田氏館':'cs:武田氏館（躑躅ヶ崎館）' });
+/* 2026-10-26 に入れ直した博物館で、以前の一覧（Wikipedia由来）と名前が違うもの */
+Object.assign(ID_ALIAS, { 'mu:HOKUSHU仙台市科学館':'mu:仙台市科学館', 'mu:いのちのたび博物館':'mu:北九州市立いのちのたび博物館' });
 STATIONS.forEach(s => { if (s.no) ID_ALIAS['ms:' + s.no] = s.id; });
 { const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */

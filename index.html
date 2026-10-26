@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026q">
+<link rel="stylesheet" href="style.css?v=20261026r">
 
 <main class="app">
   <header>
@@ -111,9 +111,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261026q"></script>
-<script src="core.js?v=20261026q"></script>
-<script src="xport.js?v=20261026q"></script>
+<script src="site.js?v=20261026r"></script>
+<script src="core.js?v=20261026r"></script>
+<script src="xport.js?v=20261026r"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1049,8 +1049,8 @@ function detailHTML(it, k) {
   if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
-  if (k === 'museums') return dHead(badge('博物・美術館') + badge(it.kb, 1) + badge(mReg(it), 1), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj + '（文化庁の一覧・2026年10月8日版）'), fTxt('備考', it.rm),
+  if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? badge(it.kb, 1) : '') + (it.tag ? it.tag.split('、').map(t => badge(t, 1)).join('') : '') + (mReg(it) ? badge(mReg(it), 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
       it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
   if (k === 'airports') {
     const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
@@ -1163,7 +1163,7 @@ const ROW_SUB = {
   biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
   whs: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録',
   capitals: it => esc(prefFull(it.pf)),
-  museums: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.kb) + ' / ' + esc(mReg(it)) + noPos(it),
+  museums: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + [it.kb, it.tag, mReg(it)].filter(Boolean).map(v => ' / ' + esc(v)).join('') + noPos(it),
   airports: it => esc(prefFull(it.pf)) + ' / ' + esc(AIR_FL_SHORT[it.fl]) + (it.st !== 1 ? ' / ' + esc(AIR_ST[it.st] || '') : ''),
   stations: it => esc(prefFull(it.pf)) + (it.x ? '' : noPos(it)),
 };
