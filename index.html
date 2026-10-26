@@ -1765,15 +1765,13 @@ function restoreMapState(st) {
   if (st.y > 0) requestAnimationFrame(() => window.scrollTo(0, st.y));
 }
 /* 初めの表示は、全種類を選んだ状態。#種類 で開いたときは、その種類だけ。
-   #sel=id は、その施設を選んで開く（あしあとのページから）。
    どれでもないときは、このタブで前に見ていた状態に戻す（ほかのページから戻ったとき） */
 {
   const h = decodeURIComponent(location.hash.slice(1));
   let st = null; try { st = JSON.parse(sessionStorage.getItem(MAPST_KEY) || 'null'); } catch (e) {}
   if (KORDER.includes(h)) resetAll(false, false, [h]);
-  else if (st && st.flt && !h.startsWith('sel=')) { try { restoreMapState(st); } catch (e) { resetAll(false, false, []); } }
+  else if (st && st.flt) { try { restoreMapState(st); } catch (e) { resetAll(false, false, []); } }
   else resetAll(false, false, []);
-  if (h.startsWith('sel=') && findItem(h.slice(4))) select(h.slice(4), true);
 }
 </script>
 <!-- 文字の CSS は、スクリプトの後ろで読む（前に置くと、届くまでスクリプト全体が待たされる） -->
