@@ -17,8 +17,8 @@ const REGIONS = ['北海道','東北','関東','中部','近畿','中国','四�
 
 const TYPE_LABEL = { N:'現存天守・国宝', k:'現存天守・重要文化財', s:'復元・復興などの天守', a:'城跡など（天守なし）' };
 const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
-  const [n, pf, lo, la, t, rm] = ln.split('|');
-  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '' };
+  const [n, pf, lo, la, t, rm, wp] = ln.split('|');
+  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '', wp:wp || '' };
 });
 
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
@@ -84,7 +84,9 @@ const REC_KEY = 'jp-records-v1';
 const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王子分館（原田の森ギャラリー）', 'mu:東山魁夷館':'mu:長野県立美術館', 'mu:立山博物館':'mu:富山県［立山博物館］', 'mu:富山県立近代美術館':'mu:富山県美術館', 'mu:東京大学総合研究博物館・小石川分館':'mu:東京大学総合研究博物館', 'mu:仏教美術資料研究センター':'mu:奈良国立博物館', 'mu:ウポポイ':'mu:国立アイヌ民族博物館',
   'lake:琵琶湖':'bw:琵琶湖', rs:'th:ルスツリゾート', tds:'th:東京ディズニーシー', tdl:'th:東京ディズニーランド', pl:'th:サンリオピューロランド', gb:'th:ジブリパーク', lg:'th:レゴランド・ジャパン', mm:'th:博物館明治村', ss:'th:志摩スペイン村', ut:'th:東映太秦映画村', usj:'th:ユニバーサル・スタジオ・ジャパン', hb:'th:ハウステンボス', 'th:横浜アンパンマンこどもミュージアム＆モール旧':'th:横浜アンパンマンこどもミュージアム＆モール@旧施設' };
 CASTLES.forEach(c => { ID_ALIAS['c' + c.no] = c.id; });
-STATIONS.forEach(s => { ID_ALIAS['ms:' + s.no] = s.id; });
+/* 2026-10-26 に番号を直した城（金沢城と七尾城、萩城と岩国城）と、名前を変えた城。古い id は、直す前の番号・名前のもの */
+Object.assign(ID_ALIAS, { c34:'cs:金沢城', c35:'cs:七尾城', c74:'cs:萩城', c75:'cs:岩国城', c24:'cs:武田氏館（躑躅ヶ崎館）', 'cs:武田氏館':'cs:武田氏館（躑躅ヶ崎館）' });
+STATIONS.forEach(s => { if (s.no) ID_ALIAS['ms:' + s.no] = s.id; });
 { const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */
 const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'bw:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',

@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026p">
+<link rel="stylesheet" href="style.css?v=20261026q">
 
 <main class="app">
   <header>
@@ -111,9 +111,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261026p"></script>
-<script src="core.js?v=20261026p"></script>
-<script src="xport.js?v=20261026p"></script>
+<script src="site.js?v=20261026q"></script>
+<script src="core.js?v=20261026q"></script>
+<script src="xport.js?v=20261026q"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1063,7 +1063,7 @@ function detailHTML(it, k) {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
     return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
   }
-  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fPos(it), fTxt('備考', it.rm));   /* 城 */
+  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fPos(it), fTxt('備考', it.rm), wiki);   /* 城 */
 }
 function renderDetail() {
   const box = $('detail');
