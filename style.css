@@ -109,9 +109,6 @@ h1 { margin: 0; }
 .lghelp b { color: var(--ink); margin-right: 4px; white-space: nowrap; }
 .lghelp > b { flex: 1 1 100%; margin: 0; }
 .legtog { position: absolute; left: 10px; bottom: 10px; font: inherit; font-size: 0.75rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--btn-line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
-.ll { position: absolute; left: 50%; transform: translateX(-50%); bottom: 10px; white-space: nowrap; font-size: 0.6875rem; line-height: 1.35; color: var(--muted); background: color-mix(in srgb, var(--panel) 80%, transparent); border-radius: 4px; padding: 1px 6px; pointer-events: none; font-variant-numeric: tabular-nums; display: grid; grid-template-columns: auto auto; column-gap: 0.5em; }
-.ll span:nth-child(even) { text-align: right; }   /* 緯度経度は右揃え */
-@media (max-width: 599px) { .ll { left: 66px; transform: none; font-size: 0.625rem; } }
 .legtog[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .cmk { fill: var(--accent); fill-opacity: 0.55; stroke: var(--accent); stroke-opacity: 0.9; stroke-width: 1.5px; vector-effect: non-scaling-stroke; }

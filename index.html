@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026o">
+<link rel="stylesheet" href="style.css?v=20261026p">
 
 <main class="app">
   <header>
@@ -63,7 +63,6 @@
         </div>
         <div id="clum" role="group" aria-label="地図に出す点と名前の量" title="混み合う所では、点と名前を「数字の入った円」にまとめます。左ほど多くまとめて、右ほど一つずつ出します。"><span id="clul">表示量：標準</span><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="地図に出す点と名前の量（左ほど少なく、右ほど多く）"><span class="clue" aria-hidden="true"><span>少</span><span>多</span></span></div>
         <div class="legend" id="legend" aria-hidden="true"></div>
-        <div class="ll" id="ll" aria-hidden="true"></div>
         <div id="bgmenu" class="bgmenu" role="menu" aria-label="背景の地図" hidden></div>
         <div id="tattr" hidden></div>
         <div class="farbox" id="farbox" hidden></div>
@@ -112,9 +111,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261026o"></script>
-<script src="core.js?v=20261026o"></script>
-<script src="xport.js?v=20261026o"></script>
+<script src="site.js?v=20261026p"></script>
+<script src="core.js?v=20261026p"></script>
+<script src="xport.js?v=20261026p"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -268,22 +267,12 @@ function clampBox(v) {
   const y = h >= W0.h ? 0 : Math.max(-40, Math.min(W0.h - h + 40, v.y));
   return { x, y, w, h };
 }
-/* 緯度経度の小さな表示：地図の中心と、マウスの位置（proj の逆変換） */
-var llPtr = null;
+/* 画面の位置から緯度経度へ（proj の逆変換） */
 const unproj = (x, y) => [x / (40 * 0.81) + 122, 46 - y / 40];
-function showLL() {
-  const e = $('ll'); if (!e) return;
-  const c = unproj(vb.x + vb.w / 2, vb.y + vb.h / 2), f = a => a.map(v => v.toFixed(2));
-  const [clo, cla] = f(c);
-  let t = '<span>中心</span><span>' + cla + '°N ' + clo + '°E</span>';
-  if (llPtr) { const [plo, pla] = f(unproj(llPtr[0], llPtr[1])); t = '<span>カーソル</span><span>' + pla + '°N ' + plo + '°E</span>' + t; }
-  e.innerHTML = t;
-}
 let usRaf = 0;
 function applyVB() {
   clampVB();
   svg.setAttribute('viewBox', vb.x + ' ' + vb.y + ' ' + vb.w + ' ' + vb.h);
-  showLL();
   updateFine();
   updateTky();
   updateTiles();
@@ -401,6 +390,10 @@ $('zbg').onclick = e => { e.stopPropagation(); bgMenu($('bgmenu').hidden); };
 document.addEventListener('click', e => { if (!$('bgmenu').hidden && !e.target.closest('#bgmenu')) bgMenu(false); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('bgmenu').hidden) { bgMenu(false); $('zbg').focus(); } });
 window.addEventListener('resize', updateTiles);
+/* 背景の出典は「表示量」の枠のすぐ上に置く（文字の大きさで枠の高さが変わるので、測って合わせる） */
+function placeTattr() { const c = $('clum'); $('tattr').style.bottom = (c && c.offsetHeight ? 10 + c.offsetHeight + 4 : 10) + 'px'; }
+try { new ResizeObserver(placeTattr).observe($('clum')); } catch (e) {}
+placeTattr();
 applyTileOn();
 $('labm').onclick = () => setLabs(LABS - 0.1);
 $('labp').onclick = () => setLabs(LABS + 0.1);
@@ -1707,8 +1700,6 @@ svg.addEventListener('click', ev => {
   ev.stopPropagation(); ev.preventDefault();
   select(id, false, true);
 }, true);
-svg.addEventListener('pointerleave', () => { llPtr = null; showLL(); });
-svg.addEventListener('pointermove', ev => { if (ev.pointerType === 'mouse') { const m = svg.getScreenCTM(); if (m) { const p = new DOMPoint(ev.clientX, ev.clientY).matrixTransform(m.inverse()); llPtr = [p.x, p.y]; showLL(); } } });
 svg.addEventListener('pointermove', ev => { if (ev.pointerType === 'mouse' && !drag && !picking) svg.style.cursor = pickAt(ev) ? 'pointer' : ''; });
 function posOrigin() {
   let g = $('g-org');
