@@ -341,6 +341,7 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .listh { height: 14px; margin-top: -2px; }
 .list .grp { letter-spacing: 0.1em; font-family: var(--font-display); }
 .nbk { border-radius: 999px; color: var(--kc, var(--accent)); border-color: color-mix(in srgb, var(--kc, var(--accent)) 40%, var(--line)); }
+.rtag { border-style: dashed; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }   /* 検索語がタグに当たった印 */
 
 /* 詳細の操作リンク */
 .actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 0; }

@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261028a">
+<link rel="stylesheet" href="style.css?v=20261028b">
 
 <main class="app">
   <header>
@@ -116,9 +116,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261028a"></script>
-<script src="core.js?v=20261028a"></script>
-<script src="xport.js?v=20261028a"></script>
+<script src="site.js?v=20261028b"></script>
+<script src="core.js?v=20261028b"></script>
+<script src="xport.js?v=20261028b"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1043,7 +1043,7 @@ function detailHTML(it, k) {
     facts(fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
   if (k === 'parks') { const toshi = it.sb !== 'その他';   /* 都市公園法の国営・広域公園か */
     return dHead(badge('公園') + fbadge(parkSb(it), 'parks', ({ 国営:'kokuei', 広域:'kouiki' })[it.sb] || 'etc'), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', fTxt('設置', it.ow), toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, fPos(it, rp)); }
+    facts(toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, fPos(it, rp)); }
   if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, fPos(it, '県庁舎・目安'));
   if (k === 'scenic') return dHead(badge('日本百景（' + it.ty + '）') + badge(it.cl, 1), it, it.ps) +
     facts(fTxt('選定', '昭和2年（1927年）・' + it.ty), fTxt('景観の区分', it.cl), fTxt('所在', it.ps), nt, wiki, fPos(it, rp));
@@ -1066,7 +1066,7 @@ function detailHTML(it, k) {
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
   if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? fbadge(it.kb, 'museums', MU_KB_FT[it.kb]) : '') + (mReg(it) ? fbadge(mReg(it), 'museums', MU_RJ_FT[it.rj]) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
+    facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
       it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
   if (k === 'airports') {
     const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
@@ -1216,7 +1216,8 @@ function renderList(keepCount) {
     b.type = 'button'; b.className = 'row-btn'; b.dataset.id = it.id;
     if (it.id === selId) b.setAttribute('aria-current', 'true');
     const k = KIND.get(it.id), hmr = rk1 === 'hyaku' ? HM_OF[it.id] : null;
-    const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + sub + '</span>';
+    const tagc = qtagHits(it).map(g => '<i class="nbk rtag">タグ：' + esc(g) + '</i>').join('');   /* 検索語がタグだけに当たったとき */
+    const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + tagc + sub + '</span>';
     const name = k === 'stations' ? esc(dn(it)) : esc(it.n) + (it.x ? '<span class="rx">（' + esc(it.x + '年' + (it.xw || '閉園')) + '）</span>' : '');
     if (hmr) b.innerHTML = row(esc(hmr.n), esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg), hmr.no);
     else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
@@ -1562,11 +1563,17 @@ function buildTabs() {
 function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)); }
 let _qk = null, _qt = [];
 function qterms() { if (_qk !== flt.q) { _qk = flt.q; _qt = fold(flt.q).split(/\s+/).filter(Boolean); } return _qt; }
+/* タグ（「鉄道」「恐竜」など）でも当たる。タグは別に見て、タグだけで当たったときは一覧の行にそのタグを出す（qtagHits） */
+function qhay(x) { const k = KIND.get(cid(x.id)) || ''; return fold([x.n, x.o, x.inc, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' ')); }
 function qm(x) {
   const t = qterms(); if (!t.length) return true;
-  const k = KIND.get(cid(x.id)) || '';
-  const hay = fold([x.n, x.o, x.inc, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.ow, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' '));
-  return t.every(w => hay.includes(w));
+  const hay = qhay(x), tg = fold(x.tag || '');
+  return t.every(w => hay.includes(w) || tg.includes(w));
+}
+function qtagHits(x) {
+  const t = qterms(); if (!t.length || !x.tag) return [];
+  const hay = qhay(x), ws = t.filter(w => !hay.includes(w));
+  return x.tag.split('、').filter(g => ws.some(w => fold(g).includes(w)));
 }
 
 /* 県をタップして絞り込む */
