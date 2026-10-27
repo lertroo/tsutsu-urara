@@ -1182,6 +1182,17 @@ function renderList(keepCount) {
   const items = currentItems(), ul = $('list');
   ul.innerHTML = ''; listEntries = []; listPos = 0; ul.classList.remove('asking');
   if (!items.length) {
+    /* 「行った」「記録なし」で絞っているせいで何も出ないときは、そう言って「記録：すべて」に戻せるようにする（絞っていることに気づかず、検索が壊れたように見えるため） */
+    if (flt.vis !== 'all') {
+      const v = flt.vis; flt.vis = 'all'; const n = currentItems().length; flt.vis = v;
+      if (n) {
+        const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
+        ul.classList.add('asking');
+        li.innerHTML = '<div>条件に合うものがありません。いまは「' + (v === 'yes' ? '行った' : '記録なし') + '」で絞り込んでいます（「記録：すべて」なら ' + n.toLocaleString() + ' 件）。</div><div class="noteb"><button type="button" class="btn" data-va="all">記録：すべて にする</button></div>';
+        li.querySelector('[data-va=all]').onclick = () => { flt.vis = 'all'; refresh(); };
+        ul.appendChild(li); return;
+      }
+    }
     const oh = (flt.kinds && qterms().length && kindAskNo !== flt.q) ? otherKindHits() : null, ks = oh ? KORDER.filter(k => oh[k]) : [];
     if (ks.length) {   /* 選んでいない種類にだけ該当があるときは、その種類も出すかを聞く */
       const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
@@ -1646,6 +1657,8 @@ function showCard(id) {
   box.innerHTML = '<div class="mct"><b>' + esc(k === 'stations' ? dn(it) : it.n) + '</b><span><i class="nbk">' + esc(MODE_LABEL[k]) + '</i>' + esc(prefFull(it.pf)) + '</span></div>' +
     '<button type="button" class="btn mcgo">詳細 ↓</button><button type="button" class="mcx" aria-label="閉じる">×</button>';
   box.dataset.id = id; box.hidden = false;
+  /* 右端は、地図のボタンの列の左まで（ボタンの幅は文字の大きさで変わるので、測って合わせる） */
+  const c = $('zin').parentNode; box.style.right = (c.offsetParent.clientWidth - c.offsetLeft + 6) + 'px';
 }
 /* 小札を押したら詳細へ（×以外なら、札のどこを押してもよい）。送ってから札を消す */
 function goDetail() {
