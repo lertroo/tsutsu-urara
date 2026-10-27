@@ -46,7 +46,9 @@ function xCollect() {
     vis.push({ it, k: ks[0] });
     ds.forEach(d => recs.push({ d, it, k: ks[0] }));
   });
-  recs.sort((a, b) => (a.d === '' ? 1 : 0) - (b.d === '' ? 1 : 0) || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0));
+  /* 記録の並び（施設の id の順）は「行った」を最初に押した順なので、日付が同じ（日付なしどうしも）なら、あとで登録したほうを先に出す */
+  const ord = {}; Object.keys(data).forEach((id, i) => { ord[id] = i; });
+  recs.sort((a, b) => (a.d === '' ? 1 : 0) - (b.d === '' ? 1 : 0) || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0) || (ord[b.it.id] ?? -1) - (ord[a.it.id] ?? -1));
   const sum = KORDER.reduce((t, k) => t + kc[k], 0), pcs = {}; let left = 100; const rem = [];
   KORDER.forEach(k => { const f = sum ? kc[k] / sum * 100 : 0; pcs[k] = Math.floor(f); left -= pcs[k]; rem.push([f - pcs[k], k]); });
   if (sum) rem.sort((p, q) => q[0] - p[0]).slice(0, left).forEach(r => { pcs[r[1]]++; });
