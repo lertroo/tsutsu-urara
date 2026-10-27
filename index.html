@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027e">
+<link rel="stylesheet" href="style.css?v=20261027f">
 
 <main class="app">
   <header>
@@ -52,6 +52,7 @@
           <g id="g-lab"></g>
           <g id="g-dots"></g>
           <g id="g-clu"></g>
+          <g id="g-pulse" aria-hidden="true"></g>
         </svg>
         <div class="ctrl">
           <button type="button" id="zin" aria-label="拡大" title="地図を拡大します">＋</button>
@@ -112,9 +113,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027e"></script>
-<script src="core.js?v=20261027e"></script>
-<script src="xport.js?v=20261027e"></script>
+<script src="site.js?v=20261027f"></script>
+<script src="core.js?v=20261027f"></script>
+<script src="xport.js?v=20261027f"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1089,18 +1090,14 @@ function renderDetail() {
     box.insertAdjacentHTML('beforeend', '<div class="nbrs">' +
       (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join('') : '') +
       (nbO.length ? '<div class="nbh" style="margin-top:12px">近くのほかの種類</div>' + nbO.map(nbRow).join('') : '') + '</div>');
-    box.querySelectorAll('.nbr').forEach(b => b.onclick = () => {
-      const d = dotEls[b.dataset.id];
-      if (d) flyToDot(d);
-      select(b.dataset.id, false);
-    });
+    box.querySelectorAll('.nbr').forEach(b => b.onclick = () => showOnMap(b.dataset.id, () => select(b.dataset.id, false)));
   }
   const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
   if (vAnchor) vAnchor.insertAdjacentHTML('afterend', photoHTML(it) + actionsHTML(it) + visBlock(it)); else box.insertAdjacentHTML('beforeend', visBlock(it));
   bindVis(it);
   const ph = box.querySelector('h2.place');
   if (ph && dotEls[it.id]) {   /* 施設名を押すと、地図をその位置へ動かす（位置がない施設は何もしない） */
-    const go = () => { const d = dotEls[it.id]; if (!d) return; flyToDot(d); try { $('mapwrap').scrollIntoView({ block:'nearest', behavior:'smooth' }); } catch (e) {} };
+    const go = () => showOnMap(it.id);
     ph.classList.add('fly'); ph.setAttribute('role', 'button'); ph.tabIndex = 0; ph.title = '地図でこの位置へ';
     ph.onclick = go; ph.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
   }
@@ -1602,6 +1599,26 @@ let flyRaf = 0;
 /* 施設へ移動：倍率はそのまま、選んだ施設を地図の中央に */
 /* 施設を選んだら、その施設を地図の中心へ。引いた表示のときは、「＋」3回分（全国の約5分の1の幅）まで寄せる。それより寄っているときは、寄り具合はそのまま */
 const FOCUS_W = W0.w * Math.pow(0.6, 3);
+/* 地図で施設を見せる。地図が画面の外にあるとき（スマホで下の詳細を見ているときなど）は、先に地図まで送り、送り終わってから
+   地図を動かして then（詳細の書き換えなど）をする。見えないところで書き換わらないように。最後に、その点に波紋を出す */
+function showOnMap(id, then) {
+  const mw = $('mapwrap'), r = mw.getBoundingClientRect();
+  const run = () => { const d = dotEls[id]; if (d) flyToDot(d); if (then) then(); setTimeout(() => pulseDot(id), 420); };
+  if (r.top >= -r.height * 0.2 && r.bottom <= window.innerHeight + r.height * 0.2) { run(); return; }
+  let done = false;
+  const fin = () => { if (done) return; done = true; window.removeEventListener('scrollend', fin); run(); };
+  window.addEventListener('scrollend', fin); setTimeout(fin, 800);   /* scrollend がないブラウザは時間で */
+  mw.scrollIntoView({ block:'start', behavior:'smooth' });
+}
+function pulseDot(id) {
+  const d = dotEls[id]; if (!d) return;
+  const s = (svgSz().width / vb.w) || 1, g = $('g-pulse');
+  for (let i = 0; i < 2; i++) {
+    const c = el('circle', { cx:d.xy[0], cy:d.xy[1], r:26 / s, class:'pulse' }, g);
+    c.style.strokeWidth = (3 / s) + 'px'; c.style.animationDelay = (i * 0.35) + 's';
+    setTimeout(() => c.remove(), 1600);
+  }
+}
 function flyToDot(d) { flyTo(d.xy[0], d.xy[1], Math.min(vb.w, FOCUS_W)); }
 function flyTo(cx, cy, w) {
   if (!isFinite(cx) || !isFinite(cy) || !isFinite(w)) return;

@@ -40,6 +40,11 @@ h1 { margin: 0; }
 @media (prefers-reduced-motion: no-preference) { .fararrow svg { animation: farnudge 1.2s ease-in-out infinite; } }
 @keyframes farnudge { 0%, 100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
 .mapwrap { position: relative; border: 1px solid var(--line); background: var(--sea); overflow: hidden; }
+/* 地図で施設を見せたときの波紋 */
+#g-pulse { pointer-events: none; }
+.pulse { fill: none; stroke: var(--accent); opacity: 0; transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out both; }
+@keyframes pulse { from { transform: scale(0.25); opacity: 1; } to { transform: scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; opacity: 0.8; transform: none; } }
 /* 確認リスト（アーティファクトだけ。地図のすぐ上） */
 .chk { margin: 0 0 8px; border: 2px dashed var(--accent); border-radius: 10px; background: var(--panel); font-size: 0.85rem; }
 .chkh { display: flex; }
