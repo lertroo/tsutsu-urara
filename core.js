@@ -34,6 +34,7 @@ const TYPEF = {
   zoos: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
   aquas: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
   bots: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
+  parks: [['すべて', 'all'], ['国営公園', 'kokuei', x => x.sb === '国営'], ['広域公園', 'kouiki', x => x.sb === '広域']],
   themes: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
   koei: [['すべて', 'all'], ['競馬場', 'keiba', x => x.sh === '競馬場'], ['競輪場', 'keirin', x => x.sh === '競輪場'], ['競艇場', 'kyotei', x => x.sh === '競艇場'], ['オートレース場', 'auto', x => x.sh === 'オートレース場'], ['廃止・休止', 'gone', x => x.x]],
 };
@@ -58,6 +59,7 @@ const KINDS = [
   { k:'zoos',     label:'動物園',       col:'#e08a1e', items:ZOOS,     r:4.4 },
   { k:'aquas',    label:'水族館',       col:'#1f8fd6', items:AQUAS,    r:4.4 },
   { k:'bots',     label:'植物園',       col:'#3fa34d', items:BOTS,     r:4.4 },
+  { k:'parks',    label:'公園',         col:'#8bb31d', items:PARKS,    r:5.2 },
   { k:'museums',  label:'博物・美術館', col:'#8e5bd0', items:MUSEUMS,  r:4.4 },
   { k:'airports', label:'空港',         col:'#5b6b7a', items:AIRPORTS, r:4.4 },
   { k:'shin',     label:'新幹線の駅',   col:'#6d7f1f', items:SHIN,     r:4.4 },
