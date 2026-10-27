@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027u">
+<link rel="stylesheet" href="style.css?v=20261028a">
 
 <main class="app">
   <header>
@@ -116,9 +116,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027u"></script>
-<script src="core.js?v=20261027u"></script>
-<script src="xport.js?v=20261027u"></script>
+<script src="site.js?v=20261028a"></script>
+<script src="core.js?v=20261028a"></script>
+<script src="xport.js?v=20261028a"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1032,6 +1032,7 @@ const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.t
   '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
 /* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
 const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
+const parkSb = it => it.sb === 'その他' ? 'その他の公園' : it.sb + '公園';
 function detailHTML(it, k) {
   dK = k;
   const pfs = prefFull(it.pf), nt = fTxt('注釈', it.nt), wiki = fLink('Wikipedia', wikiUrl(it.wp), '記事を開く');
@@ -1040,8 +1041,9 @@ function detailHTML(it, k) {
   const facts = (...rows) => '<dl class="facts">' + rows.join('') + '</dl>';
   if (FAC[k]) return dHead(badge(FAC[k]) + (it.x ? badge('閉園済み（' + it.x + '年）', 1) : '') + (it.tg ? badge(FAC[k] + '＋' + it.tg.split('、').join('＋'), 1) : ''), it, pfs) +
     facts(fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
-  if (k === 'parks') return dHead(badge('公園') + fbadge(it.sb + '公園', 'parks', it.sb === '国営' ? 'kokuei' : 'kouiki'), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(fTxt('種別', it.sb + '公園（都市公園法）'), fTxt('設置', it.ow), fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1), fTxt('開園', it.sd, 1), nt, wiki, fPos(it, rp));
+  if (k === 'parks') { const toshi = it.sb !== 'その他';   /* 都市公園法の国営・広域公園か */
+    return dHead(badge('公園') + fbadge(parkSb(it), 'parks', ({ 国営:'kokuei', 広域:'kouiki' })[it.sb] || 'etc'), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', fTxt('設置', it.ow), toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, fPos(it, rp)); }
   if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, fPos(it, '県庁舎・目安'));
   if (k === 'scenic') return dHead(badge('日本百景（' + it.ty + '）') + badge(it.cl, 1), it, it.ps) +
     facts(fTxt('選定', '昭和2年（1927年）・' + it.ty), fTxt('景観の区分', it.cl), fTxt('所在', it.ps), nt, wiki, fPos(it, rp));
@@ -1173,7 +1175,7 @@ const ROW_SUB = {
   biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
   whs: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + '遺産・' + esc(it.yr) + '年登録',
   capitals: it => esc(prefFull(it.pf)),
-  parks: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sb) + '公園' + (it.ha != null ? '・' + esc(it.ha.toLocaleString('ja-JP')) + ' ha' : '') + noPos(it),
+  parks: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(parkSb(it)) + (it.tag ? ' / ' + esc(it.tag) : '') + (it.ha != null ? '・' + esc(it.ha.toLocaleString('ja-JP')) + ' ha' : '') + noPos(it),
   museums: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + [it.kb, it.tag, mReg(it)].filter(Boolean).map(v => ' / ' + esc(v)).join('') + noPos(it),
   airports: it => esc(prefFull(it.pf)) + ' / ' + esc(AIR_FL_SHORT[it.fl]) + (it.st !== 1 ? ' / ' + esc(AIR_ST[it.st] || '') : ''),
   stations: it => esc(prefFull(it.pf)) + (it.x ? '' : noPos(it)),
