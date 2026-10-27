@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027r">
+<link rel="stylesheet" href="style.css?v=20261027s">
 
 <main class="app">
   <header>
@@ -58,6 +58,7 @@
           <button type="button" id="zin" aria-label="拡大" title="地図を拡大します">＋</button>
           <button type="button" id="zout" aria-label="縮小" title="地図を縮小します">－</button>
           <button type="button" id="zfull" aria-label="全国を表示" title="日本全体が見える大きさに戻します">全国</button>
+          <button type="button" id="zloc" aria-label="現在地へ移動" title="今いる場所へ地図を寄せて、一覧を近い順にします">現在地</button>
           <button type="button" id="zfill" class="cgap" aria-pressed="false" aria-label="行った都道府県を塗って表示（点との切り替え）" title="行った都道府県を、行った数に応じて色で塗ります。もう一度押すと、点の表示に戻ります">県を塗る</button>
           <button type="button" id="zbg" aria-pressed="false" aria-haspopup="menu" aria-expanded="false" aria-controls="bgmenu" aria-label="背景の地図を選ぶ" title="地図の下に敷く地図（淡色地図・航空写真など）を選びます"><span>背景</span><small id="zbgn">なし</small></button>
           <button type="button" id="labm" class="cgap" aria-label="地図の名前の文字を小さく" title="地図に出す名前の文字を小さくします（ページ全体の文字の大きさは、右上の歯車で変えます）">名前 小</button>
@@ -115,9 +116,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027r"></script>
-<script src="core.js?v=20261027r"></script>
-<script src="xport.js?v=20261027r"></script>
+<script src="site.js?v=20261027s"></script>
+<script src="core.js?v=20261027s"></script>
+<script src="xport.js?v=20261027s"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -542,7 +543,7 @@ function drawFill() {
 }
 /* 凡例の最後に付ける、地図の右のボタンの説明（スマホでは押す前の説明が出せないため） */
 const CTRL_HELP = '<div class="lghelp"><b>右のボタン</b>'
-  + '<span><b>＋ －</b>拡大・縮小</span><span><b>全国</b>日本全体を表示</span>'
+  + '<span><b>＋ －</b>拡大・縮小</span><span><b>全国</b>日本全体を表示</span><span><b>現在地</b>今いる場所へ寄せて、一覧を近い順に</span>'
   + '<span><b>県を塗る</b>行った都道府県を色で塗る（点と切り替え）</span>'
   + '<span><b>背景</b>下に敷く地図を選ぶ</span><span><b>名前 小・大</b>地図の名前の文字の大きさ</span></div>';
 function applyMapView() {
@@ -1728,17 +1729,19 @@ function setOrg(lo, la, src) {
   ORG = { lo, la, src, t: Date.now() }; saveOrg(); nearOn = true; picking = false; nearMsg = '';
   $('mapwrap').classList.remove('picking'); posOrigin(); refresh();
 }
-function askGps() {
+function askGps(then) {
   nearOn = true; nearMsg = '現在地を取得中…'; renderNearUI();
   const fail = why => { nearMsg = why + 'この画面では現在地を取れないため、地図をタップして基準点を指定してください。'; startPick(true); };
   if (!navigator.geolocation) return fail('');
   let done = false;
   const t = setTimeout(() => { if (!done) { done = true; fail(''); } }, 8000);
   try {
-    navigator.geolocation.getCurrentPosition(p => { if (done) return; done = true; clearTimeout(t); setOrg(p.coords.longitude, p.coords.latitude, 'gps'); },
+    navigator.geolocation.getCurrentPosition(p => { if (done) return; done = true; clearTimeout(t); setOrg(p.coords.longitude, p.coords.latitude, 'gps'); if (then) then(); },
       () => { if (done) return; done = true; clearTimeout(t); fail(''); }, { enableHighAccuracy: false, timeout: 7000, maximumAge: 300000 });
   } catch (e) { done = true; clearTimeout(t); fail(''); }
 }
+/* 地図の「現在地」：現在地を取って、地図をそこへ寄せ、一覧を近い順にする（取れないときは、近い順と同じく地図で指定する案内） */
+$('zloc').onclick = () => askGps(() => { const [x, y] = proj(ORG.lo, ORG.la); flyTo(x, y, Math.min(vb.w, FOCUS_W)); });
 function startPick(keep) {
   picking = true; nearOn = true; if (!keep) nearMsg = '地図をタップして基準点を指定してください。';
   $('mapwrap').classList.add('picking'); renderNearUI(); refresh();
