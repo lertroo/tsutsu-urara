@@ -75,13 +75,13 @@ function xDraw(cv, D) {
   c.textAlign = 'left'; c.fillStyle = P.ink; c.font = XFONT(54, 700);
   const rightTxt = xPeriodLabel();
   c.font = XFONT(28, 400); const rw = c.measureText(rightTxt).width;
-  c.font = XHEAD(54, 700); c.fillText(xFit(c, XS.title || 'Tsutsu-Urara', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
+  c.font = XHEAD(54, 700); c.fillText(xFit(c, XS.title || 'ツツウララ', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
   if (XS.who) { c.font = XFONT(28, 400); c.fillStyle = P.muted; c.fillText(xFit(c, curNameOf(XPID), W - pad * 2 - 100 - rw - 24), pad + 100, pad + 82); }
   c.font = XFONT(28, 400); c.fillStyle = P.muted; c.textAlign = 'right'; c.fillText(rightTxt, W - pad, pad + 40); c.textAlign = 'left';
   c.fillStyle = P.line; c.fillRect(pad, pad + 108, W - pad * 2, 2);
   const y0 = pad + 140, yEnd = H - 92;
   // フッター
-  c.font = XFONT(24, 400); c.fillStyle = P.muted; c.fillText(xFit(c, XS.note || '行ったところを記録しよう。', W - pad * 2 - 260), pad, H - 40);
+  c.font = XFONT(24, 400); c.fillStyle = P.muted; if (XS.note) c.fillText(xFit(c, XS.note, W - pad * 2 - 260), pad, H - 40);   /* ひとことは、書いたときだけ出す */
   c.textAlign = 'right'; c.fillText(new Date().toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric' }), W - pad, H - 40); c.textAlign = 'left';
   if (!D.nv) {
     c.fillStyle = P.muted; c.font = XFONT(34, 700); c.textAlign = 'center';
@@ -225,7 +225,7 @@ function xOptsHTML() {
   h += '<fieldset><legend>期間</legend><select data-x="period"><option value="all"' + (XS.period === 'all' ? ' selected' : '') + '>全期間</option><option value="year"' + (XS.period === 'year' ? ' selected' : '') + '>今年</option><option value="d30"' + (XS.period === 'd30' ? ' selected' : '') + '>直近30日</option><option value="since"' + (XS.period === 'since' ? ' selected' : '') + '>指定した日から</option></select>' +
     (XS.period === 'since' ? ' <input type="date" data-x="since" value="' + esc(XS.since) + '">' : '') + '<p class="xnote">期間を決めると、日付のある記録だけが対象です。</p></fieldset>';
   h += '<fieldset><legend>見た目</legend><div class="xrow">' + rd('size', 'tall', '縦長', XS.size) + rd('size', 'square', '正方形', XS.size) + rd('size', 'wide', '横長', XS.size) + '</div><div class="xrow">' + rd('theme', 'light', 'ライト', XS.theme) + rd('theme', 'dark', 'ダーク', XS.theme) + '</div></fieldset>';
-  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="Tsutsu-Urara" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="行ったところを記録しよう。" value="' + esc(XS.note) + '"></label></fieldset>';
+  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="ツツウララ" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="空欄なら出しません" value="' + esc(XS.note) + '"></label></fieldset>';
   return h;
 }
 let xFontsOK = false;
