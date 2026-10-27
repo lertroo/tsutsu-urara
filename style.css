@@ -41,12 +41,13 @@ h1 { margin: 0; }
 @keyframes farnudge { 0%, 100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
 .mapwrap { position: relative; border: 1px solid var(--line); background: var(--sea); overflow: hidden; }
 /* スマホで地図へ送ったときの小札（地図の左上） */
-.mcard { cursor: pointer; touch-action: manipulation; position: absolute; top: 10px; left: 10px; right: 120px; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--kc, var(--line)); border-left-width: 5px; background: color-mix(in srgb, var(--panel) 95%, transparent); box-shadow: var(--shadow); font-size: 0.85rem; }
-.mct { flex: 1 1 100%; min-width: 0; }
-.mct b { display: block; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mct span { color: var(--muted); font-size: 0.78rem; }
-.mcgo { padding: 5px 12px; }
-.mcx { margin-left: auto; font: inherit; font-size: 1.1rem; line-height: 1; color: var(--muted); background: none; border: 0; padding: 4px 6px; cursor: pointer; }
+.mcard { cursor: pointer; touch-action: manipulation; position: absolute; top: 8px; left: 8px; right: 126px; z-index: 5; display: flex; align-items: center; gap: 6px; padding: 4px 6px 4px 8px; border-radius: 10px; border: 1px solid var(--kc, var(--line)); border-left-width: 5px; background: color-mix(in srgb, var(--panel) 95%, transparent); box-shadow: var(--shadow); font-size: 0.78rem; }
+/* 地図をなるべく隠さないように、1段（名前と種類・県の2行＋ボタン）にまとめる。右は地図のボタン（スマホでは2列）にかからない幅 */
+.mct { flex: 1 1 auto; min-width: 0; line-height: 1.25; }
+.mct b { display: block; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mct span { display: block; color: var(--muted); font-size: 0.7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mcgo { flex: none; padding: 3px 8px; font-size: 0.75rem; white-space: nowrap; }
+.mcx { flex: none; font: inherit; font-size: 1rem; line-height: 1; color: var(--muted); background: none; border: 0; padding: 2px 3px; cursor: pointer; }
 /* 地図で施設を見せたときの波紋 */
 #g-pulse { pointer-events: none; }
 .pulse { fill: none; stroke: var(--accent); opacity: 0; transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out both; }
@@ -372,6 +373,7 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .nearbtn { display: inline-flex; align-items: center; gap: 4px; }
 .nearbtn .ic { width: 1.1em; height: 1.1em; }
 .nearmsg { flex: 1 1 100%; font-size: .78rem; color: var(--muted); line-height: 1.5; }
+.kmtog { font: inherit; font-size: .7rem; color: var(--muted); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .rdist { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 4px; }
 .mapwrap.picking { outline: 3px solid var(--stamp); outline-offset: -3px; cursor: crosshair; }
 .mapwrap.picking svg { cursor: crosshair; }

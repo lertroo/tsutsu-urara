@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027s">
+<link rel="stylesheet" href="style.css?v=20261027u">
 
 <main class="app">
   <header>
@@ -116,9 +116,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027s"></script>
-<script src="core.js?v=20261027s"></script>
-<script src="xport.js?v=20261027s"></script>
+<script src="site.js?v=20261027u"></script>
+<script src="core.js?v=20261027u"></script>
+<script src="xport.js?v=20261027u"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1211,7 +1211,7 @@ function renderList(keepCount) {
     else b.innerHTML = row(name, '<i class="nbk">' + MODE_LABEL[k] + '</i> ' + esc(prefFull(it.pf)), '', it.x);
     b.onclick = () => select(it.id, true);
     li.appendChild(b);
-    if (listNear) { const v = b.querySelector('.rval'); if (v) v.insertAdjacentHTML('afterbegin', '<b class="rdist">' + fmtDist(distKm(it)) + '</b> '); }
+    if (listNear && showKm) { const v = b.querySelector('.rval'); if (v) v.insertAdjacentHTML('afterbegin', '<b class="rdist">' + fmtDist(distKm(it)) + '</b> '); }
     return li;
   };
   items.forEach(it => {
@@ -1644,7 +1644,7 @@ function showCard(id) {
   const k = KIND.get(id);
   box.style.setProperty('--kc', KCOL[k]);
   box.innerHTML = '<div class="mct"><b>' + esc(k === 'stations' ? dn(it) : it.n) + '</b><span><i class="nbk">' + esc(MODE_LABEL[k]) + '</i>' + esc(prefFull(it.pf)) + '</span></div>' +
-    '<button type="button" class="btn mcgo">詳細を見る ↓</button><button type="button" class="mcx" aria-label="閉じる">×</button>';
+    '<button type="button" class="btn mcgo">詳細 ↓</button><button type="button" class="mcx" aria-label="閉じる">×</button>';
   box.dataset.id = id; box.hidden = false;
 }
 /* 小札を押したら詳細へ（×以外なら、札のどこを押してもよい）。送ってから札を消す */
@@ -1704,6 +1704,9 @@ function actionsHTML(it) {
 /* ---------- 近い順（現在地 / 地図で指定した基準点から） ---------- */
 const ORG_KEY = 'jp-origin-v1';
 let ORG = null, nearOn = false, picking = false, nearMsg = '';
+/* 近い順の距離（km）は、ふだんは出さない（画面を人に見せたとき、ごく近い施設との距離から住まいを推し量られないように）。「km を表示」で出す */
+const KM_KEY = 'jp-showkm';
+var showKm = false; try { showKm = localStorage.getItem(KM_KEY) === '1'; } catch (e) {}
 try { const o = JSON.parse(localStorage.getItem(ORG_KEY) || 'null'); if (o && typeof o.lo === 'number' && typeof o.la === 'number') ORG = o; } catch (e) {}
 if (ORG && ORG.src === 'claude') { ORG = null; try { localStorage.removeItem(ORG_KEY); } catch (e) {} }
 function distKm(it) {
@@ -1811,6 +1814,9 @@ function renderNearUI() {
     const s = document.createElement('span'); s.className = 'nearmsg';
     s.textContent = nearMsg || (ORG ? '基準点：' + (ORG.src === 'gps' ? '現在地' : '地図で指定した地点') + '（地図の青い印）' : '');
     r.appendChild(s);
+    const km = document.createElement('button'); km.type = 'button'; km.className = 'kmtog'; km.textContent = showKm ? 'km を隠す' : 'km を表示';
+    km.onclick = () => { showKm = !showKm; try { localStorage.setItem(KM_KEY, showKm ? '1' : '0'); } catch (e) {} renderNearUI(); refresh(); };
+    r.appendChild(km);
   }
   tools.appendChild(r);
 }
