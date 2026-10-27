@@ -40,6 +40,21 @@ h1 { margin: 0; }
 @media (prefers-reduced-motion: no-preference) { .fararrow svg { animation: farnudge 1.2s ease-in-out infinite; } }
 @keyframes farnudge { 0%, 100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
 .mapwrap { position: relative; border: 1px solid var(--line); background: var(--sea); overflow: hidden; }
+/* 確認リスト（アーティファクトだけ。地図のすぐ上） */
+.chk { margin: 0 0 8px; border: 2px dashed var(--accent); border-radius: 10px; background: var(--panel); font-size: 0.85rem; }
+.chkh { display: flex; }
+.chkt { flex: 1; display: flex; align-items: baseline; gap: 8px; font: inherit; font-weight: 700; color: var(--ink); background: none; border: 0; padding: 8px 12px; cursor: pointer; text-align: left; }
+.chkt span { color: var(--accent); }
+.chkt small { color: var(--muted); font-weight: 400; font-size: 0.75rem; }
+.chkt i { margin-left: auto; font-style: normal; color: var(--muted); font-size: 0.7rem; }
+.chk ol { list-style: none; margin: 0; padding: 0 8px 8px; max-height: 40vh; overflow: auto; }
+.chk li { display: flex; align-items: flex-start; gap: 6px; border-top: 1px solid var(--line); padding: 6px 2px; }
+.chk li.done .chkgo { opacity: 0.5; }
+.chkok { padding-top: 2px; }
+.chkok input { width: 18px; height: 18px; accent-color: var(--accent); }
+.chkgo { flex: 1; display: block; font: inherit; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; text-decoration: none; }
+.chkgo b { margin-right: 6px; }
+.chkn { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 #svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
 .mapwrap.drag #svg { cursor: grabbing; }
 .seabg { fill: var(--sea); }

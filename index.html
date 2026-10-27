@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027d">
+<link rel="stylesheet" href="style.css?v=20261027e">
 
 <main class="app">
   <header>
@@ -36,6 +36,7 @@
 
   <div class="layout">
     <section class="left" aria-label="分布図">
+      <div class="chk" id="chk" hidden></div>
       <div class="mapwrap" id="mapwrap">
         <svg id="svg" viewBox="120 0 680 880" role="img" aria-label="日本列島の分布図">
           <defs><filter id="tdark" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"></feColorMatrix><feColorMatrix type="hueRotate" values="180"></feColorMatrix><feColorMatrix type="matrix" values="0.8 0 0 0 0  0 0.8 0 0 0  0 0 0.8 0 0  0 0 0 1 0"></feColorMatrix></filter></defs>
@@ -111,9 +112,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027d"></script>
-<script src="core.js?v=20261027d"></script>
-<script src="xport.js?v=20261027d"></script>
+<script src="site.js?v=20261027e"></script>
+<script src="core.js?v=20261027e"></script>
+<script src="xport.js?v=20261027e"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1599,7 +1600,9 @@ function drawSpeed() {
 /* 地図のなめらかな移動 */
 let flyRaf = 0;
 /* 施設へ移動：倍率はそのまま、選んだ施設を地図の中央に */
-function flyToDot(d) { flyTo(d.xy[0], d.xy[1], vb.w); }
+/* 施設を選んだら、その施設を地図の中心へ。引いた表示のときは、「＋」3回分（全国の約5分の1の幅）まで寄せる。それより寄っているときは、寄り具合はそのまま */
+const FOCUS_W = W0.w * Math.pow(0.6, 3);
+function flyToDot(d) { flyTo(d.xy[0], d.xy[1], Math.min(vb.w, FOCUS_W)); }
 function flyTo(cx, cy, w) {
   if (!isFinite(cx) || !isFinite(cy) || !isFinite(w)) return;
   cancelAnimationFrame(flyRaf);
@@ -1776,6 +1779,49 @@ function restoreMapState(st) {
   if (KORDER.includes(h)) resetAll(false, false, [h]);
   else if (st && st.flt) { try { restoreMapState(st); } catch (e) { resetAll(false, false, []); } }
   else resetAll(false, false, []);
+}
+/* ===== 確認リスト（アーティファクトで見るときだけ。check.js は公開のたびに Claude が書き替える。git には入れない）=====
+   CHECKLIST = { v:'版の名前', items:[ { id:'mu:…', note:'見てほしいこと' }, { page:'kiroku.html', label:'…', note:'…' } ] }
+   GitHub Pages（lertroo.github.io）では読みに行かない */
+function renderCheck() {
+  const C = window.CHECKLIST, box = $('chk');
+  if (!C || !Array.isArray(C.items) || !C.items.length) { box.hidden = true; return; }
+  const key = 'jp-chk-' + (C.v || ''), okRead = () => { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { return {}; } };
+  let ok = okRead(), open = true;
+  try { open = localStorage.getItem('jp-chk-open') !== '0'; } catch (e) {}
+  const draw = () => {
+    const n = C.items.length, m = C.items.filter((x, i) => ok[i]).length;
+    let h = '<div class="chkh"><button type="button" class="chkt" aria-expanded="' + open + '">確認リスト <span>' + m + ' / ' + n + ' OK</span>' + (C.v ? '<small>' + esc(C.v) + '</small>' : '') + '<i aria-hidden="true">' + (open ? '▲' : '▼') + '</i></button></div>';
+    if (open) h += '<ol>' + C.items.map((x, i) => {
+      const id = x.id ? (ID_ALIAS[x.id] || x.id) : '', it = id && findItem(id);
+      const name = it ? (KIND.get(id) === 'stations' ? dn(it) : it.n) : (x.label || x.page || id || '');
+      const kind = it ? MODE_LABEL[KIND.get(id)] : x.page ? 'ページ' : '';
+      const go = it ? '<button type="button" class="chkgo" data-i="' + i + '">' : x.page ? '<a class="chkgo" href="' + esc(x.page) + '">' : '<span class="chkgo">';
+      const end = it ? '</button>' : x.page ? '</a>' : '</span>';
+      return '<li class="' + (ok[i] ? 'done' : '') + '"><label class="chkok"><input type="checkbox" data-i="' + i + '"' + (ok[i] ? ' checked' : '') + ' aria-label="OK"></label>' + go +
+        '<b>' + esc(name) + '</b>' + (kind ? '<i class="nbk">' + esc(kind) + '</i>' : '') + (x.note ? '<span class="chkn">' + esc(x.note) + '</span>' : '') + (id && !it ? '<span class="chkn">（データに見つかりません：' + esc(id) + '）</span>' : '') + end + '</li>';
+    }).join('') + '</ol>';
+    box.innerHTML = h; box.hidden = false;
+  };
+  box.onclick = e => {
+    if (e.target.closest('.chkt')) { open = !open; try { localStorage.setItem('jp-chk-open', open ? '1' : '0'); } catch (err) {} draw(); return; }
+    const b = e.target.closest('button.chkgo'); if (!b) return;
+    const id = ID_ALIAS[C.items[+b.dataset.i].id] || C.items[+b.dataset.i].id;
+    if (!currentItems().some(x => x.id === id)) resetAll(false, true, [KIND.get(id)]);   /* 一覧に出ていないときは、その種類だけを出し直す */
+    select(id, true);
+  };
+  box.onchange = e => {
+    const c = e.target.closest('input[type=checkbox]'); if (!c) return;
+    ok = okRead(); if (c.checked) ok[c.dataset.i] = 1; else delete ok[c.dataset.i];
+    try { localStorage.setItem(key, JSON.stringify(ok)); } catch (err) {}
+    draw();
+  };
+  draw();
+}
+if (location.hostname !== 'lertroo.github.io') {
+  const s = document.createElement('script');
+  s.src = 'check.js?t=' + Date.now(); s.onload = renderCheck; s.onerror = () => {};
+  document.head.appendChild(s);
 }
 </script>
 <!-- 文字の CSS は、スクリプトの後ろで読む（前に置くと、届くまでスクリプト全体が待たされる） -->
