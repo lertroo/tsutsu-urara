@@ -269,6 +269,9 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .place { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-feature-settings: "palt"; }   /* 施設名は、かなの幅を詰める（palt）。字間も少し詰める */
 .badge { border-radius: 999px; padding: 2px 10px; background: var(--kc, var(--accent)); border-color: var(--kc, var(--accent)); color: #fff; }
 .badge.outline { background: transparent; color: var(--kc, var(--accent)); }
+/* 押して絞り込めるバッジ（詳細の区分・タグなど） */
+button.badge { font: inherit; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; line-height: inherit; cursor: pointer; }
+button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb, var(--kc, var(--accent)) 18%, transparent); }
 .landp { fill: var(--land); }
 .fillview .landp { cursor: pointer; }
 .fillview .landp:hover { fill: color-mix(in srgb, var(--accent) 16%, var(--land)); }

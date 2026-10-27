@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261026r">
+<link rel="stylesheet" href="style.css?v=20261027c">
 
 <main class="app">
   <header>
@@ -111,9 +111,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261026r"></script>
-<script src="core.js?v=20261026r"></script>
-<script src="xport.js?v=20261026r"></script>
+<script src="site.js?v=20261027c"></script>
+<script src="core.js?v=20261027c"></script>
+<script src="xport.js?v=20261027c"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1016,12 +1016,17 @@ const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target=
 const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
 const fPos = (it, what, after) => typeof it.la === 'number' ? fRow('位置（' + esc(what || '目安') + '）', fLL(it.la, it.lo) + (after || ''), 1) : fRow('位置', '地図には表示していません（位置情報なし）');
 const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '') + '">' + esc(t) + '</span>';
+/* 押すと、その種類の細かい絞り込み（TYPEF の値 ft）で一覧を出すバッジ */
+const fbadge = (t, k, ft) => ft ? '<button type="button" class="badge outline fbadge" data-fk="' + esc(k) + '" data-ft="' + esc(ft) + '" title="「' + esc(t) + '」で一覧を絞り込みます">' + esc(t) + '</button>' : badge(t, 1);
+const MU_KB_FT = { '都道府県立':'pref', '国立':'nat', '国立大学':'nat', '国宝所蔵':'kokuho', 'letroo基準':'letroo' }, MU_RJ_FT = { '登録博物館':'reg', '指定施設':'des' };
 /* 見出し：種類などの印と地方、名前、名前の下の一行 */
-const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' +
+let dK = '';   /* いま詳細を作っている種類（dHead がタグのチップに使う） */
+const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' +
   '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
 /* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
 const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
 function detailHTML(it, k) {
+  dK = k;
   const pfs = prefFull(it.pf), nt = fTxt('注釈', it.nt), wiki = fLink('Wikipedia', wikiUrl(it.wp), '記事を開く');
   const web = /^https?:\/\//.test(it.web || '') ? fLink('公式サイト', it.web, '開く') : '';
   const rp = it.rp ? it.rp + '・目安' : '';
@@ -1049,7 +1054,7 @@ function detailHTML(it, k) {
   if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
-  if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? badge(it.kb, 1) : '') + (it.tag ? it.tag.split('、').map(t => badge(t, 1)).join('') : '') + (mReg(it) ? badge(mReg(it), 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+  if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? fbadge(it.kb, 'museums', MU_KB_FT[it.kb]) : '') + (mReg(it) ? fbadge(mReg(it), 'museums', MU_RJ_FT[it.rj]) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('旧称', it.o), fTxt('通称', it.al), fTxt('含む施設', it.inc), fTxt('設置', it.ow), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
       it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
   if (k === 'airports') {
@@ -1267,6 +1272,14 @@ function renderControls() {
   { const ab = document.createElement('button'); ab.type = 'button'; ab.className = 'btn'; ab.textContent = '＋ 地点を追加'; ab.onclick = () => openMyForm(null); tools.appendChild(ab); }
   $('q').value = flt.q;
 }
+/* 詳細のバッジを押したら、その種類だけを、その絞り込みで全国から出す（検索語・県・地方は外す） */
+document.addEventListener('click', e => {
+  const b = e.target.closest('.fbadge'); if (!b) return;
+  flt.kinds = new Set([b.dataset.fk]); flt.typeK = b.dataset.fk; flt.type = b.dataset.ft;
+  flt.q = ''; flt.region = 'all'; flt.vis = 'all';
+  if (flt.pfk) setPfk(''); else refresh();
+  const l = $('list'); if (l) { l.scrollTop = 0; l.scrollIntoView({ block:'nearest', behavior:'smooth' }); }
+});
 function renderStat() { /* 「表示中 ○件、○都道府県に分布…」の一文は表示しない */ }
 function renderLegend() {
   $('legend').innerHTML = KORDER.map(m => '<span><i style="background:' + KCOL[m] + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';

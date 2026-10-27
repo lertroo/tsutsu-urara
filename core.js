@@ -24,12 +24,12 @@ const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
 const AIR_FL = { 1:'ジェット機の定期便あり', 2:'プロペラ機の定期便あり', 3:'定期便なし' };
 const AIR_FL_SHORT = { 1:'ジェット便', 2:'プロペラ便', 3:'定期便なし' };
-/* 博物・美術館のタグ（tag。区分とは別に付ける分け方。「、」区切り） */
+/* タグ（tag。種類や区分とは別に付ける分け方。「、」区切り。どの種類のデータにも付けられる） */
 const hasTag = (x, t) => !!x.tag && x.tag.split('、').includes(t);
 /* 横断検索で種類を1つだけ選んだときに出す、その種類の細かい絞り込み。[ボタンの名前, 値, 条件]。先頭は「すべて」 */
 const TYPEF = {
   castles: [['すべて', 'all'], ['現存天守', 'tower', c => c.t === 'N' || c.t === 'k'], ['国宝天守', 'N', c => c.t === 'N'], ['復元などの天守', 's', c => c.t === 's'], ['城跡など', 'a', c => c.t === 'a']],
-  museums: [['すべて', 'all'], ['県立', 'pref', x => x.kb === '都道府県立'], ['国立（大学を含む）', 'nat', x => x.kb === '国立' || x.kb === '国立大学'], ['国宝所蔵', 'kokuho', x => x.kb === '国宝所蔵'], ['恐竜', 'dino', x => hasTag(x, '恐竜')], ['登録博物館', 'reg', x => x.rj === '登録博物館'], ['指定施設', 'des', x => x.rj === '指定施設'], ['地図に未表示', 'nopos', x => typeof x.la !== 'number']],
+  museums: [['すべて', 'all'], ['県立', 'pref', x => x.kb === '都道府県立'], ['国立（大学を含む）', 'nat', x => x.kb === '国立' || x.kb === '国立大学'], ['国宝所蔵', 'kokuho', x => x.kb === '国宝所蔵'], ['letroo基準', 'letroo', x => x.kb === 'letroo基準'], ['登録博物館', 'reg', x => x.rj === '登録博物館'], ['指定施設', 'des', x => x.rj === '指定施設'], ['地図に未表示', 'nopos', x => typeof x.la !== 'number']],
   airports: [['定期便:すべて', 'all'], [AIR_FL_SHORT[1], '1', x => x.fl === 1], [AIR_FL_SHORT[2], '2', x => x.fl === 2], [AIR_FL_SHORT[3], '3', x => x.fl === 3]],
   zoos: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
   aquas: [['すべて', 'all'], ['合体', 'combo', x => x.tg]],
@@ -74,6 +74,12 @@ const KINDS = [
 ];
 const KORDER = KINDS.map(x => x.k), KIND_BY = {}, MODE_LABEL = {}, KCOL = {};
 KINDS.forEach(x => { KIND_BY[x.k] = x; MODE_LABEL[x.k] = x.label; KCOL[x.k] = x.col; });
+/* 種類ごとに、データにあるタグを、細かい絞り込みのボタンにする（付いている数の多い順。種類の絞り込みの後ろに並べる） */
+KINDS.forEach(x => {
+  const c = {}; x.items.forEach(o => (o.tag ? o.tag.split('、') : []).forEach(t => { c[t] = (c[t] || 0) + 1; }));
+  const tags = Object.keys(c).sort((a, b) => c[b] - c[a]); if (!tags.length) return;
+  TYPEF[x.k] = (TYPEF[x.k] || [['すべて', 'all']]).concat(tags.map(t => [t, 'tag:' + t, o => hasTag(o, t)]));
+});
 function modeItems(k) { return (KIND_BY[k] || KIND_BY.castles).items; }
 
 const PREF_ORDER = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
@@ -90,10 +96,12 @@ CASTLES.forEach(c => { ID_ALIAS['c' + c.no] = c.id; });
 Object.assign(ID_ALIAS, { c34:'cs:金沢城', c35:'cs:七尾城', c74:'cs:萩城', c75:'cs:岩国城', c24:'cs:武田氏館（躑躅ヶ崎館）', 'cs:武田氏館':'cs:武田氏館（躑躅ヶ崎館）' });
 /* 2026-10-26 に入れ直した博物館で、以前の一覧（Wikipedia由来）と名前が違うもの */
 Object.assign(ID_ALIAS, { 'mu:HOKUSHU仙台市科学館':'mu:仙台市科学館', 'mu:いのちのたび博物館':'mu:北九州市立いのちのたび博物館' });
+/* 2026-10-27 にテーマパークからほかの種類へ移した施設と、外したミニ遊園地（同じ「わんぱーくこうち」の動物園へまとめる） */
+Object.assign(ID_ALIAS, { 'th:市立室蘭水族館':'aq:市立室蘭水族館', 'th:兵庫県立西はりま天文台公園':'mu:西はりま天文台', 'th:わんぱーくこうちプレイランド':'zo:わんぱーくこうちアニマルランド', 'th:東南植物楽園＆おきなわスロー風楽風遊の森':'bt:東南植物楽園' });
 STATIONS.forEach(s => { if (s.no) ID_ALIAS['ms:' + s.no] = s.id; });
 { const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
 /* 複数のタブに出る施設は、行った記録を1つにまとめる（左が副、右が主） */
-const TWIN = { 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'bw:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
+const TWIN = { 'mu:青梅鉄道公園':'th:青梅鉄道公園', 'bt:東山動植物園':'zo:東山動植物園', 'zo:姫路セントラルパーク':'th:姫路セントラルパーク', 'aq:NIFREL（ニフレル）':'zo:ニフレル', 'bw:琵琶湖':'sc:琵琶湖', 'na:西之島':'ik:西之島', 'na:屋久島':'wh:屋久島', 'na:富士山':'wh:富士山', 'na:鬼ヶ城':'sc:御濱鬼ヶ城',
   'wh:姫路城':'cs:姫路城', 'bt:国立科学博物館附属自然教育園':'mu:国立科学博物館 自然教育園', 'ms:デンパーク安城':'bt:安城産業文化公園デンパーク',
   'ms:マイントピア別子':'th:マイントピア別子', 'ms:小豆島オリーブ公園':'th:小豆島オリーブ公園', 'ms:燕趙園':'th:燕趙園', 'ms:青洲の里':'th:青洲の里', 'ms:神戸フルーツ・フラワーパーク大沢':'th:神戸 フルーツ・フラワーパーク', 'ms:美ヶ原高原':'th:美ヶ原高原美術館',
   'na:鳥海山':'sc:鳥海山', 'na:赤城山':'sc:赤城山', 'na:筑波山':'sc:筑波山', 'na:白馬岳':'sc:白馬岳', 'na:立山':'sc:立山', 'na:八ヶ岳':'sc:八ヶ岳', 'na:甲斐駒ヶ岳':'sc:甲斐駒ヶ岳', 'na:大台ヶ原山':'sc:大台ヶ原山', 'na:大山 (鳥取県)':'sc:大山', 'na:石鎚山':'sc:石鎚山', 'na:阿蘇山':'sc:阿蘇山', 'na:霧島山':'sc:霧島山', 'na:昇仙峡':'sc:御嶽昇仙峡', 'na:十和田湖':'sc:十和田湖', 'na:高田松原':'sc:高田松原', 'na:猪苗代湖':'sc:猪苗代湖', 'na:中禅寺湖':'sc:中禅寺湖', 'na:菅沼 (群馬県)':'sc:菅沼', 'na:華厳滝':'sc:華厳滝', 'na:白糸の滝 (静岡県)':'sc:富士白糸の滝', 'na:上高地':'sc:上高地', 'na:黒部峡谷':'sc:黒部峡谷', 'na:鳥羽港':'sc:鳥羽湾', 'na:朝熊山':'sc:朝熊山', 'na:浦富海岸':'sc:浦富海岸', 'na:寒霞渓':'sc:寒霞渓', 'na:御崎':'sc:赤穂御崎', 'na:鞆の浦':'sc:鞆の浦', 'na:屋島':'sc:屋島', 'na:九十九島 (西海国立公園)':'sc:九十九島', 'na:雲仙岳':'sc:雲仙岳', 'na:久住高原':'sc:久住高原', 'na:飯田高原':'sc:飯田高原', 'na:袋田の滝':'sc:袋田の滝', 'na:養老の滝':'sc:養老の滝', 'na:赤目四十八滝':'sc:赤目四十八滝', 'na:箕面滝':'sc:箕面滝', 'na:那智滝':'sc:那智滝', 'na:古座川':'sc:古座川', 'na:大沼 (七飯町)':'sc:大沼',
@@ -136,7 +144,9 @@ function saveMys() { store.set(MYS_KEY, JSON.stringify(MYS.map(m => ({ id:m.id, 
 try { const a = JSON.parse(store.get(MYS_KEY)); if (Array.isArray(a)) a.forEach(o => addMySpot(o)); } catch (e) {}
 function rebuildAllx() { ALLX.length = 0; KIND.clear(); initAll(); }
 
-const ALL_IDS = new Set([].concat(...KINDS.map(x => x.items.map(o => o.id)), MUSEUMS_RETIRED));
+/* 一覧から外した施設の id。行った記録を消さないために、記録の読み込みだけに使う（博物館は data/museums.js の MUSEUMS_RETIRED） */
+const RETIRED_IDS = ['th:ゆうばりめろん城', 'th:大洗わくわく科学館'];
+const ALL_IDS = new Set([].concat(...KINDS.map(x => x.items.map(o => o.id)), MUSEUMS_RETIRED, RETIRED_IDS));
 MYS.forEach(m => ALL_IDS.add(m.id));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
