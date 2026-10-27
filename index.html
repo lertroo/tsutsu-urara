@@ -1038,7 +1038,7 @@ function detailHTML(it, k) {
   const pfs = prefFull(it.pf), nt = fTxt('注釈', it.nt), wiki = fLink('Wikipedia', wikiUrl(it.wp), '記事を開く');
   const web = /^https?:\/\//.test(it.web || '') ? fLink('公式サイト', it.web, '開く') : '';
   const rp = it.rp ? it.rp + '・目安' : '';
-  const fIn = fTxt('場所', it.in ? it.in + 'の中' : '');   /* ほかの施設の中にあるとき（in はその施設の名前。一覧の行と検索にも使う。一覧の行は、短い名前 ins があればそちら） */
+  const fIn = fTxt('場所', it.in ? it.in + 'の中' : it.by ? it.by + 'に併設' : '');   /* ほかの施設の中にあるとき（in はその施設の名前。一覧の行と検索にも使う。一覧の行は、短い名前 ins があればそちら。by は併設している施設で、検索にだけ使う） */
   const facts = (...rows) => '<dl class="facts">' + rows.join('') + '</dl>';
   if (FAC[k]) return dHead(badge(FAC[k]) + (it.x ? badge('閉園済み（' + it.x + '年）', 1) : '') + (it.tg ? badge(FAC[k] + '＋' + it.tg.split('、').join('＋'), 1) : ''), it, pfs) +
     facts(fIn, fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
@@ -1566,7 +1566,7 @@ function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/[�
 let _qk = null, _qt = [];
 function qterms() { if (_qk !== flt.q) { _qk = flt.q; _qt = fold(flt.q).split(/\s+/).filter(Boolean); } return _qt; }
 /* タグ（「鉄道」「恐竜」など）でも当たる。タグは別に見て、タグだけで当たったときは一覧の行にそのタグを出す（qtagHits） */
-function qhay(x) { const k = KIND.get(cid(x.id)) || ''; return fold([x.n, x.o, x.inc, x.in, x.ins, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' ')); }
+function qhay(x) { const k = KIND.get(cid(x.id)) || ''; return fold([x.n, x.o, x.inc, x.in, x.ins, x.by, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' ')); }
 function qm(x) {
   const t = qterms(); if (!t.length) return true;
   const hay = qhay(x), tg = fold(x.tag || '');
