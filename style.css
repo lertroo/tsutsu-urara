@@ -40,6 +40,13 @@ h1 { margin: 0; }
 @media (prefers-reduced-motion: no-preference) { .fararrow svg { animation: farnudge 1.2s ease-in-out infinite; } }
 @keyframes farnudge { 0%, 100% { transform: translateX(-4px); } 50% { transform: translateX(4px); } }
 .mapwrap { position: relative; border: 1px solid var(--line); background: var(--sea); overflow: hidden; }
+/* スマホで地図へ送ったときの小札（地図の左上） */
+.mcard { cursor: pointer; touch-action: manipulation; position: absolute; top: 10px; left: 10px; right: 120px; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--kc, var(--line)); border-left-width: 5px; background: color-mix(in srgb, var(--panel) 95%, transparent); box-shadow: var(--shadow); font-size: 0.85rem; }
+.mct { flex: 1 1 100%; min-width: 0; }
+.mct b { display: block; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mct span { color: var(--muted); font-size: 0.78rem; }
+.mcgo { padding: 5px 12px; }
+.mcx { margin-left: auto; font: inherit; font-size: 1.1rem; line-height: 1; color: var(--muted); background: none; border: 0; padding: 4px 6px; cursor: pointer; }
 /* 地図で施設を見せたときの波紋 */
 #g-pulse { pointer-events: none; }
 .pulse { fill: none; stroke: var(--accent); opacity: 0; transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out both; }
@@ -160,6 +167,7 @@ h1 { margin: 0; }
 .tools select { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; max-width: 100%; }
 .list .grp { font-size: 0.8rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--accent) 9%, var(--panel)); position: sticky; top: 0; }
 .tools label { font-size: 0.82rem; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+.list.asking { max-height: none !important; }   /* 選んでいない種類を出すか聞いているときは、一覧の高さの制限を外す */
 .list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); background: var(--panel); overflow-y: auto; max-height: 220px; }
 .row-btn { display: grid; align-items: center; width: 100%; text-align: left; font: inherit; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--line); cursor: pointer; }
 .list li:last-child .row-btn { border-bottom: 0; }

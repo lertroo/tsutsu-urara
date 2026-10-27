@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027f">
+<link rel="stylesheet" href="style.css?v=20261027i">
 
 <main class="app">
   <header>
@@ -68,6 +68,7 @@
         <div id="bgmenu" class="bgmenu" role="menu" aria-label="背景の地図" hidden></div>
         <div id="tattr" hidden></div>
         <div class="farbox" id="farbox" hidden></div>
+        <div class="mcard" id="mcard" hidden></div>
         <div class="fararrow" id="fararrow" hidden aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M3 17h25V6l17 18-17 18V31H3z"/></svg></div>
         <button type="button" id="legtog" class="legtog" aria-expanded="false" aria-controls="legend">凡例</button>
       </div>
@@ -113,9 +114,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027f"></script>
-<script src="core.js?v=20261027f"></script>
-<script src="xport.js?v=20261027f"></script>
+<script src="site.js?v=20261027i"></script>
+<script src="core.js?v=20261027i"></script>
+<script src="xport.js?v=20261027i"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1076,7 +1077,7 @@ function renderDetail() {
   const box = $('detail');
   const it = selId && findItem(selId);
   box.hidden = !it;
-  if (!it) { box.innerHTML = ''; drawFarBox(); return; }
+  if (!it) { box.innerHTML = ''; drawFarBox(); hideCard(); return; }
   const k = curKind(it);
   box.innerHTML = detailHTML(it, k);
   if (k === 'my') {
@@ -1172,12 +1173,14 @@ const ROW_SUB = {
 };
 function renderList(keepCount) {
   const items = currentItems(), ul = $('list');
-  ul.innerHTML = ''; listEntries = []; listPos = 0;
+  ul.innerHTML = ''; listEntries = []; listPos = 0; ul.classList.remove('asking');
   if (!items.length) {
     const oh = (flt.kinds && qterms().length && kindAskNo !== flt.q) ? otherKindHits() : null, ks = oh ? KORDER.filter(k => oh[k]) : [];
     if (ks.length) {   /* 選んでいない種類にだけ該当があるときは、その種類も出すかを聞く */
       const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
-      li.innerHTML = '<div>「' + esc(flt.q) + '」は、選んでいない種類（' + ks.map(k => esc(MODE_LABEL[k]) + ' ' + oh[k] + '件').join('・') + '）にあります。表示しますか？</div><div class="noteb"><button type="button" class="btn" data-ka="yes">はい</button><button type="button" class="btn" data-ka="no">いいえ</button></div>';
+      ul.classList.add('asking');   /* 一覧の高さを低くしていても、問いとボタンが隠れないように（高さの制限を外す） */
+      const kl = ks.slice().sort((a, b) => oh[b] - oh[a]), kt = kl.slice(0, 3).map(k => esc(MODE_LABEL[k]) + ' ' + oh[k] + '件').join('・') + (kl.length > 3 ? ' ほか' + (kl.length - 3) + '種類' : '');
+      li.innerHTML = '<div>「' + esc(flt.q) + '」は、選んでいない種類（' + kt + '）にあります。表示しますか？</div><div class="noteb"><button type="button" class="btn" data-ka="yes">はい</button><button type="button" class="btn" data-ka="no">いいえ</button></div>';
       li.querySelector('[data-ka=yes]').onclick = () => { ks.forEach(k => flt.kinds.add(k)); refresh(); };
       li.querySelector('[data-ka=no]').onclick = () => { kindAskNo = flt.q; renderList(); };
       ul.appendChild(li); return;
@@ -1287,13 +1290,19 @@ function renderLegend() {
 function select(id, fromList, jump) {
   /* 横断検索のまま詳細を開く（種類ごとの表示は renderDetail が切り替える）。地図の点を押したとき（jump）は、地図は動かさず、スマホでは詳細へ送る */
   selId = id;
-  const d = dotEls[id];
+  const d = dotEls[id], phone = window.innerWidth < 920;
+  hideCard();
+  if (fromList && phone) {   /* スマホで一覧から選んだとき：詳細へは送らず、地図まで送って動きを見せ、地図の上に小札を出す（詳細へは小札から） */
+    markSel(); renderDetail();
+    if (d) showOnMap(id); else $('detail').scrollIntoView({ behavior:'smooth', block:'start' });
+  } else {
   if (fromList && d) {
     flyToDot(d);
   }
   markSel(); renderDetail();
-  if ((fromList || jump) && window.innerWidth < 920) { const dt = $('detail').getBoundingClientRect(); if (dt.top < 0 || dt.top > window.innerHeight * 0.6) $('detail').scrollIntoView({ behavior:'smooth', block:'start' }); }
-  else if (fromList) { const dt = $('detail').getBoundingClientRect(); if (dt.top > window.innerHeight - 140) $('detail').scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+  }
+  if (jump && phone) { const dt = $('detail').getBoundingClientRect(); if (dt.top < 0 || dt.top > window.innerHeight * 0.6) $('detail').scrollIntoView({ behavior:'smooth', block:'start' }); }
+  else if (fromList && !phone) { const dt = $('detail').getBoundingClientRect(); if (dt.top > window.innerHeight - 140) $('detail').scrollIntoView({ behavior:'smooth', block:'nearest' }); }
   listEnsure(id);
   document.querySelectorAll('.row-btn').forEach(b => {
     const on = b.dataset.id === id;
@@ -1603,13 +1612,35 @@ const FOCUS_W = W0.w * Math.pow(0.6, 3);
    地図を動かして then（詳細の書き換えなど）をする。見えないところで書き換わらないように。最後に、その点に波紋を出す */
 function showOnMap(id, then) {
   const mw = $('mapwrap'), r = mw.getBoundingClientRect();
-  const run = () => { const d = dotEls[id]; if (d) flyToDot(d); if (then) then(); setTimeout(() => pulseDot(id), 420); };
+  const run = () => { const d = dotEls[id]; if (d) flyToDot(d); if (then) then(); showCard(id); setTimeout(() => pulseDot(id), 420); };
   if (r.top >= -r.height * 0.2 && r.bottom <= window.innerHeight + r.height * 0.2) { run(); return; }
   let done = false;
   const fin = () => { if (done) return; done = true; window.removeEventListener('scrollend', fin); run(); };
   window.addEventListener('scrollend', fin); setTimeout(fin, 800);   /* scrollend がないブラウザは時間で */
   mw.scrollIntoView({ block:'start', behavior:'smooth' });
 }
+/* スマホで地図へ送ったときの小札（名前・種類・県と「詳細を見る」）。パソコンでは詳細が横に見えているので出さない */
+function showCard(id) {
+  const box = $('mcard'), it = findItem(id);
+  if (window.innerWidth >= 920 || !it) { hideCard(); return; }
+  const k = KIND.get(id);
+  box.style.setProperty('--kc', KCOL[k]);
+  box.innerHTML = '<div class="mct"><b>' + esc(k === 'stations' ? dn(it) : it.n) + '</b><span><i class="nbk">' + esc(MODE_LABEL[k]) + '</i>' + esc(prefFull(it.pf)) + '</span></div>' +
+    '<button type="button" class="btn mcgo">詳細を見る ↓</button><button type="button" class="mcx" aria-label="閉じる">×</button>';
+  box.dataset.id = id; box.hidden = false;
+}
+/* 小札を押したら詳細へ（×以外なら、札のどこを押してもよい）。送ってから札を消す */
+function goDetail() {
+  const dt = $('detail'); if (!dt) return;
+  const y = () => dt.getBoundingClientRect().top + window.scrollY - 8;
+  try { window.scrollTo({ top: y(), behavior: 'smooth' }); } catch (e) { window.scrollTo(0, y()); }
+  setTimeout(() => { if (Math.abs(dt.getBoundingClientRect().top) > 40) window.scrollTo(0, y()); hideCard(); }, 700);   /* なめらかに動かないブラウザの予備 */
+}
+$('mcard').addEventListener('click', e => {
+  if (e.target.closest('.mcx')) { hideCard(); return; }
+  goDetail();
+});
+function hideCard() { const b = $('mcard'); if (b) { b.hidden = true; b.innerHTML = ''; } }
 function pulseDot(id) {
   const d = dotEls[id]; if (!d) return;
   const s = (svgSz().width / vb.w) || 1, g = $('g-pulse');
