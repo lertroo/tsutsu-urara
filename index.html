@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027i">
+<link rel="stylesheet" href="style.css?v=20261027m">
 
 <main class="app">
   <header>
@@ -114,9 +114,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027i"></script>
-<script src="core.js?v=20261027i"></script>
-<script src="xport.js?v=20261027i"></script>
+<script src="site.js?v=20261027m"></script>
+<script src="core.js?v=20261027m"></script>
+<script src="xport.js?v=20261027m"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -893,8 +893,10 @@ function drawLabel() {
 }
 let selOn = null;   /* いま印（on）を付けている点 */
 function markSel(noLabel) {
-  if (selOn && selOn !== dotEls[selId]) selOn.g.classList.remove('on');
+  if (selOn && selOn !== dotEls[selId]) { selOn.g.classList.remove('on'); if (selOn.wasDim) { selOn.wasDim = false; selOn.g.classList.add('dim'); } }
   selOn = dotEls[selId] || null;
+  /* 選んだ施設は、いまの絞り込み（検索語など）で一覧に出ていなくても、点と名前を出す（近くの施設から選んだときなど） */
+  if (selOn) { selOn.wasDim = !currentItems().some(x => x.id === selId); if (selOn.wasDim && selOn.g.classList.contains('dim')) { selOn.g.classList.remove('dim'); selOn.g.style.display = ''; selOn.sk = null; } }
   if (selOn) selOn.g.classList.add('on');
   gSel.innerHTML = '';
   const it = selId && findItem(selId);
@@ -1091,14 +1093,14 @@ function renderDetail() {
     box.insertAdjacentHTML('beforeend', '<div class="nbrs">' +
       (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join('') : '') +
       (nbO.length ? '<div class="nbh" style="margin-top:12px">近くのほかの種類</div>' + nbO.map(nbRow).join('') : '') + '</div>');
-    box.querySelectorAll('.nbr').forEach(b => b.onclick = () => showOnMap(b.dataset.id, () => select(b.dataset.id, false)));
+    box.querySelectorAll('.nbr').forEach(b => b.onclick = () => showOnMap(b.dataset.id, () => select(b.dataset.id, false), true));
   }
   const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
   if (vAnchor) vAnchor.insertAdjacentHTML('afterend', photoHTML(it) + actionsHTML(it) + visBlock(it)); else box.insertAdjacentHTML('beforeend', visBlock(it));
   bindVis(it);
   const ph = box.querySelector('h2.place');
   if (ph && dotEls[it.id]) {   /* 施設名を押すと、地図をその位置へ動かす（位置がない施設は何もしない） */
-    const go = () => showOnMap(it.id);
+    const go = () => showOnMap(it.id, null, true);
     ph.classList.add('fly'); ph.setAttribute('role', 'button'); ph.tabIndex = 0; ph.title = '地図でこの位置へ';
     ph.onclick = go; ph.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
   }
@@ -1610,14 +1612,23 @@ let flyRaf = 0;
 const FOCUS_W = W0.w * Math.pow(0.6, 3);
 /* 地図で施設を見せる。地図が画面の外にあるとき（スマホで下の詳細を見ているときなど）は、先に地図まで送り、送り終わってから
    地図を動かして then（詳細の書き換えなど）をする。見えないところで書き換わらないように。最後に、その点に波紋を出す */
-function showOnMap(id, then) {
-  const mw = $('mapwrap'), r = mw.getBoundingClientRect();
+/* 地図がいまどれだけ見えているか（0〜1）。アーティファクトでは、ページが外側の画面ごとスクロールすることがあり、
+   getBoundingClientRect では見えているかを正しく測れないので、IntersectionObserver（本当の画面に対して測る）を使う */
+let mapRatio = 1;
+try { new IntersectionObserver(es => { mapRatio = es[es.length - 1].intersectionRatio; }, { threshold:[0, 0.2, 0.4, 0.6, 0.8, 0.9, 0.95, 1] }).observe($('mapwrap')); } catch (e) {}
+let goDetailT = 0;
+function showOnMap(id, then, force) {
+  const mw = $('mapwrap');
+  clearTimeout(goDetailT);   /* 「詳細を見る」の予備の送り（0.7秒後）が残っていたら止める（地図へ戻したあとで、詳細へ引き戻さないように） */
   const run = () => { const d = dotEls[id]; if (d) flyToDot(d); if (then) then(); showCard(id); setTimeout(() => pulseDot(id), 420); };
-  if (r.top >= -r.height * 0.2 && r.bottom <= window.innerHeight + r.height * 0.2) { run(); return; }
+  /* 地図がほぼ全部見えているときだけ、送らずに動かす。記事の中（近くの施設・施設名）から押したとき（force）は、スマホでは必ず送る */
+  if (mapRatio >= 0.9 && !(force && window.innerWidth < 920)) { run(); return; }
   let done = false;
   const fin = () => { if (done) return; done = true; window.removeEventListener('scrollend', fin); run(); };
   window.addEventListener('scrollend', fin); setTimeout(fin, 800);   /* scrollend がないブラウザは時間で */
-  mw.scrollIntoView({ block:'start', behavior:'smooth' });
+  const y = () => mw.getBoundingClientRect().top + window.scrollY - 8;
+  try { mw.scrollIntoView({ block:'start', behavior:'smooth' }); } catch (e) {}
+  setTimeout(() => { if (mapRatio < 0.9) { try { window.scrollTo({ top:y(), behavior:'smooth' }); } catch (e) { window.scrollTo(0, y()); } } }, 350);   /* 送れていなければ、別のやり方でもう一度 */
 }
 /* スマホで地図へ送ったときの小札（名前・種類・県と「詳細を見る」）。パソコンでは詳細が横に見えているので出さない */
 function showCard(id) {
@@ -1634,7 +1645,8 @@ function goDetail() {
   const dt = $('detail'); if (!dt) return;
   const y = () => dt.getBoundingClientRect().top + window.scrollY - 8;
   try { window.scrollTo({ top: y(), behavior: 'smooth' }); } catch (e) { window.scrollTo(0, y()); }
-  setTimeout(() => { if (Math.abs(dt.getBoundingClientRect().top) > 40) window.scrollTo(0, y()); hideCard(); }, 700);   /* なめらかに動かないブラウザの予備 */
+  clearTimeout(goDetailT);
+  goDetailT = setTimeout(() => { if (Math.abs(dt.getBoundingClientRect().top) > 40) window.scrollTo(0, y()); hideCard(); }, 700);   /* なめらかに動かないブラウザの予備 */
 }
 $('mcard').addEventListener('click', e => {
   if (e.target.closest('.mcx')) { hideCard(); return; }
