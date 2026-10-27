@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261027m">
+<link rel="stylesheet" href="style.css?v=20261027n">
 
 <main class="app">
   <header>
@@ -114,9 +114,9 @@
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261027m"></script>
-<script src="core.js?v=20261027m"></script>
-<script src="xport.js?v=20261027m"></script>
+<script src="site.js?v=20261027n"></script>
+<script src="core.js?v=20261027n"></script>
+<script src="xport.js?v=20261027n"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1231,7 +1231,8 @@ function renderControls() {
     c.type = 'button'; c.className = 'chip';
     c.setAttribute('aria-pressed', String(flt[key] === val));
     c.innerHTML = esc(label) + (n != null ? '<span class="n">' + n + '</span>' : '');
-    c.onclick = () => { flt[key] = val; if (key === 'region' && val !== 'all' && flt.pfk && REGION_OF[pfShort(flt.pfk)] !== val) setPfk(''); else refresh(); };
+    c.onclick = () => { flt[key] = val; if (key === 'vis' && val !== 'all' && flt.kinds && !flt.kinds.size) flt.kinds = new Set(KORDER);   /* 種類を1つも選んでいないときに「行った」「記録なし」を押したら、種類をすべてオンにする（何も出ないのを防ぐ） */
+      if (key === 'region' && val !== 'all' && flt.pfk && REGION_OF[pfShort(flt.pfk)] !== val) setPfk(''); else refresh(); };
     chips.appendChild(c);
     return c;
   };
