@@ -54,29 +54,31 @@ function dn(it) { let t = it.o ? it.o + ' → ' + it.n : it.n; if (it.x) t += '�
    種類の並び（KORDER）・名前・色・データ・地図の点の大きさ（r）は、ここだけに書く。アイコンは ICON_P */
 const MYS_KEY = 'jp-myspots-v1';
 const MYS = [];   /* マイスポット（自分で足した地点。この端末のブラウザに保存） */
+/* g はグループ（地図の種類のボタンを、グループごとに分けて並べる）。同じグループの種類は続けて書く */
 const KINDS = [
-  { k:'themes',   label:'テーマパーク', col:'#e0457b', items:TPARKS,   r:4.4 },
-  { k:'castles',  label:'城',           col:'#8a5a2b', items:CASTLES,  r:c => c.t === 'N' ? 5.6 : c.t === 'k' ? 5.2 : c.t === 's' ? 4.4 : 3.8 },
-  { k:'zoos',     label:'動物園',       col:'#e08a1e', items:ZOOS,     r:4.4 },
-  { k:'aquas',    label:'水族館',       col:'#1f8fd6', items:AQUAS,    r:4.4 },
-  { k:'bots',     label:'植物園',       col:'#3fa34d', items:BOTS,     r:4.4 },
-  { k:'parks',    label:'公園',         col:'#8bb31d', items:PARKS,    r:5.2 },
-  { k:'museums',  label:'博物・美術館', col:'#8e5bd0', items:MUSEUMS,  r:4.4 },
-  { k:'towers',   label:'タワー',       col:'#c62828', items:TOWERS,   r:5.2 },
-  { k:'airports', label:'空港',         col:'#5b6b7a', items:AIRPORTS, r:4.4 },
-  { k:'shin',     label:'新幹線の駅',   col:'#6d7f1f', items:SHIN,     r:4.4 },
-  { k:'stations', label:'道の駅',       col:'#148a8a', items:STATIONS, r:3.4 },
-  { k:'capitals', label:'県庁所在地',   col:'#4f63c9', items:CAPS,     r:5.2 },
-  { k:'whs',      label:'世界遺産',     col:'#b5851a', items:WHS,      r:5.6 },
-  { k:'scenic',   label:'日本百景',     col:'#2f9e8f', items:SCENIC,   r:5.6 },
-  { k:'nature',   label:'自然',         col:'#4d7c0f', items:NATURE,   r:5.2 },
-  { k:'hyaku',    label:'日本百名山',   col:'#0d47a1', items:HYAKU,    r:5.2 },
-  { k:'biwa',     label:'琵琶湖',       col:'#2e86ab', items:BIWA,     r:5.8 },
-  { k:'koei',     label:'公営競技場',   col:'#a33b8a', items:KOEI,     r:4.4 },
-  { k:'ik',       label:'レアスポット', col:'#7a3b3b', items:IKENAI,   r:5.6 },
-  { k:'my',       label:'マイスポット', col:'#d0662a', items:MYS,      r:5.8 },
+  { k:'zoos',     label:'動物園',       col:'#e08a1e', items:ZOOS,     r:4.4, g:'いきもの' },
+  { k:'aquas',    label:'水族館',       col:'#1f8fd6', items:AQUAS,    r:4.4, g:'いきもの' },
+  { k:'bots',     label:'植物園',       col:'#3fa34d', items:BOTS,     r:4.4, g:'いきもの' },
+  { k:'themes',   label:'テーマパーク', col:'#e0457b', items:TPARKS,   r:4.4, g:'遊ぶ・学ぶ' },
+  { k:'parks',    label:'公園',         col:'#8bb31d', items:PARKS,    r:5.2, g:'遊ぶ・学ぶ' },
+  { k:'museums',  label:'博物・美術館', col:'#8e5bd0', items:MUSEUMS,  r:4.4, g:'遊ぶ・学ぶ' },
+  { k:'koei',     label:'公営競技場',   col:'#a33b8a', items:KOEI,     r:4.4, g:'遊ぶ・学ぶ' },
+  { k:'castles',  label:'城',           col:'#8a5a2b', items:CASTLES,  r:c => c.t === 'N' ? 5.6 : c.t === 'k' ? 5.2 : c.t === 's' ? 4.4 : 3.8, g:'建物・歴史' },
+  { k:'towers',   label:'タワー',       col:'#c62828', items:TOWERS,   r:5.2, g:'建物・歴史' },
+  { k:'whs',      label:'世界遺産',     col:'#b5851a', items:WHS,      r:5.6, g:'建物・歴史' },
+  { k:'nature',   label:'自然',         col:'#4d7c0f', items:NATURE,   r:5.2, g:'自然・景色' },
+  { k:'hyaku',    label:'日本百名山',   col:'#0d47a1', items:HYAKU,    r:5.2, g:'自然・景色' },
+  { k:'scenic',   label:'日本百景',     col:'#2f9e8f', items:SCENIC,   r:5.6, g:'自然・景色' },
+  { k:'biwa',     label:'琵琶湖',       col:'#2e86ab', items:BIWA,     r:5.8, g:'自然・景色' },
+  { k:'airports', label:'空港',         col:'#5b6b7a', items:AIRPORTS, r:4.4, g:'交通・まち' },
+  { k:'shin',     label:'新幹線の駅',   col:'#6d7f1f', items:SHIN,     r:4.4, g:'交通・まち' },
+  { k:'stations', label:'道の駅',       col:'#148a8a', items:STATIONS, r:3.4, g:'交通・まち' },
+  { k:'capitals', label:'県庁所在地',   col:'#4f63c9', items:CAPS,     r:5.2, g:'交通・まち' },
+  { k:'ik',       label:'レアスポット', col:'#7a3b3b', items:IKENAI,   r:5.6, g:'とっておき' },
+  { k:'my',       label:'マイスポット', col:'#d0662a', items:MYS,      r:5.8, g:'とっておき' },
 ];
 const KORDER = KINDS.map(x => x.k), KIND_BY = {}, MODE_LABEL = {}, KCOL = {};
+const KGROUPS = [...new Set(KINDS.map(x => x.g))].map(g => ({ g, ks:KINDS.filter(x => x.g === g).map(x => x.k) }));
 KINDS.forEach(x => { KIND_BY[x.k] = x; MODE_LABEL[x.k] = x.label; KCOL[x.k] = x.col; });
 /* 種類ごとに、データにあるタグを、細かい絞り込みのボタンにする（付いている数の多い順。種類の絞り込みの後ろに並べる） */
 KINDS.forEach(x => {
