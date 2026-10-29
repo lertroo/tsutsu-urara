@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261029h">
+<link rel="stylesheet" href="style.css?v=20261029k">
 
 <main class="app">
   <header>
@@ -83,7 +83,7 @@
   <div class="tabs" role="tablist" aria-label="表示する一覧">
     <button type="button" class="tab" role="tab" id="tab-all" aria-selected="true" data-mode="all">横断検索</button>
   </div>
-      <input type="search" id="q" aria-label="絞り込み" placeholder="施設名・県名で検索" autocomplete="off">
+      <label class="qbox"><svg class="qic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg><input type="search" id="q" aria-label="絞り込み" placeholder="施設名・県名で検索" autocomplete="off"></label>
       <ul class="list" id="list"></ul>
       <div class="maph listh" id="listh" role="separator" aria-orientation="horizontal" aria-label="検索結果の高さ（上下にドラッグ、ダブルクリックで元に戻す）" tabindex="0"><i></i></div>
       <aside class="panel" id="detail" aria-live="polite" hidden></aside>
@@ -117,9 +117,9 @@
 <script src="data/museums.js"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261029h"></script>
-<script src="core.js?v=20261029h"></script>
-<script src="xport.js?v=20261029h"></script>
+<script src="site.js?v=20261029k"></script>
+<script src="core.js?v=20261029k"></script>
+<script src="xport.js?v=20261029k"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -641,7 +641,7 @@ function drawClusters() {
     const key = Math.floor(d.xy[0] / cs) + ',' + Math.floor(d.xy[1] / cs);
     const c = cells.get(key); if (c) c.push(d); else cells.set(key, [d]);
   }
-  /* 丸の大きさ：件数が2件なら今の0.6倍、いま描いている中でいちばん多い丸（20件に満たないときは20件）なら今の1.5倍。間は対数でなめらかに */
+  /* 丸の大きさ：2件がいちばん小さく（半径約6px）、いま描いている中でいちばん多い丸（20件に満たないときは20件）ほど大きく（約17〜18px）。間は対数でなめらかに。数字も丸に合わせて大きくする */
   let cmax = 20; cells.forEach(l => { if (l.length > cmax) cmax = l.length; });
   cells.forEach(list => {
     if (list.length < 2) { list[0].g.style.display = ''; return; }
@@ -649,10 +649,10 @@ function drawClusters() {
     list.forEach(d => { d.g.style.display = 'none'; sx += d.xy[0]; sy += d.xy[1]; x0 = Math.min(x0, d.xy[0]); x1 = Math.max(x1, d.xy[0]); y0 = Math.min(y0, d.xy[1]); y1 = Math.max(y1, d.xy[1]); if (isVisited(d.it.id)) vis = true; });
     const cx = sx / list.length, cy = sy / list.length;
     if (cx < vb.x - cmx || cx > vb.x + vb.w + cmx || cy < vb.y - cmy || cy > vb.y + vb.h + cmy) return;
-    const half = (11 + 4 * Math.log10(list.length)) * (0.6 + 0.15 * Math.min(1, Math.log(list.length / 2) / Math.log(cmax / 2))) / s;
+    const hpx = Math.min(CL_PX * CLU_LV[CLUL][2] * 0.4, (9 + 7 * Math.log10(list.length)) * (0.55 + 0.35 * Math.min(1, Math.log(list.length / 2) / Math.log(cmax / 2)))), half = hpx / s;   /* となりのまとまりと重ならないよう、まとめる升目の幅の8割を超えない */
     const g = el('g', { class:'clu' + (vis ? ' vis' : '') }, gClu);
     el('circle', { cx:cx, cy:cy, r:half, class:'cmk' }, g);
-    const t = el('text', { x:cx, y:cy, class:'ctx' }, g); t.style.fontSize = (13 / s) + 'px'; t.style.strokeWidth = (3 / s) + 'px'; t.textContent = list.length;
+    const t = el('text', { x:cx, y:cy, class:'ctx' }, g); t.style.fontSize = (Math.max(10, Math.min(18, hpx * 0.95 + 4, hpx * 2.6 / String(list.length).length)) / s) + 'px';   /* 桁が多いときは、円からはみ出さないよう小さく */ t.style.strokeWidth = (3 / s) + 'px'; t.textContent = list.length;
     g.addEventListener('click', () => {
       if (moved) return;
       const bw = Math.max(x1 - x0, y1 - y0);
@@ -1215,6 +1215,17 @@ function renderList(keepCount) {
     ul.innerHTML = '<li style="padding:14px 16px;color:var(--muted)">' + (flt.kinds && !flt.kinds.size && !qterms().length ? '下の「種類」を選ぶと、ここに一覧が出ます。' : '条件に合うものがありません。') + '</li>'; return;
   }
   let lastGrp = null; const entries = [];
+  /* 検索で、選んでいる種類にも当たったが、選んでいない種類にも当たるときは、一覧の先頭に1行出して、その種類も出せるようにする */
+  if (flt.kinds && qterms().length && flt.kinds.size < KORDER.length) {
+    const oh = otherKindHits(), ks = KORDER.filter(k => oh[k]);
+    if (ks.length) {
+      const kl = ks.slice().sort((a, b) => oh[b] - oh[a]), n = kl.reduce((t, k) => t + oh[k], 0);
+      const li = document.createElement('li'); li.className = 'okh';
+      li.innerHTML = '<span>選んでいない種類にも ' + n + '件（' + kl.slice(0, 3).map(k => esc(MODE_LABEL[k]) + ' ' + oh[k]).join('・') + (kl.length > 3 ? ' ほか' + (kl.length - 3) + '種類' : '') + '）</span><button type="button" class="btn">表示する</button>';
+      li.querySelector('button').onclick = () => { ks.forEach(k => flt.kinds.add(k)); refresh(); };
+      entries.push(li);
+    }
+  }
   const nVisAll = items.filter(x => isVisited(x.id)).length;
   const rk1 = flt.kinds && flt.kinds.size === 1 ? flt.kinds.values().next().value : null;   /* 種類を1つだけ選んでいるときは、その種類の行の形で出す */
   const rowLi = it => {
@@ -1376,10 +1387,12 @@ function refresh() {
   drawSpeed();
 }
 let mvInit = false;
-/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類。省くと、すべての種類） */
+/* 初めに選んでおく種類（100名城だけ。全種類だと全国表示が円だらけになり、何もないと真っ白になるため） */
+const INIT_KINDS = ['castles'];
+/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類。省くと INIT_KINDS） */
 function resetAll(keepQ, keepView, kinds) {
   initAll();
-  dotEls = {}; selId = null; flt.kinds = new Set(kinds || KORDER); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
+  dotEls = {}; selId = null; flt.kinds = new Set(kinds || INIT_KINDS); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
   if (!mvInit) { mvInit = true; mapView = 'dots';   /* 塗りは、初期状態ではオフ */ }
   if (keepView) applyVB(); else fitAll();
   renderLegend(); applyMapView(); refresh();
@@ -1848,6 +1861,23 @@ svg.addEventListener('click', ev => {
   ev.stopPropagation(); ev.preventDefault();
   select(id, false, true);
 }, true);
+/* 地図を長押し（パソコンはマウスのボタンを押したまま）すると、そこを基準点にして、一覧を今の絞り込みの中で近い順にする */
+function orgAt(cx, cy) { const u = toUser({ clientX:cx, clientY:cy }); setOrg(u.x / (SCALE * KX) + 122, 46 - u.y / SCALE, 'map'); }
+let lpT = null;
+svg.addEventListener('pointerdown', ev => {
+  clearTimeout(lpT);
+  if (ev.button !== 0 || !ev.isPrimary || picking || pickCb) return;
+  const cx = ev.clientX, cy = ev.clientY;
+  lpT = setTimeout(() => {
+    if (moved || ptrs.size !== 1) return;
+    moved = true;   /* 指を離したときのタップ（点を選ぶ）を起こさない */
+    if (navigator.vibrate) try { navigator.vibrate(20); } catch (e) {}
+    orgAt(cx, cy);
+  }, 550);
+});
+['pointerup', 'pointercancel'].forEach(t => svg.addEventListener(t, () => clearTimeout(lpT)));
+svg.addEventListener('pointermove', () => { if (moved) clearTimeout(lpT); });
+svg.addEventListener('contextmenu', ev => { if (ev.pointerType === 'touch' || ev.pointerType === 'pen') ev.preventDefault(); });   /* 長押しで出るメニューを止める */
 svg.addEventListener('pointermove', ev => { if (ev.pointerType === 'mouse' && !drag && !picking) svg.style.cursor = pickAt(ev) ? 'pointer' : ''; });
 function posOrigin() {
   let g = $('g-org');
@@ -1906,7 +1936,7 @@ function restoreMapState(st) {
   if (st.selId && currentItems().some(x => x.id === st.selId)) select(st.selId);
   if (st.y > 0) requestAnimationFrame(() => window.scrollTo(0, st.y));
 }
-/* 初めの表示は、全種類を選んだ状態。#種類 で開いたときは、その種類だけ。
+/* 初めの表示は、INIT_KINDS（100名城）だけを選んだ状態。#種類 で開いたときは、その種類だけ。
    どれでもないときは、このタブで前に見ていた状態に戻す（ほかのページから戻ったとき） */
 {
   const h = decodeURIComponent(location.hash.slice(1));

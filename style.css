@@ -68,7 +68,7 @@ h1 { margin: 0; }
 .chkgo { flex: 1; display: block; font: inherit; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; text-decoration: none; }
 .chkgo b { margin-right: 6px; }
 .chkn { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
-#svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+#svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .mapwrap.drag #svg { cursor: grabbing; }
 .seabg { fill: var(--sea); }
 .lakes path { fill: var(--sea); stroke: var(--coast); stroke-width: 0.9px; stroke-linejoin: round; vector-effect: non-scaling-stroke; pointer-events: none; }
@@ -402,7 +402,11 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .orgr { fill: color-mix(in srgb, #1e6bff 18%, transparent); stroke: #1e6bff; }
 .orgd { fill: #1e6bff; stroke: #fff; stroke-width: .6; }
 
-#q { border: 1.5px solid color-mix(in srgb, var(--ink) 38%, var(--panel)); border-radius: 10px; }
+/* 検索の窓（いちばん使う入口なので、虫めがねと色の枠で目立たせる） */
+.qbox { position: relative; display: flex; }
+.qbox .qic { position: absolute; left: 12px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--accent); pointer-events: none; }
+#q { border: 2px solid var(--accent); border-radius: 12px; padding: 11px 12px 11px 42px; background: color-mix(in srgb, var(--accent) 7%, var(--panel)); font-weight: 600; box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+#q::placeholder { color: color-mix(in srgb, var(--ink) 55%, transparent); font-weight: 400; }
 #q:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
 .upd { margin: -4px 0 10px; font-size: .78rem; color: var(--muted); }
 .upd a { color: var(--accent); font-weight: 700; }
@@ -583,3 +587,6 @@ a.btn { display: inline-block; text-decoration: none; }
 .plinks { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; padding: 0; list-style: none; }
 .plinks a { display: inline-block; padding: 5px 12px; font-size: .82rem; font-weight: 700; color: var(--accent); text-decoration: none; background: var(--btn-bg); border: 1px solid var(--btn-line); border-radius: 8px; }
 .plinks a:hover { border-color: var(--accent); }
+/* 検索で、選んでいない種類にも当たったときの1行（一覧の先頭） */
+.okh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; font-size: 0.74rem; color: var(--muted); border-bottom: 1px solid var(--line); }
+.okh .btn { flex: none; font-size: 0.72rem; padding: 2px 10px; }
