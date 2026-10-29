@@ -1348,10 +1348,10 @@ function refresh() {
   drawSpeed();
 }
 let mvInit = false;
-/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類） */
+/* 絞り込みを初めの状態に戻す（keepQ：検索語と県の絞り込みは残す。keepView：地図の範囲は動かさない。kinds：選んでおく種類。省くと、すべての種類） */
 function resetAll(keepQ, keepView, kinds) {
   initAll();
-  dotEls = {}; selId = null; flt.kinds = new Set(kinds || []); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
+  dotEls = {}; selId = null; flt.kinds = new Set(kinds || KORDER); flt.type = 'all'; flt.region = 'all'; if (!keepQ) flt.q = ''; flt.vis = 'all'; if (!keepQ) flt.pfk = '';
   if (!mvInit) { mvInit = true; mapView = 'dots';   /* 塗りは、初期状態ではオフ */ }
   if (keepView) applyVB(); else fitAll();
   renderLegend(); applyMapView(); refresh();
@@ -1882,8 +1882,8 @@ function restoreMapState(st) {
   const h = decodeURIComponent(location.hash.slice(1));
   let st = null; try { st = JSON.parse(sessionStorage.getItem(MAPST_KEY) || 'null'); } catch (e) {}
   if (KORDER.includes(h)) resetAll(false, false, [h]);
-  else if (st && st.flt) { try { restoreMapState(st); } catch (e) { resetAll(false, false, []); } }
-  else resetAll(false, false, []);
+  else if (st && st.flt) { try { restoreMapState(st); } catch (e) { resetAll(false, false); } }
+  else resetAll(false, false);
 }
 /* ===== 確認リスト（アーティファクトで見るときだけ。check.js は公開のたびに Claude が書き替える。git には入れない）=====
    CHECKLIST = { v:'版の名前', items:[ { id:'mu:…', note:'見てほしいこと' }, { page:'kiroku.html', label:'…', note:'…' } ] }
