@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261028d">
+<link rel="stylesheet" href="style.css?v=20261029b">
 
 <main class="app">
   <header>
@@ -58,6 +58,7 @@
         <li><b>動物園・水族館・植物園・テーマパーク</b>：地図データ（OpenStreetMap）・国土数値情報・Wikipedia から作った一覧。</li>
         <li><b>博物・美術館</b>：国立・国立大学・都道府県立の館（文化庁「全国の博物館」の登録博物館・指定施設など）と、国宝を収蔵する館（Wikipedia「日本の国宝一覧」で国宝の所在がその館になっているもの。寄託を含む）と、letroo基準の館（作者の判断で1館ずつ入れた館。恐竜の展示がある館（タグ「恐竜」。閉館した館も含む）など）。</li>
         <li><b>公園</b>：都市公園法の国営公園と広域公園（いまは試しに1か所）と、青梅鉄道公園。</li>
+        <li><b>タワー</b>：全日本タワー連盟に加盟している20塔と、letroo基準の塔（作者の判断で入れた塔。東京スカイツリー）。</li>
         <li><b>空港</b>：国土数値情報の空港データ（C28-21）にある空港。</li>
         <li><b>新幹線の駅</b>：フル規格の新幹線の駅と、ミニ新幹線（山形・秋田）の駅、ガーラ湯沢。</li>
         <li><b>道の駅</b>：mach-tools「道の駅オープンデータ」にある駅。</li>
@@ -82,6 +83,7 @@
         <li>動物園・水族館・植物園・テーマパーク・博物・美術館：位置と区域は OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取り、Wikipedia 日本語版（CC BY-SA 4.0）で補っています。一部は手で調べて入れています。</li>
         <li>博物・美術館：館の一覧、登録博物館・指定施設の区分、設置者は、文化庁「全国の博物館」（https://museum.bunka.go.jp/guide/ ）の一覧（2026年10月8日版）をもとにしています。</li>
         <li>公園：公園の種別と開設面積は、国土交通省「都市公園データベース」（https://www.mlit.go.jp/crd/park/joho/database/t_kouen/index.html ）の表（2021年3月末時点）によります。位置は Wikipedia 日本語版（CC BY-SA 4.0）の記事の座標をもとにした目安です。</li>
+        <li>タワー：一覧・ブロック・高さ・竣工は、Wikipedia 日本語版（CC BY-SA 4.0）の「全日本タワー連盟」の記事と各塔の記事によります。位置は OpenStreetMap contributors（ODbL）から取っています。</li>
         <li>道の駅：駅名と都道府県は、mach-tools「道の駅オープンデータ」（CC BY 4.0）をもとにしています。位置は、OpenStreetMap contributors（ODbL）と Wikidata（CC0）から取っています。</li>
         <li>公営競技場（競馬場・競輪場・競艇場・オートレース場）：一覧と位置は、Wikipedia 日本語版（CC BY-SA 4.0）の一覧の記事と各場の記事をもとにしています。2000年以降に廃止・休止した場も含めています。</li>
         <li>日本百景（日本新八景・日本二十五勝を含む）：一覧は Wikipedia（CC BY-SA 4.0）の表をもとにしています。位置は、各景勝地を代表する地点の概算です。</li>
@@ -126,9 +128,10 @@
 <script src="data/gardens.js"></script>
 <script src="data/themeparks.js"></script>
 <script src="data/museums.js"></script>
+<script src="data/towers.js"></script>
 <script src="data/lakes.js"></script>
-<script src="site.js?v=20261028d"></script>
-<script src="core.js?v=20261028d"></script>
+<script src="site.js?v=20261029b"></script>
+<script src="core.js?v=20261029b"></script>
 <script>
 /* 登録状況：種類ごとの件数と、ある都道府県の数（マイスポットは数えない） */
 initAll();
