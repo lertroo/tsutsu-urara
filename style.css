@@ -298,7 +298,15 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 .kgrid .kb.ksum, .kgrid .kb.kclose { opacity: 1; border-style: dashed; border-color: color-mix(in srgb, var(--ink) 45%, transparent); }
 .kgrid .kb.ksum .tn { font-size: 0.68rem; font-weight: 700; color: var(--ink); border: 1px solid var(--btn-line); border-radius: 8px; padding: 1px 8px; }
 .kgrid .kb.kclose { justify-self: center; grid-column: 1 / -1; margin-top: 4px; }
+/* 開いているときは、上の行から下の「閉じる」までを1つの枠で囲む（下の「閉じる」は枠の線の上に載せる） */
+.kgrid.open { border: 1px dashed color-mix(in srgb, var(--ink) 45%, transparent); border-radius: 14px; padding: 4px 6px 0; margin-bottom: 18px; }
+.kgrid.open .kb.ksum { border-color: transparent; border-bottom: 1px solid var(--btn-line); border-radius: 10px 10px 0 0; }
+.kgrid.open .kb.kclose { border-style: dashed; background: var(--panel); transform: translateY(50%); margin-top: 0; }
 .kgrid .kb.kclose .tl { font-weight: 400; color: var(--muted); }
+/* 全種類のオン・オフ（小さい丸い札） */
+.kall { grid-column: 1 / -1; justify-self: start; display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 0.68rem; color: var(--ink); background: none; border: 1px solid var(--ink); border-radius: 999px; padding: 3px 12px; margin: 4px 0 0; cursor: pointer; }
+.kall b { font-weight: 700; }
+.kall[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
 .kgh { grid-column: 1 / -1; font: inherit; font-size: 0.68rem; font-weight: 700; color: var(--muted); background: none; border: 0; border-bottom: 1px solid var(--btn-line); padding: 6px 2px 2px; text-align: left; cursor: pointer; letter-spacing: 0.04em; }
 .kgh::after { content: '　まとめて選ぶ'; font-weight: 400; font-size: 0.6rem; opacity: .7; }
 .kgh[aria-pressed="true"] { color: var(--ink); }

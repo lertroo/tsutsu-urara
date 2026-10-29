@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261029f">
+<link rel="stylesheet" href="style.css?v=20261029h">
 
 <main class="app">
   <header>
@@ -117,9 +117,9 @@
 <script src="data/museums.js"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261029f"></script>
-<script src="core.js?v=20261029f"></script>
-<script src="xport.js?v=20261029f"></script>
+<script src="site.js?v=20261029h"></script>
+<script src="core.js?v=20261029h"></script>
+<script src="xport.js?v=20261029h"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1273,7 +1273,7 @@ function renderControls() {
     /* 種類を複数選べる */
     const kn = {}, kv = {}; ALLX.forEach(x => { const k = KIND.get(x.id); kn[k] = (kn[k] || 0) + 1; if (isVisited(x.id)) kv[k] = (kv[k] || 0) + 1; });
     const allOn = flt.kinds.size === KORDER.length;
-    const kg = document.createElement('div'); kg.className = 'kgrid';
+    const kg = document.createElement('div'); kg.className = 'kgrid' + (store.get('jp-kopen') === '1' ? ' open' : '');
          const mk = (k, label, n, on, fn, cls) => { const c = document.createElement('button'); c.type = 'button'; c.className = 'kb' + (cls ? ' ' + cls : ''); if (k) c.dataset.k = k; c.style.setProperty('--kc', k ? KCOL[k] : 'var(--ink)'); if (on != null) c.setAttribute('aria-pressed', String(on)); c.innerHTML = '<span class="ti">' + icon(k || 'all') + '</span><span class="tl">' + esc(label) + '</span>' + (n ? '<span class="tn">' + n + '</span>' : ''); c.onclick = fn; kg.appendChild(c); return c; };
          /* ふだんは1行にたたむ（選んでいる種類を短く出す）。開いたかどうかは、この端末に保存 */
          const kOpen = store.get('jp-kopen') === '1', sel = KORDER.filter(k => flt.kinds.has(k));
@@ -1282,7 +1282,10 @@ function renderControls() {
          const sm = mk(null, '種類：' + sumL + '（' + (allOn ? KORDER.length : sel.length + '／' + KORDER.length) + '種）', kOpen ? '閉じる' : '選ぶ', null, kTog, 'all ksum');
          sm.setAttribute('aria-expanded', String(kOpen)); sm.querySelector('.ti').innerHTML = icon(kOpen ? 'kup' : 'kdown');
          if (kOpen) {
-           mk(null, '種類：すべて', KORDER.length + '種', allOn, () => { flt.kinds = new Set(allOn ? [] : KORDER); refresh(); }, 'all');
+           /* 全種類のオン・オフは、種類のボタンと見分けがつくように、小さい丸い札にする */
+           const ka = document.createElement('button'); ka.type = 'button'; ka.className = 'kall'; ka.setAttribute('aria-pressed', String(allOn));
+           ka.innerHTML = '<b>全' + KORDER.length + '種</b>' + (allOn ? 'すべて外す' : 'すべて選ぶ'); ka.onclick = () => { flt.kinds = new Set(allOn ? [] : KORDER); refresh(); };
+           kg.appendChild(ka);
            /* グループの見出しを押すと、そのグループの種類をまとめてオン・オフする */
            KGROUPS.forEach(({ g, ks }) => {
              const gOn = ks.every(k => flt.kinds.has(k)), h = document.createElement('button');
