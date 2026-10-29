@@ -82,10 +82,11 @@ h1 { margin: 0; }
 .labbg { fill: var(--halo); stroke: var(--ink); stroke-width: 1px; vector-effect: non-scaling-stroke; opacity: .95; pointer-events: none; }
 .nbrs { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 8px; }
 .nbh { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); padding-bottom: 4px; }
-.nbr { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line); padding: 5px 2px; cursor: pointer; }
+.nbr { display: flex; justify-content: space-between; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--line); padding: 3px 2px; cursor: pointer; font-size: 0.72rem; }
 .nbr:hover { color: var(--accent); }
 .nbk { font-style: normal; font-size: 0.72rem; border: 1px solid var(--line); padding: 0 5px; margin-right: 6px; }
 .nbd { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nbr .nbk { font-size: 0.6rem; }
 .place.fly { cursor: pointer; }
 .place.fly:hover { text-decoration: underline dotted; text-underline-offset: 6px; }
 .labbg2 { fill: var(--halo); fill-opacity: 0.62; stroke: none; pointer-events: none; }
@@ -307,6 +308,9 @@ h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; fo
 /* パネル・地図 */
 .panel, .list, .mapwrap { box-shadow: var(--shadow); border-radius: 14px; }
 #detail { border-top: 0; }
+/* 詳細を閉じる（どの施設も選んでいない状態に戻す） */
+.dclose { float: right; margin: -3px -6px 4px 8px; width: 30px; height: 30px; border-radius: 50%; font: inherit; font-size: 1.1rem; line-height: 1; color: var(--muted); background: var(--btn-bg); border: 1px solid var(--btn-line); cursor: pointer; }
+.dclose:hover { color: var(--ink); }
 .place { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-feature-settings: "palt"; }   /* 施設名は、かなの幅を詰める（palt）。字間も少し詰める */
 .badge { border-radius: 999px; padding: 2px 10px; background: var(--kc, var(--accent)); border-color: var(--kc, var(--accent)); color: #fff; }
 .badge.outline { background: transparent; color: var(--kc, var(--accent)); }
