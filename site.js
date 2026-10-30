@@ -50,6 +50,35 @@ applyPrefs();
 
 
 { const e = $('dupd'); if (e) e.textContent = DATA_DATE; }
+/* 見出しの行の空いたところに、ひとことを流す（ティッカー）。TICKER の文を足したり消したりしてよい。
+   動きを減らす設定の端末では流さず、8秒ごとに入れ替える。マウスを乗せると止まる */
+const TICKER = [
+  '公園は、いま入れているところです。まだかなり足りません。',
+  'リス園は、思ったよりたくさんありました。',
+  '動物園の小さな施設を、少しずつ足しています。',
+  'ツツウララは、のんびり育てています。'
+];
+{
+  const brand = document.querySelector('header .head .brand');
+  if (brand && TICKER.length) {
+    const t = document.createElement('div'); t.className = 'ticker'; t.innerHTML = '<span class="tk"></span>'; brand.after(t);
+    const s = t.firstChild, RM = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let i = Math.floor(Math.random() * TICKER.length);
+    const play = () => {
+      const w = t.clientWidth;
+      if (w < 40) { setTimeout(play, 2000); return; }   /* 枠がほとんどない（隠れている）ときは待つ */
+      s.textContent = TICKER[i]; i = (i + 1) % TICKER.length;
+      s.style.animation = 'none';
+      if (RM.matches) { setTimeout(play, 8000); return; }
+      const sw = s.scrollWidth;
+      s.style.setProperty('--tk-from', w + 'px'); s.style.setProperty('--tk-to', -sw + 'px');
+      void s.offsetWidth;   /* 同じアニメーションを、はじめからやり直す */
+      s.style.animation = 'tk ' + ((w + sw) / 45).toFixed(1) + 's linear';
+    };
+    s.addEventListener('animationend', play);
+    play();
+  }
+}
 /* 画面の表示設定を初期状態に戻す（地図のページは、地図の設定も戻すように index.html で付け替える） */
 $('prefreset').onclick = () => {
   ['jp-fs', 'jp-theme', 'jp-font'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });

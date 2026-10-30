@@ -590,3 +590,12 @@ a.btn { display: inline-block; text-decoration: none; }
 /* 検索で、選んでいない種類にも当たったときの1行（一覧の先頭） */
 .okh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 12px; font-size: 0.74rem; color: var(--muted); border-bottom: 1px solid var(--line); }
 .okh .btn { flex: none; font-size: 0.72rem; padding: 2px 10px; }
+/* 見出しの行に流す、ひとこと（ティッカー。文は site.js の TICKER） */
+.ticker { flex: 1 1 auto; min-width: 0; align-self: center; overflow: hidden; white-space: nowrap; margin: 0 10px; height: 1.9em; display: flex; align-items: center; font-size: .78rem; color: var(--muted);
+  border-block: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--line));
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
+.ticker .tk { display: inline-block; will-change: transform; }
+.ticker:hover .tk { animation-play-state: paused !important; }   /* アニメーションは site.js で style に書くので、!important で上書きする */
+@keyframes tk { from { transform: translateX(var(--tk-from)); } to { transform: translateX(var(--tk-to)); } }
+@media (prefers-reduced-motion: reduce) { .ticker { -webkit-mask-image: none; mask-image: none; } .ticker .tk { max-width: 100%; overflow: hidden; text-overflow: ellipsis; } }
+@media (min-width: 1100px) { header .ticker { align-self: center; margin: 0 16px; max-width: 520px; } }
