@@ -1549,14 +1549,18 @@ initMapH();
     if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') { ev.preventDefault(); set((parseFloat(ul.style.maxHeight) || cur()) + (ev.key === 'ArrowDown' ? 40 : -40), true); }
   });
 })();
-/* 検索は、入力中にはかけない。Enter（変換の確定ではないもの）、入力欄から離れたとき、空にしたときに実行する */
+/* 検索は、入力中にもかける（打ち終わって少し止まったとき。変換中はかけず、確定したら）。Enter では、当たった施設に地図を寄せる */
+let qTimer = 0;
 function applySearch() {
+  clearTimeout(qTimer);
   const v = $('q').value.trim(); if (v === flt.q) return;
   flt.q = v;
   renderList(); drawDots(); renderStat();
 }
+function queueSearch() { clearTimeout(qTimer); qTimer = setTimeout(applySearch, $('q').value.trim() ? 250 : 0); }
 $('q').setAttribute('enterkeyhint', 'search');
-$('q').addEventListener('input', () => { if (!$('q').value.trim()) applySearch(); });
+$('q').addEventListener('input', e => { if (!e.isComposing) queueSearch(); });
+$('q').addEventListener('compositionend', queueSearch);
 $('q').addEventListener('change', applySearch);
 $('q').addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.isComposing || e.keyCode === 229) return;
