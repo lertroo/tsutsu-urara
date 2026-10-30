@@ -109,6 +109,8 @@ Object.assign(ID_ALIAS, { 'mu:青梅鉄道公園':'pa:青梅鉄道公園', 'th:�
 Object.assign(ID_ALIAS, { 'aq:ほたるいかミュージアム':'mu:ほたるいかミュージアム', 'zo:滋賀サファリ博物館':'mu:滋賀サファリ博物館' });
 /* 2026-10-30 に、2件入っていたあくあぴあ芥川を、もとからある側にまとめた */
 Object.assign(ID_ALIAS, { 'aq:あくあぴあ芥川':'aq:あくあぴあ芥川（芥川緑地資料館）' });
+/* 2026-10-30 に、横浜アンパンマンこどもミュージアムの移転前の施設を、移転後の側にまとめた */
+Object.assign(ID_ALIAS, { 'th:横浜アンパンマンこどもミュージアム＆モール@旧施設':'th:横浜アンパンマンこどもミュージアム＆モール' });
 Object.assign(ID_ALIAS, { 'th:市立室蘭水族館':'aq:市立室蘭水族館', 'th:兵庫県立西はりま天文台公園':'mu:西はりま天文台', 'th:わんぱーくこうちプレイランド':'zo:わんぱーくこうちアニマルランド', 'th:東南植物楽園＆おきなわスロー風楽風遊の森':'bt:東南植物楽園' });
 STATIONS.forEach(s => { if (s.no) ID_ALIAS['ms:' + s.no] = s.id; });
 { const old = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' }; KOEI.forEach(x => { ID_ALIAS[old[x.sh] + ':' + x.n] = x.id; }); }
