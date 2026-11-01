@@ -445,7 +445,7 @@ body.xopen { overflow: hidden; }
 /* 狭い画面：操作ボタンを小さく */
 /* スマホでは地図が低く、1列だとボタンが「表示量」の枠に重なるので、2列にまとめる（＋－、全国・現在地、県を塗る・背景、名前 小・大） */
 @media (max-width: 600px) { .ctrl { display: grid; grid-template-columns: auto auto; } .ctrl .cgap { margin-top: 0; } }
-@media (max-width: 600px) { .ctrl { gap: 4px; top: 8px; right: 8px; } .ctrl button { min-width: 36px; height: 34px; padding: 0 6px; font-size: .85rem; } .ctrl #zbg { min-height: 34px; } .ctrl #zfill, .ctrl #zbg, .ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .7rem; } }
+@media (max-width: 600px) { .ctrl { gap: 3px; top: 6px; right: 6px; } .ctrl button { min-width: 32px; height: 28px; padding: 0 4px; font-size: .8rem; border-radius: 6px; background: color-mix(in srgb, var(--btn-bg) 88%, transparent); } .ctrl #zbg { min-height: 28px; padding-block: 1px; } .ctrl #zfill, .ctrl #zbg, .ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .64rem; } .ctrl #zbg small { font-size: .56rem; } }
 /* PCの広い画面：全幅で使い、地図を縦いっぱいに */
 @media (min-width: 1100px) {
   body { padding-inline: clamp(32px, 3.2vw, 64px); padding-block: 12px 40px; }
@@ -487,18 +487,18 @@ a.btn { display: inline-block; text-decoration: none; }
 /* 更新履歴のページ */
 .clog .lead { margin: 0 0 4px; color: var(--muted); font-size: .85rem; }
 .clog h2 { margin: 0; }
-.clog .day { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 14px 16px; line-height: 1.75; }
-.clog .day h2 { margin: 0 0 4px; font-size: 1.05rem; }
+.clog .day { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 8px 12px; line-height: 1.55; }
+.clog .day h2 { margin: 0 0 2px; font-size: 1rem; }
 .clog .day .note { margin: 0 0 8px; padding: 2px 0 2px 10px; border-left: 3px solid var(--accent); color: var(--muted); font-size: .8rem; }
 .clog .day .note::before { content: 'この日のまとめ'; display: block; font-size: .68rem; font-weight: 700; letter-spacing: .08em; color: var(--accent); }
 .clog ul { list-style: none; margin: 0; padding: 0; }
-.clog li { display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--line); }
+.clog li { display: flex; gap: 6px; align-items: baseline; padding: 4px 0; border-top: 1px solid var(--line); }
 .clog li:first-child { border-top: 0; }
 .clog .tag { font-size: .72rem; font-weight: 700; padding: 1px 8px; border-radius: 999px; border: 1.5px solid var(--accent); color: var(--accent); white-space: nowrap; }
 .clog .t-修正, .clog .t-変更 { border-color: var(--stamp); color: var(--stamp); }
 .clog .t-整理 { border-color: var(--muted); color: var(--muted); }
 .clog .kd { font-size: .72rem; color: var(--muted); white-space: nowrap; }
-.clog .tx { flex: 1 1 100%; min-width: 0; overflow-wrap: anywhere; }
+.clog .tx { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; }   /* タグの右に本文を続ける（1行目からタグと並ぶ） */
 .clog .foot { margin: 8px 0 0; color: var(--muted); font-size: .75rem; }
 @media (max-width: 480px) {
   .brand { gap: 7px; }
@@ -595,6 +595,8 @@ a.btn { display: inline-block; text-decoration: none; }
   border-block: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--line));
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent); }
 .ticker .tk { display: inline-block; will-change: transform; }
+/* 名前と日付は縮めない。縮むと、ティッカーの点線と流れる文字が名前・日付に重なる（スマホ幅）。ティッカーは残りの幅だけ使う */
+.head .brand { flex: none; }
 .ticker:hover .tk { animation-play-state: paused !important; }   /* アニメーションは site.js で style に書くので、!important で上書きする */
 @keyframes tk { from { transform: translateX(var(--tk-from)); } to { transform: translateX(var(--tk-to)); } }
 @media (prefers-reduced-motion: reduce) { .ticker { -webkit-mask-image: none; mask-image: none; } .ticker .tk { max-width: 100%; overflow: hidden; text-overflow: ellipsis; } }
