@@ -119,6 +119,7 @@ h1 { margin: 0; }
 #g-tile { pointer-events: none; }
 .mapwrap.bgmap .landp { fill-opacity: 0; }
 .mapwrap.bgmap .lakes path { fill: none; }
+.mapwrap.bgmap #g-tkyl { display: none; }   /* 背景の地図に地名があるので、区市町村の名前は出さない（二重になる） */
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #g-tile:not(.photo) { filter: url(#tdark); } }
 :root[data-theme="dark"] #g-tile:not(.photo) { filter: url(#tdark); }   /* 航空写真は反転しない */
 .bgmenu { position: absolute; right: 58px; z-index: 5; display: flex; flex-direction: column; min-width: 9em; padding: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
@@ -167,7 +168,7 @@ h1 { margin: 0; }
 .tools { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .tools input[type=search] { flex: 1 1 160px; min-width: 0; font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
 .tools select { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0; max-width: 100%; }
-.list .grp { font-size: 0.8rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--accent) 9%, var(--panel)); position: sticky; top: 0; }
+.list .grp { font-size: 0.8rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--accent) 9%, var(--panel)); position: sticky; top: 0; z-index: 1; }   /* 行（content-visibility: auto）が見出しの上に描かれないように */
 .tools label { font-size: 0.82rem; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
 .list.asking { max-height: none !important; }   /* 選んでいない種類を出すか聞いているときは、一覧の高さの制限を外す */
 .list { margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); background: var(--panel); overflow-y: auto; max-height: 220px; }
