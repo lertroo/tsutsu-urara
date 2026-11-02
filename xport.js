@@ -49,12 +49,9 @@ function xCollect() {
   /* 記録の並び（施設の id の順）は「行った」を最初に押した順なので、日付が同じ（日付なしどうしも）なら、あとで登録したほうを先に出す */
   const ord = {}; Object.keys(data).forEach((id, i) => { ord[id] = i; });
   recs.sort((a, b) => (a.d === '' ? 1 : 0) - (b.d === '' ? 1 : 0) || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0) || (ord[b.it.id] ?? -1) - (ord[a.it.id] ?? -1));
-  const sum = KORDER.reduce((t, k) => t + kc[k], 0), pcs = {}; let left = 100; const rem = [];
-  KORDER.forEach(k => { const f = sum ? kc[k] / sum * 100 : 0; pcs[k] = Math.floor(f); left -= pcs[k]; rem.push([f - pcs[k], k]); });
-  if (sum) rem.sort((p, q) => q[0] - p[0]).slice(0, left).forEach(r => { pcs[r[1]]++; });
   const pf = {}; vis.forEach(v => { const k = PREF_KEY[v.it.pf]; if (k) pf[k] = (pf[k] || 0) + 1; });
   const ys = {}; recs.forEach(r => { if (r.d) { const y = r.d.slice(0, 4); ys[y] = (ys[y] || 0) + 1; } });
-  return { vis, recs, kc, pcs, pf, ys, nv: vis.length, kinds: KORDER.filter(k => kc[k] > 0).sort((a, b) => kc[b] - kc[a]) };
+  return { vis, recs, kc, pf, ys, nv: vis.length, kinds: KORDER.filter(k => kc[k] > 0).sort((a, b) => kc[b] - kc[a]) };
 }
 const X_PATHS = {};
 function xPath(k) { return X_PATHS[k] || (X_PATHS[k] = new Path2D(GEO_PREFS[k])); }
@@ -102,10 +99,12 @@ function xDraw(cv, D) {
   };
   const blkShare = (x, y, w, maxH) => {
     const ks = D.kinds, cols = (w - 24) / 2 >= 330 ? 2 : 1, bh = 26;   /* 1列の幅が狭いと、分類の名前が切れるので、そのときは1列にする */
-    if (!ks.length || maxH < 8 + bh + 50) return 0;
-    let rowH = 42; if (Math.ceil(ks.length / cols) * rowH > maxH - 8 - bh - 16) rowH = 36;
-    const rows = Math.min(Math.ceil(ks.length / cols), Math.floor((maxH - 8 - bh - 16) / rowH));
-    const by = y + 4, sum = ks.reduce((t, k) => t + D.kc[k], 0) || 1;
+    const hh = 38;   /* 見出し「○か所の内訳」の高さ */
+    if (!ks.length || maxH < hh + 8 + bh + 50) return 0;
+    let rowH = 42; if (Math.ceil(ks.length / cols) * rowH > maxH - hh - 8 - bh - 16) rowH = 36;
+    const rows = Math.min(Math.ceil(ks.length / cols), Math.floor((maxH - hh - 8 - bh - 16) / rowH));
+    c.fillStyle = P.muted; c.font = XFONT(26, 700); c.fillText(D.nv + 'か所の内訳', x, y + 24);
+    const by = y + hh + 4, sum = ks.reduce((t, k) => t + D.kc[k], 0) || 1;
     c.save(); xRR(c, x, by, w, bh, bh / 2); c.clip();
     c.fillStyle = P.line; c.fillRect(x, by, w, bh);
     let cx = x; const gap = 3;
@@ -115,15 +114,14 @@ function xDraw(cv, D) {
     ks.slice(0, rows * cols).forEach((k, i) => {
       const col = Math.floor(i / rows), r = i % rows, lx = x + col * (ew + 24), ry = ly + r * rowH;
       c.fillStyle = KCOL[k]; xRR(c, lx, ry + 8, 22, 22, 5); c.fill();
-      const pcTxt = D.pcs[k] + '%', cntTxt = '（' + D.kc[k] + '）';
-      c.textAlign = 'right'; c.font = XFONT(24, 400); c.fillStyle = P.muted; c.fillText(cntTxt, lx + ew, ry + 30);
-      const cw = c.measureText(cntTxt).width; c.font = XFONT(30, 700); c.fillStyle = P.ink; c.fillText(pcTxt, lx + ew - cw - 6, ry + 30);
-      const pw = c.measureText(pcTxt).width + cw + 6; c.textAlign = 'left';
+      const cntTxt = String(D.kc[k]);   /* 割合（%）は出さない。全体のうちの何%（コンプリート率）に読まれるため。割合は上の帯で見せる */
+      c.textAlign = 'right'; c.font = XFONT(30, 700); c.fillStyle = P.ink; c.fillText(cntTxt, lx + ew, ry + 30);
+      const pw = c.measureText(cntTxt).width; c.textAlign = 'left';
       const lw = ew - 34 - pw - 10; let fs = 30;
       c.font = XFONT(fs, 700); while (fs > 22 && c.measureText(MODE_LABEL[k]).width > lw) { fs -= 2; c.font = XFONT(fs, 700); }   /* それでも入らないときだけ、文字を小さくする */
       c.fillStyle = P.ink; c.fillText(xFit(c, MODE_LABEL[k], lw), lx + 34, ry + 30);
     });
-    return 8 + bh + 16 + rows * rowH;
+    return hh + 8 + bh + 16 + rows * rowH;
   };
   const blkRecent = (x, y, w, maxH) => {
     const n = Math.min(8, Math.floor((maxH - 50) / 52), D.recs.length); if (n < 1) return 0;
@@ -220,7 +218,7 @@ function xOptsHTML() {
   const rd = (name, v, label, cur) => '<label class="xrd"><input type="radio" name="x-' + name + '" data-x="' + name + '" value="' + v + '"' + (cur === v ? ' checked' : '') + '>' + label + '</label>';
   let h = '';
   if (rec.profiles.length > 1) h += '<fieldset><legend>記録する人</legend><select data-x="pid">' + rec.profiles.map(p => '<option value="' + esc(p.id) + '"' + (p.id === XPID ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</select></fieldset>';
-  h += '<fieldset><legend>入れる内容</legend>' + ck('p:map', '地図', XS.parts.map) + ck('p:count', '件数・都道府県数', XS.parts.count) + ck('p:share', '種類ごとの割合', XS.parts.share) +
+  h += '<fieldset><legend>入れる内容</legend>' + ck('p:map', '地図', XS.parts.map) + ck('p:count', '件数・都道府県数', XS.parts.count) + ck('p:share', '種類ごとの内訳', XS.parts.share) +
     ck('p:recent', '最近の足あと', XS.parts.recent, !XS.names) + ck('p:years', '年ごとの回数', XS.parts.years, !XS.dates) + ck('dots', '地図に施設の点も出す', XS.dots, !XS.parts.map) + '</fieldset>';
   h += '<fieldset><legend>見せる範囲</legend>' + ck('names', '施設名を出す', XS.names) + ck('dates', '日付を出す', XS.dates) + ck('who', '名前を出す', XS.who) + '</fieldset>';
   h += '<fieldset><legend>種類を絞る</legend><div class="xkinds">' + KORDER.map(k => '<label class="xk" style="--kc:' + KCOL[k] + '"><input type="checkbox" data-x="k:' + k + '"' + (XS.kinds[k] ? ' checked' : '') + '><span>' + esc(MODE_LABEL[k]) + '</span></label>').join('') + '</div></fieldset>';
