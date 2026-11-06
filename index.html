@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261106b">
+<link rel="stylesheet" href="style.css?v=20261106c">
 
 <main class="app">
   <header>
@@ -1027,9 +1027,13 @@ const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '')
 /* 押すと、その種類の細かい絞り込み（TYPEF の値 ft）で一覧を出すバッジ */
 const fbadge = (t, k, ft) => ft ? '<button type="button" class="badge outline fbadge" data-fk="' + esc(k) + '" data-ft="' + esc(ft) + '" title="「' + esc(t) + '」で一覧を絞り込みます">' + esc(t) + '</button>' : badge(t, 1);
 const MU_KB_FT = { '都道府県立':'pref', '国立':'nat', '国立大学':'nat', '国宝所蔵':'kokuho', 'letroo基準':'letroo' }, MU_RJ_FT = { '登録博物館':'reg', '指定施設':'des' };
+/* タグの説明（付箋）。詳細のタグの下に出す。×で閉じたタグは、このブラウザでは次から出さない。文のないタグには出ない */
+const TAG_NOTE = { しょくぶつ:'タグ「しょくぶつ」は、花や木を見に行ける公園の目印です。', いきもの:'タグ「いきもの」は、動物に会える公園などの目印です。' };
+let tagNoteOff = []; try { const v = JSON.parse(localStorage.getItem('jp-tagnote')); if (Array.isArray(v)) tagNoteOff = v; } catch (e) {}
+const tagNotes = it => (it.tag ? it.tag.split('、') : []).filter(t => TAG_NOTE[t] && !tagNoteOff.includes(t)).map(t => '<div class="tnote"><span>📌 ' + esc(TAG_NOTE[t]) + '</span><button type="button" class="tnx" data-t="' + esc(t) + '" aria-label="この説明を閉じる" title="この説明を閉じる">×</button></div>').join('');
 /* 見出し：種類などの印と地方、名前、名前の下の一行 */
 let dK = '';   /* いま詳細を作っている種類（dHead がタグのチップに使う） */
-const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' +
+const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' + tagNotes(it) +
   '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
 /* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
 const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
@@ -1094,6 +1098,7 @@ function renderDetail() {
   const k = curKind(it);
   box.innerHTML = '<button type="button" class="dclose" id="dclose" aria-label="詳細を閉じる" title="詳細を閉じる（Esc）">×</button>' + detailHTML(it, k);
   $('dclose').onclick = unselect;
+  box.querySelectorAll('.tnx').forEach(b => { b.onclick = () => { tagNoteOff.push(b.dataset.t); try { localStorage.setItem('jp-tagnote', JSON.stringify(tagNoteOff)); } catch (e) {} b.parentNode.remove(); }; });
   if (k === 'my') {
     $('my-edit').onclick = () => openMyForm(it);
     let armed = false;
@@ -1405,7 +1410,8 @@ $('legtog').onclick = () => { legOpen = !legOpen; store.set('jp-legend', legOpen
 applyLegend();
 /* 画面の表示設定を初期状態に戻す（行った記録・自分の地点・書き出しの設定は、そのまま） */
 $('prefreset').onclick = () => {
-  ['jp-fs', 'jp-theme', 'jp-font', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  ['jp-fs', 'jp-theme', 'jp-font', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap', 'jp-tagnote'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  tagNoteOff = [];
   tileSrc = ''; gTile.replaceChildren(); bgMenu(false); applyTileOn();
   fsPct = 100; theme = 'auto'; fontSys = false; applyPrefs();
   legOpen = window.innerWidth >= 700; applyLegend();

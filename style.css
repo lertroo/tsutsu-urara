@@ -151,6 +151,8 @@ h1 { margin: 0; }
 .note a { color: var(--accent); }
 .panel { background: var(--panel); border: 1px solid var(--line); padding: 11px 14px; min-width: 0; }
 .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.tnote { display: flex; align-items: flex-start; gap: 8px; width: fit-content; max-width: 100%; box-sizing: border-box; margin: 8px 0 0; padding: 6px 6px 6px 10px; font-size: 0.82rem; line-height: 1.45; color: var(--ink); background: color-mix(in srgb, #f2cf4e 30%, var(--panel)); border: 1px solid color-mix(in srgb, #d4a72c 55%, var(--line)); border-radius: 3px; box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.12); }
+.tnx { flex: none; min-width: 24px; min-height: 24px; padding: 0; font: inherit; font-size: 1rem; line-height: 1; color: var(--muted); background: none; border: 0; cursor: pointer; }
 .badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; border: 1px solid var(--accent); }
 
 .place { font-size: clamp(1.6rem, 6vw, 2.1rem); line-height: 1.2; margin: 6px 0 0; overflow-wrap: anywhere; }
