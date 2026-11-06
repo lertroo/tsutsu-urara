@@ -165,6 +165,15 @@ const RETIRED_IDS = ['th:ゆうばりめろん城', 'th:大洗わくわく科学
 const ALL_IDS = new Set([].concat(...KINDS.map(x => x.items.map(o => o.id)), MUSEUMS_RETIRED, RETIRED_IDS));
 MYS.forEach(m => ALL_IDS.add(m.id));
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+/* 打った・貼った文字から日付を読む（2020/02/22、20200222、2020_0222、2020.2.22、2020年2月22日、全角、前後に余計な文字があるものなど）。読めない・ない日付は null */
+function parseDateText(text) {
+  const t = String(text).normalize('NFKC');
+  const m = t.match(/(?:^|\D)(\d{4})\s*[-\/._年]\s*(\d{1,2})\s*[-\/._月]\s*(\d{1,2})(?!\d)/) || t.match(/(?:^|\D)(\d{4})_?(\d{2})(\d{2})(?:\d{6})?(?!\d)/);
+  if (!m) return null;
+  const y = +m[1], mo = +m[2], d = +m[3], dt = new Date(Date.UTC(y, mo - 1, d));
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) return null;
+  return m[1] + '-' + String(mo).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+}
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 /* 1か所につき「行った日」のリスト。日付が分からない回は空文字。旧形式(文字列1つ)も読める */
 function normList(v) {

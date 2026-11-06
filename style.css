@@ -390,7 +390,11 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .photo img { display: block; margin-inline: auto; width: auto; max-width: 100%; height: auto; max-height: 360px; border-radius: 10px; border: 1px solid var(--line); background: var(--sea); }
 .photo figcaption { margin-top: 4px; font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
 .photo figcaption a { color: var(--accent); }
-.vrow input[type=date] { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; }
+.vrow input.vd { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; min-width: 0; width: 8.5em; font-variant-numeric: tabular-nums; }
+.vrow input.vd.bad { border-color: #c0392b; background: #fbe4e1; color: #7a1f14; }
+.vcal { position: relative; flex: none; display: inline-flex; }
+.vrow input.vdp { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; opacity: 0; cursor: pointer; font-size: 16px; flex: none; }
+.vrow input.vdp::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; cursor: pointer; }
 
 .nearrow { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
 .nearbtn { display: inline-flex; align-items: center; gap: 4px; }

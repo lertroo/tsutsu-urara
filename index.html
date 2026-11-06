@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261102b">
+<link rel="stylesheet" href="style.css?v=20261106b">
 
 <main class="app">
   <header>
@@ -118,7 +118,7 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="site.js?v=20261106b"></script>
-<script src="core.js?v=20261106q"></script>
+<script src="core.js?v=20261106r"></script>
 <script src="xport.js?v=20261102c"></script>
 <script>
 
@@ -1491,10 +1491,10 @@ function visBlock(it) {
   const list = visList(it.id);
   let h = '<div class="visbox"><div class="vhead"><b>' + (list.length ? '<span class="hanko">行</span>' : '') + (list.length ? '行った回数:' + list.length + '回' : '行った記録はありません') + '</b><span class="vwho">記録する人:' + esc(curName()) + '</span></div>';
   list.forEach((d, i) => {
-    h += '<div class="vrow"><span class="vn">' + (i + 1) + '回目</span><input type="date" class="vd" data-i="' + i + '" value="' + esc(d) + '" aria-label="' + (i + 1) + '回目の日付">' + (d ? '' : '<span class="vwho">日付不明</span>') + '<button type="button" class="btn warn vx" data-i="' + i + '" aria-label="' + (i + 1) + '回目を削除">削除</button></div>';
+    h += '<div class="vrow"><span class="vn">' + (i + 1) + '回目</span><input type="text" inputmode="numeric" autocomplete="off" class="vd" data-i="' + i + '" value="' + esc(d) + '" placeholder="2020/02/22" aria-label="' + (i + 1) + '回目の日付（打つか貼り付ける）"><span class="vcal"><span class="btn vcb" aria-hidden="true">📅</span><input type="date" class="vdp" data-i="' + i + '" value="' + esc(d) + '" aria-label="' + (i + 1) + '回目の日付をカレンダーで選ぶ"></span>' + (d ? '' : '<span class="vwho">日付不明</span>') + '<button type="button" class="btn warn vx" data-i="' + i + '" aria-label="' + (i + 1) + '回目を削除">削除</button></div>';
   });
   h += '<button type="button" id="vis-add" class="chip big">' + (list.length ? '＋ もう1回行った' : '行ったら記録する') + '</button>';
-  if (list.length) h += '<p class="vwho" style="margin:0">日付は初めは「不明」です。分かる回だけ、あとから入れられます。</p>';
+  if (list.length) h += '<p class="vwho" style="margin:0">日付は初めは「不明」です。分かる回だけ、あとから入れられます。貼り付けもできます。</p>';
   return h + '</div>';
 }
 function bindVis(it) {
@@ -1504,12 +1504,24 @@ function bindVis(it) {
     l.push(''); l.sort();
     saveRec(); afterVisChange();
   };
+  const setDate = (i, d) => { const l = curData()[cid(it.id)]; l[i] = d; l.sort(); saveRec(); afterVisChange(); };
   $('detail').querySelectorAll('.vd').forEach(inp => {
-    inp.onchange = () => {
-      const l = curData()[cid(it.id)];
-      l[+inp.dataset.i] = DATE_RE.test(inp.value) ? inp.value : '';
-      l.sort(); saveRec(); afterVisChange();
+    const was = inp.value, i = +inp.dataset.i;
+    const commit = text => {
+      const d = text.trim() === '' ? '' : parseDateText(text);
+      if (d === null) {   /* 読めないときは赤くして、元に戻す */
+        inp.value = was; inp.classList.add('bad');
+        setTimeout(() => inp.classList.remove('bad'), 1500);
+      } else if (d !== was) setDate(i, d);
+      else inp.value = was;
     };
+    inp.onchange = () => commit(inp.value);
+    inp.onkeydown = e => { if (e.key === 'Enter') inp.blur(); };
+    inp.onpaste = e => { const t = e.clipboardData && e.clipboardData.getData('text'); if (t) { e.preventDefault(); commit(t); } };
+  });
+  /* カレンダーは、📅の上に重ねた透明な日付の欄（showPicker はアーティファクトの枠の中で使えない） */
+  $('detail').querySelectorAll('.vdp').forEach(pick => {
+    pick.onchange = () => { if (DATE_RE.test(pick.value)) setDate(+pick.dataset.i, pick.value); };
   });
   $('detail').querySelectorAll('.vx').forEach(b => {
     b.onclick = () => {
