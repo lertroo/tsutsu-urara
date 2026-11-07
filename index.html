@@ -118,7 +118,7 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="site.js?v=20261107a"></script>
-<script src="core.js?v=20261107e"></script>
+<script src="core.js?v=20261107f"></script>
 <script src="xport.js?v=20261102c"></script>
 <script>
 
@@ -1090,7 +1090,7 @@ function detailHTML(it, k) {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
     return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
   }
-  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fIn, fPos(it), fTxt('備考', it.rm), wiki, web);   /* 城 */
+  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fTxt('別名', it.al), fIn, fPos(it), fTxt('備考', it.rm), wiki, web);   /* 城 */
 }
 function renderDetail() {
   const box = $('detail');
@@ -1245,7 +1245,7 @@ function renderList(keepCount) {
     const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + tagc + sub + '</span>';
     const name = (k === 'stations' ? esc(dn(it)) : esc(it.n) + (it.in ? '<span class="rx">（' + esc(it.ins || it.in) + '内）</span>' : '') + (it.x ? '<span class="rx">（' + esc((it.x === true ? '' : it.x + '年') + (it.xw || '閉園')) + '）</span>' : '')) + (it.kg ? '<span class="rx">（休業）</span>' : '');   /* kg：休業中（くわしくは注釈に書く） */
     if (hmr) b.innerHTML = row(esc(hmr.n), esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg), hmr.no);
-    else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
+    else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + (it.kg ? '<span class="rx">（休業）</span>' : '') + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
     else if (k === rk1 && ROW_SUB[k]) b.innerHTML = row(name, ROW_SUB[k](it), '', it.x);
     else b.innerHTML = row(name, '<i class="nbk">' + MODE_LABEL[k] + '</i> ' + esc(prefFull(it.pf)), '', it.x);
     b.onclick = () => select(it.id, true);
@@ -1635,7 +1635,8 @@ function buildTabs() {
   });
 }
 /* 検索：複数語（空白区切り）、かな・全半角のゆらぎ、種類名や県名でも当たる */
-function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)); }
+/* 検索用に文字をそろえる。漢字に挟まれた「ヶ・ケ・が」は同じ字として扱う（鶴ヶ城＝鶴ケ城＝鶴が城。表示は変えない） */
+function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/(?<=[一-鿿々])[ヶケが](?=[一-鿿々])/g, 'が').replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)); }
 let _qk = null, _qt = [];
 function qterms() { if (_qk !== flt.q) { _qk = flt.q; _qt = fold(flt.q).split(/\s+/).filter(Boolean); } return _qt; }
 /* タグ（「鉄道」「恐竜」など）でも当たる。タグは別に見て、タグだけで当たったときは一覧の行にそのタグを出す（qtagHits） */

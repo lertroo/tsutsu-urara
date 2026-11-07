@@ -17,8 +17,8 @@ const REGIONS = ['北海道','東北','関東','中部','近畿','中国','四�
 
 const TYPE_LABEL = { N:'現存天守・国宝', k:'現存天守・重要文化財', s:'復元・復興などの天守', a:'城跡など（天守なし）' };
 const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
-  const [n, pf, lo, la, t, rm, wp, inn, web] = ln.split('|');   /* inn は、ほかの施設の中にあるときの、その施設の名前。web は公式サイト */
-  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '', wp:wp || '', in:inn || '', web:web || '' };
+  const [n, pf, lo, la, t, rm, wp, inn, web, al, kg] = ln.split('|');   /* inn は、ほかの施設の中にあるときの、その施設の名前。web は公式サイト。al は別名。kg は休業中の印 */
+  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '', wp:wp || '', in:inn || '', web:web || '', al:al || '', kg:kg ? 1 : 0 };
 });
 
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
@@ -99,7 +99,7 @@ const ID_ALIAS = { 'mu:原田の森ギャラリー':'mu:兵庫県立美術館王
   'lake:琵琶湖':'bw:琵琶湖', rs:'th:ルスツリゾート', tds:'th:東京ディズニーシー', tdl:'th:東京ディズニーランド', pl:'th:サンリオピューロランド', gb:'th:ジブリパーク', lg:'th:レゴランド・ジャパン', mm:'th:博物館明治村', ss:'th:志摩スペイン村', ut:'th:東映太秦映画村', usj:'th:ユニバーサル・スタジオ・ジャパン', hb:'th:ハウステンボス', 'th:横浜アンパンマンこどもミュージアム＆モール旧':'th:横浜アンパンマンこどもミュージアム＆モール@旧施設' };
 CASTLES.forEach(c => { ID_ALIAS['c' + c.no] = c.id; });
 /* 2026-10-26 に番号を直した城（金沢城と七尾城、萩城と岩国城）と、名前を変えた城。古い id は、直す前の番号・名前のもの */
-Object.assign(ID_ALIAS, { c34:'cs:金沢城', c35:'cs:七尾城', c74:'cs:萩城', c75:'cs:岩国城', c24:'cs:武田氏館（躑躅ヶ崎館）', 'cs:武田氏館':'cs:武田氏館（躑躅ヶ崎館）' });
+Object.assign(ID_ALIAS, { c34:'cs:金沢城', c35:'cs:七尾城', c74:'cs:萩城', c75:'cs:岩国城', c24:'cs:武田氏館', 'cs:武田氏館（躑躅ヶ崎館）':'cs:武田氏館', 'cs:若松城':'cs:会津若松城' });
 /* 2026-10-26 に入れ直した博物館で、以前の一覧（Wikipedia由来）と名前が違うもの */
 Object.assign(ID_ALIAS, { 'mu:HOKUSHU仙台市科学館':'mu:仙台市科学館', 'mu:いのちのたび博物館':'mu:北九州市立いのちのたび博物館' });
 /* 2026-10-27 にテーマパークからほかの種類へ移した施設と、外したミニ遊園地（同じ「わんぱーくこうち」の動物園へまとめる） */
