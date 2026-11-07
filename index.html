@@ -118,7 +118,7 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="site.js?v=20261107a"></script>
-<script src="core.js?v=20261107d"></script>
+<script src="core.js?v=20261107e"></script>
 <script src="xport.js?v=20261102c"></script>
 <script>
 
@@ -1055,7 +1055,7 @@ function detailHTML(it, k) {
     facts(fTxt('別名', it.o), toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, web, fPos(it, rp)); }
   if (k === 'towers') return dHead(badge('タワー') + fbadge(it.bl || it.kb, 'towers', TW_BL_FT[it.bl || it.kb]), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('別名', it.o), fIn, fRow('高さ', esc(it.ht) + ' m', 1), fTxt('竣工', it.sd, 1), it.bl ? fTxt('加盟', '全日本タワー連盟（' + it.bl + '）') : fTxt('区分', it.kb + '（全日本タワー連盟には入っていない）'), nt, wiki, web, fPos(it, rp));
-  if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, fPos(it, '県庁舎・目安'));
+  if (k === 'capitals') return dHead(badge('県庁所在地'), it, pfs) + facts(fTxt('県庁', it.ch), nt, wiki, /^https?:\/\//.test(it.web || '') ? fLink(pfs + 'の公式サイト', it.web, '開く') : '', fPos(it, '県庁舎・目安'));
   if (k === 'scenic') return dHead(badge('日本百景（' + it.ty + '）') + badge(it.cl, 1), it, it.ps) +
     facts(fTxt('選定', '昭和2年（1927年）・' + it.ty), fTxt('景観の区分', it.cl), fTxt('所在', it.ps), nt, wiki, fPos(it, rp));
   if (k === 'nature') return dHead(badge('自然') + badge(it.ty, 1), it, it.ps) +
@@ -1069,7 +1069,7 @@ function detailHTML(it, k) {
       facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
   }
   if (k === 'koei') return dHead(badge(it.sh) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, fPos(it));
+    facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
   if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
     facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, fPos(it, rp));
@@ -1084,13 +1084,13 @@ function detailHTML(it, k) {
     const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
     return dHead(badge('空港') + badge(AIR_FL_SHORT[it.fl], 1), it, pfs + '（' + (AIR_ST[it.st] || '') + '）') +
       facts(fRow('面積（概算）', '約 ' + fmtKm(it.ar), 1), fTxt('区分', AIR_TYPE[it.t]), fTxt('定期便', AIR_FL[it.fl]), fTxt('滑走路', rws || '不明', 1),
-        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), fPos(it, '標点'));
+        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), web, fPos(it, '標点'));
   }
   if (k === 'stations') {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
-    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
+    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
   }
-  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fIn, fPos(it), fTxt('備考', it.rm), wiki);   /* 城 */
+  return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fIn, fPos(it), fTxt('備考', it.rm), wiki, web);   /* 城 */
 }
 function renderDetail() {
   const box = $('detail');

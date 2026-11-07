@@ -17,8 +17,8 @@ const REGIONS = ['北海道','東北','関東','中部','近畿','中国','四�
 
 const TYPE_LABEL = { N:'現存天守・国宝', k:'現存天守・重要文化財', s:'復元・復興などの天守', a:'城跡など（天守なし）' };
 const CASTLES = CASTLE_TXT.split('\n').map((ln, i) => {
-  const [n, pf, lo, la, t, rm, wp, inn] = ln.split('|');   /* inn は、ほかの施設の中にあるときの、その施設の名前 */
-  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '', wp:wp || '', in:inn || '' };
+  const [n, pf, lo, la, t, rm, wp, inn, web] = ln.split('|');   /* inn は、ほかの施設の中にあるときの、その施設の名前。web は公式サイト */
+  return { id:'cs:' + n, no:i + 1, n, pf, lo:+lo, la:+la, t, rg:REGION_OF[pf], rm:rm || '', wp:wp || '', in:inn || '', web:web || '' };
 });
 
 const AIR_TYPE = { 1:'拠点空港（会社管理）', 2:'拠点空港（国管理）', 3:'拠点空港（特定地方管理）', 4:'地方管理空港', 5:'その他の空港', 6:'共用空港' };
