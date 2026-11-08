@@ -68,6 +68,11 @@ h1 { margin: 0; }
 .chkgo { flex: 1; display: block; font: inherit; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; text-decoration: none; }
 .chkgo b { margin-right: 6px; }
 .chkn { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+.chkt em { font-style: normal; color: var(--stamp); }
+.chkbody { flex: 1; min-width: 0; }
+.chkng { flex: none; font: inherit; font-size: 0.72rem; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; cursor: pointer; }
+.chk li.ng .chkng { color: var(--bg); background: var(--stamp); border-color: var(--stamp); }
+.chkmemo { display: block; width: 100%; box-sizing: border-box; margin-top: 4px; font: inherit; font-size: 0.8rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; }
 #svg { display: block; width: 100%; height: auto; max-height: 78vh; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .mapwrap.drag #svg { cursor: grabbing; }
 .seabg { fill: var(--sea); }

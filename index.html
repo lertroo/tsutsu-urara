@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261106c">
+<link rel="stylesheet" href="style.css?v=20261108a">
 
 <main class="app">
   <header>
@@ -1976,37 +1976,69 @@ function restoreMapState(st) {
 function renderCheck() {
   const C = window.CHECKLIST, box = $('chk');
   if (!C || !Array.isArray(C.items) || !C.items.length) { box.hidden = true; return; }
-  const key = 'jp-chk-' + (C.v || ''), okRead = () => { try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { return {}; } };
-  let ok = okRead(), open = true;
+  /* 状態は { ok:{番号:1}, ng:{番号:1}, memo:{番号:'一言'} }。ブラウザに置き、アーティファクトでは db の checks/〈版の名前から作った記号〉にも書く（Claude が読む） */
+  const key = 'jp-chk-' + (C.v || ''), blank = () => ({ ok: {}, ng: {}, memo: {} });
+  const norm = o => { o = o && typeof o === 'object' ? o : {}; if (!o.ok && !o.ng && !o.memo) o = { ok: o }; return { ok: o.ok || {}, ng: o.ng || {}, memo: o.memo || {} }; };
+  const stRead = () => { try { return norm(JSON.parse(localStorage.getItem(key) || '{}')); } catch (e) { return blank(); } };
+  let st = stRead(), open = true, cdb = null, saved = '';
   try { open = localStorage.getItem('jp-chk-open') !== '0'; } catch (e) {}
+  let h = 5381; for (const ch of (C.v || '')) h = ((h * 33) ^ ch.codePointAt(0)) >>> 0;
+  const docPath = 'checks/v' + h.toString(16);
+  const itemName = x => { const id = x.id ? (ID_ALIAS[x.id] || x.id) : '', it = id && findItem(id); return { id, it, name: it ? (KIND.get(id) === 'stations' ? dn(it) : it.n) : (x.label || x.page || id || '') }; };
+  const push = () => {
+    try { localStorage.setItem(key, JSON.stringify(st)); } catch (err) {}
+    if (!cdb) return;
+    const body = { v: C.v || '', at: new Date().toISOString(), items: C.items.map((x, i) => ({ id: x.id || '', page: x.page || '', name: itemName(x).name, ok: !!st.ok[i], ng: !!st.ng[i], memo: st.memo[i] || '' })) };
+    const sig = JSON.stringify(body.items); if (sig === saved) return; saved = sig;
+    cdb.doc(docPath).set(body).catch(() => { saved = ''; });
+  };
   const draw = () => {
-    const n = C.items.length, m = C.items.filter((x, i) => ok[i]).length;
-    let h = '<div class="chkh"><button type="button" class="chkt" aria-expanded="' + open + '">確認リスト <span>' + m + ' / ' + n + ' OK</span>' + (C.v ? '<small>' + esc(C.v) + '</small>' : '') + '<i aria-hidden="true">' + (open ? '▲' : '▼') + '</i></button></div>';
+    const n = C.items.length, m = C.items.filter((x, i) => st.ok[i]).length, g = C.items.filter((x, i) => st.ng[i]).length;
+    let h = '<div class="chkh"><button type="button" class="chkt" aria-expanded="' + open + '">確認リスト <span>' + m + ' / ' + n + ' OK</span>' + (g ? '<em>気になる ' + g + '</em>' : '') + (C.v ? '<small>' + esc(C.v) + '</small>' : '') + '<i aria-hidden="true">' + (open ? '▲' : '▼') + '</i></button></div>';
     if (open) h += '<ol>' + C.items.map((x, i) => {
-      const id = x.id ? (ID_ALIAS[x.id] || x.id) : '', it = id && findItem(id);
-      const name = it ? (KIND.get(id) === 'stations' ? dn(it) : it.n) : (x.label || x.page || id || '');
+      const { id, it, name } = itemName(x);
       const kind = it ? MODE_LABEL[KIND.get(id)] : x.page ? 'ページ' : '';
       const go = it ? '<button type="button" class="chkgo" data-i="' + i + '">' : x.page ? '<a class="chkgo" href="' + esc(x.page) + '">' : '<span class="chkgo">';
       const end = it ? '</button>' : x.page ? '</a>' : '</span>';
-      return '<li class="' + (ok[i] ? 'done' : '') + '"><label class="chkok"><input type="checkbox" data-i="' + i + '"' + (ok[i] ? ' checked' : '') + ' aria-label="OK"></label>' + go +
-        '<b>' + esc(name) + '</b>' + (kind ? '<i class="nbk">' + esc(kind) + '</i>' : '') + (x.note ? '<span class="chkn">' + esc(x.note) + '</span>' : '') + (id && !it ? '<span class="chkn">（データに見つかりません：' + esc(id) + '）</span>' : '') + end + '</li>';
+      return '<li class="' + (st.ok[i] ? 'done' : '') + (st.ng[i] ? ' ng' : '') + '"><label class="chkok"><input type="checkbox" data-i="' + i + '"' + (st.ok[i] ? ' checked' : '') + ' aria-label="OK"></label><div class="chkbody">' + go +
+        '<b>' + esc(name) + '</b>' + (kind ? '<i class="nbk">' + esc(kind) + '</i>' : '') + (x.note ? '<span class="chkn">' + esc(x.note) + '</span>' : '') + (id && !it ? '<span class="chkn">（データに見つかりません：' + esc(id) + '）</span>' : '') + end +
+        (st.ng[i] ? '<input type="text" class="chkmemo" data-i="' + i + '" value="' + esc(st.memo[i] || '') + '" placeholder="気になること（なくてもよい）" aria-label="気になること">' : '') + '</div>' +
+        '<button type="button" class="chkng" data-i="' + i + '" aria-pressed="' + !!st.ng[i] + '" title="気になる">気になる</button></li>';
     }).join('') + '</ol>';
     box.innerHTML = h; box.hidden = false;
   };
   box.onclick = e => {
     if (e.target.closest('.chkt')) { open = !open; try { localStorage.setItem('jp-chk-open', open ? '1' : '0'); } catch (err) {} draw(); return; }
+    const ng = e.target.closest('button.chkng');
+    if (ng) { const i = ng.dataset.i; if (st.ng[i]) { delete st.ng[i]; delete st.memo[i]; } else { st.ng[i] = 1; delete st.ok[i]; } push(); draw(); if (st.ng[i]) { const f = box.querySelector('.chkmemo[data-i="' + i + '"]'); if (f) f.focus(); } return; }
     const b = e.target.closest('button.chkgo'); if (!b) return;
     const id = ID_ALIAS[C.items[+b.dataset.i].id] || C.items[+b.dataset.i].id;
     if (!currentItems().some(x => x.id === id)) resetAll(false, true, [KIND.get(id)]);   /* 一覧に出ていないときは、その種類だけを出し直す */
     select(id, true);
   };
   box.onchange = e => {
+    const t = e.target.closest('.chkmemo');
+    if (t) { const v = t.value.trim().slice(0, 300); if (v) st.memo[t.dataset.i] = v; else delete st.memo[t.dataset.i]; push(); return; }
     const c = e.target.closest('input[type=checkbox]'); if (!c) return;
-    ok = okRead(); if (c.checked) ok[c.dataset.i] = 1; else delete ok[c.dataset.i];
-    try { localStorage.setItem(key, JSON.stringify(ok)); } catch (err) {}
-    draw();
+    if (c.checked) { st.ok[c.dataset.i] = 1; delete st.ng[c.dataset.i]; delete st.memo[c.dataset.i]; } else delete st.ok[c.dataset.i];
+    push(); draw();
   };
+  box.onkeydown = e => { if (e.key === 'Enter' && e.target.closest('.chkmemo')) e.target.blur(); };
   draw();
+  /* db が使えるとき：前に書いた状態があれば読んで合わせる（書くのは、チェックを変えたときだけ） */
+  (async () => {
+    try {
+      if (!(window.claude && claude.use)) return;
+      const db = await claude.use('db'); if (!db) return;
+      const snap = await db.doc(docPath).get();
+      if (snap.exists && snap.data && Array.isArray(snap.data.items)) {
+        const o = blank(); snap.data.items.forEach((x, i) => { if (x.ok) o.ok[i] = 1; if (x.ng) o.ng[i] = 1; if (x.memo) o.memo[i] = x.memo; });
+        st = o; saved = JSON.stringify(snap.data.items); try { localStorage.setItem(key, JSON.stringify(st)); } catch (err) {}
+        if (!box.querySelector('.chkmemo:focus')) draw();
+      }
+      cdb = db;
+    } catch (e) { /* 使えない表示では、ブラウザの中だけに置く */ }
+  })();
 }
 if (location.hostname !== 'lertroo.github.io') {
   const s = document.createElement('script');
