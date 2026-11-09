@@ -417,7 +417,7 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .mapwrap.picking { outline: 3px solid var(--stamp); outline-offset: -3px; cursor: crosshair; }
 .mapwrap.picking svg { cursor: crosshair; }
 .orgr { fill: color-mix(in srgb, #1e6bff 18%, transparent); stroke: #1e6bff; }
-.orgd { fill: #1e6bff; stroke: #fff; stroke-width: .6; }
+.orgd { fill: #1e6bff; stroke: #fff; }
 
 /* 検索の窓（いちばん使う入口なので、虫めがねと色の枠で目立たせる） */
 .qbox { position: relative; display: flex; }

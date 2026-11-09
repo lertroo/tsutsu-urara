@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261109a">
+<link rel="stylesheet" href="style.css?v=20261109b">
 
 <main class="app">
   <header>
@@ -1910,7 +1910,7 @@ function posOrigin() {
   g.innerHTML = '';
   if (!ORG) return;
   const [x, y] = proj(ORG.lo, ORG.la), k = vb.w / 680;
-  g.innerHTML = '<circle class="orgr" cx="' + x + '" cy="' + y + '" r="' + (11 * k) + '" stroke-width="' + (2 * k) + '"/><circle class="orgd" cx="' + x + '" cy="' + y + '" r="' + (4.2 * k) + '"/>';
+  g.innerHTML = '<circle class="orgr" cx="' + x + '" cy="' + y + '" r="' + (11 * k) + '" stroke-width="' + (2 * k) + '"/><circle class="orgd" cx="' + x + '" cy="' + y + '" r="' + (4.2 * k) + '" stroke-width="' + (0.6 * k) + '"/>';   /* ふちの太さも拡大に合わせる（固定だと、拡大したとき白いふちが青い点を覆う） */
 }
 const _usBase = updateSizes;
 updateSizes = function () { _usBase.apply(this, arguments); posOrigin(); };
