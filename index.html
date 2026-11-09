@@ -99,7 +99,8 @@
 <script src="data/geo.js"></script>
 <script src="data/lakes.js"></script>
 <script src="data/shinkansen.js"></script>
-<script src="data/ikenai.js?v=20261102a"></script>
+<script src="data/ikenai.js?v=20261109a"></script>
+<script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
 <script src="data/parks.js"></script>
 <script src="data/castles.js"></script>
@@ -118,7 +119,7 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="site.js?v=20261109b"></script>
-<script src="core.js?v=20261108g"></script>
+<script src="core.js?v=20261109a"></script>
 <script src="xport.js?v=20261102c"></script>
 <script>
 
@@ -1063,6 +1064,15 @@ function detailHTML(it, k) {
   if (k === 'hyaku') return dHead(badge('日本百名山') + badge('第' + it.no + '座', 1), it, it.ps + (it.al ? '（記事名：' + it.al + '）' : '')) +
     facts(fRow('標高', it.el.toLocaleString() + ' m', 1), fTxt('山系', it.rg), fTxt('国立公園', it.pk), wiki, fPos(it, rp));
   if (k === 'shin') return dHead(badge('新幹線の駅'), it, pfs) + facts(fTxt('路線', it.ln.join('・')), fTxt('所在', pfs), nt, fPos(it, rp));
+  if (k === 'edge') {
+    /* 記録を共通にしている先（SHARE）。主の行の名前と種類を出す */
+    const rid = cid(it.id), rIt = rid !== it.id ? findItem(rid) : null;
+    const shr = rIt ? fTxt('記録', '「' + rIt.n + '」（' + MODE_LABEL[KIND.get(rid)] + '）と共通') : '';
+    if (it.ty === 'はじっこ') return dHead(fbadge('はじっこ', 'edge', 'end') + badge(it.ky, 1), it, it.ps) +
+      facts(fTxt('説明', it.rs), fTxt('所在', it.ps), nt, fPos(it, rp));
+    return dHead(fbadge('てっぺん', 'edge', 'top') + badge(pfs + 'の最高地点', 1), it, pfs + (it.yo ? '　' + it.yo : '')) +
+      facts(fRow('標高', it.el.toLocaleString() + ' m', 1), nt, fTxt('出典', '国土地理院「都道府県の最高地点」（令和7年4月1日）'), shr, wiki, fPos(it, rp));
+  }
   if (k === 'ik') {
     const ll = typeof it.la === 'number' ? [it.la, it.lo] : it.ll;
     return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
@@ -1602,6 +1612,7 @@ const ICON_P = {
   my:'<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0113 0c0 4.8-6.5 11-6.5 11z"/><path d="M12 7.2v5.6M9.2 10h5.6"/>',
   shin: '<path d="M5 18V9.5C5 6 8 4 12 4s7 2 7 5.5V18zM5 13.5h14M8.5 21l-1-3M15.5 21l1-3"/><circle cx="8.8" cy="16" r=".7"/><circle cx="15.2" cy="16" r=".7"/>',
   ik: '<rect x="5" y="11" width="14" height="9.5" rx="1.6"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+  edge: '<path d="M3.5 20.5L12 7l8.5 13.5z"/><path d="M12 7V2.8M12 2.8l3.6 1.4L12 5.6"/><path d="M2.5 13.5h3M18.5 13.5h3"/>',
   koei: '<path d="M5 21V4"/><path d="M5 4h14l-2.5 4 2.5 4H5"/><path d="M9 4v8M13 4v8M5 8h12"/>',
   biwa: '<path d="M12.5 3.5c-3 1.5-4 4-3.2 6.6.6 2-1.6 3.2-1.6 5.4 0 2.2 2 4.2 4.8 4.6 2.2-.6 3.2-2.4 2.6-4.4-.6-2 1.6-3.4 1-6C15.7 6 14.4 4.2 12.5 3.5z"/>',
   scenic: '<path d="M2.5 19l6-9 4 6 3-4 6 7z"/><circle cx="17.5" cy="6.5" r="2"/>',
@@ -1640,7 +1651,7 @@ function fold(s) { return String(s).normalize('NFKC').toLowerCase().replace(/(?<
 let _qk = null, _qt = [];
 function qterms() { if (_qk !== flt.q) { _qk = flt.q; _qt = fold(flt.q).split(/\s+/).filter(Boolean); } return _qt; }
 /* タグ（「鉄道」「恐竜」など）でも当たる。タグは別に見て、タグだけで当たったときは一覧の行にそのタグを出す（qtagHits） */
-function qhay(x) { const k = KIND.get(cid(x.id)) || ''; return fold([x.n, x.o, x.inc, x.in, x.ins, x.by, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' ')); }
+function qhay(x) { const k = KIND.get(x.id) || KIND.get(cid(x.id)) || '';   /* 自分の種類を先に（SHARE の行は、記録の先とは種類が違う） */ return fold([x.n, x.o, x.inc, x.in, x.ins, x.by, x.pf, PREF_KEY[x.pf], x.ci, x.city, x.al, x.tg, MODE_LABEL[k], x.rg, x.of, x.ps, x.k, x.memo].filter(Boolean).join(' ')); }
 function qm(x) {
   const t = qterms(); if (!t.length) return true;
   const hay = qhay(x), tg = fold(x.tag || '');

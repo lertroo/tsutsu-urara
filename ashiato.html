@@ -42,7 +42,8 @@
 
 <script src="data/geo.js"></script>
 <script src="data/shinkansen.js"></script>
-<script src="data/ikenai.js?v=20261102a"></script>
+<script src="data/ikenai.js?v=20261109a"></script>
+<script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
 <script src="data/parks.js"></script>
 <script src="data/castles.js"></script>
@@ -61,7 +62,7 @@
 <script src="data/towers.js"></script>
 <script src="data/lakes.js"></script>
 <script src="site.js?v=20261109b"></script>
-<script src="core.js?v=20261108g"></script>
+<script src="core.js?v=20261109a"></script>
 <script>
 /* あしあと：行った所の記録を、文字の一覧で見るページ。並べ方は「日付順・種類別・都道府県別」を切り替える */
 const VIEW_KEY = 'jp-ashiato-view';
@@ -76,17 +77,27 @@ const nameTag = n => '<span class="aname">' + esc(n) + '</span>';
 const cntTag = n => n > 1 ? '<span class="acnt">' + n + '回</span>' : '';
 
 /* いまの人の、行った所（双子は本来の側にまとめてある）と、行った日のリスト */
+/* 記録を共通にしている行（core.js の SHARE。例：富士山と、山梨・静岡のてっぺん）は1つにまとめ、種類の印を並べる。名前は記録の先の行 */
 function visited() {
-  const cd = curData();
-  return ALLX.filter(x => isVisited(x.id)).map(it => ({ it, ds: cd[cid(it.id)], ks: kindsOf(it) }));
+  const cd = curData(), by = new Map();
+  visitedAll().forEach(it => {
+    const r = cid(it.id), o = by.get(r);
+    if (o) { kindsOf(it).forEach(k => { if (!o.ks.includes(k)) o.ks.push(k); }); if (it.pf && !o.pfs.includes(it.pf)) o.pfs.push(it.pf); return; }
+    const top = findItem(r) || it;
+    by.set(r, { it: top, ds: cd[r], ks: kindsOf(top).concat(r === it.id ? [] : kindsOf(it)).filter((k, i, a) => a.indexOf(k) === i), pfs: [top.pf, it.pf].filter((p, i, a) => p && a.indexOf(p) === i) });
+  });
+  /* 県は北から順に（まとめた行では「山梨県・静岡県」のように並べる） */
+  return [...by.values()].map(v => { v.pfs.sort((a, b) => PREF_ORDER.indexOf(a) - PREF_ORDER.indexOf(b)); return v; });
 }
-const hit = v => !query || [nameOf(v.it), v.it.pf, prefFull(v.it.pf)].concat(v.ks.map(k => MODE_LABEL[k])).some(t => t && t.toLowerCase().includes(query));
+const visitedAll = () => ALLX.filter(x => isVisited(x.id));
+const pfsText = v => (v.pfs && v.pfs.length ? v.pfs : [v.it.pf]).map(prefFull).join('・');
+const hit = v => !query || [nameOf(v.it), pfsText(v)].concat(v.pfs || [v.it.pf], v.ks.map(k => MODE_LABEL[k])).some(t => t && t.toLowerCase().includes(query));
 
 function renderDash() {
   const V = visited(), dated = [];
   V.forEach(v => v.ds.forEach(d => { if (d) dated.push(d); }));
   dated.sort();
-  const nPref = new Set(V.map(v => v.it.pf).filter(p => PREF_KEY[p])).size;
+  const nPref = new Set(visitedAll().map(x => x.pf).filter(p => PREF_KEY[p])).size;   /* 県は、まとめる前の行で数える（静岡のてっぺんなど） */
   const nVis = V.reduce((t, v) => t + v.ds.length, 0);
   let h = '<p class="asum"><b>' + V.length + '</b> か所・<b>' + nPref + '</b> 都道府県・延べ <b>' + nVis + '</b> 回';
   if (dated.length) h += '<span class="aspan">（' + dated[0].replace(/^(\d{4})-(\d{2}).*/, '$1年$2月').replace('年0', '年') + '〜' + dated[dated.length - 1].replace(/^(\d{4})-(\d{2}).*/, '$1年$2月').replace('年0', '年') + '）</span>';
@@ -121,7 +132,7 @@ function listByDate(V) {
     h += '<section class="agrp"><h3 class="agh">' + y + '<span>' + es.length + '回</span></h3><div class="arows">';
     es.forEach(({ v, d }) => {
       h += '<div class="arow"><time>' + (d ? md(d) : '—') + '</time>' + nameTag(nameOf(v.it))
-        + '<span class="ameta">' + v.ks.map(kindTag).join('') + '<span class="apf">' + esc(prefFull(v.it.pf)) + '</span>' + cntTag(v.ds.length) + '</span></div>';
+        + '<span class="ameta">' + v.ks.map(kindTag).join('') + '<span class="apf">' + esc(pfsText(v)) + '</span>' + cntTag(v.ds.length) + '</span></div>';
     });
     h += '</div></section>';
   });
