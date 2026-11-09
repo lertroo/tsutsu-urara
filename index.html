@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261108a">
+<link rel="stylesheet" href="style.css?v=20261109a">
 
 <main class="app">
   <header>
@@ -117,7 +117,7 @@
 <script src="data/museums.js"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261108b"></script>
+<script src="site.js?v=20261109a"></script>
 <script src="core.js?v=20261108g"></script>
 <script src="xport.js?v=20261102c"></script>
 <script>
@@ -1971,7 +1971,8 @@ function restoreMapState(st) {
   else resetAll(false, false);
 }
 /* ===== 確認リスト（アーティファクトで見るときだけ。check.js は公開のたびに Claude が書き替える。git には入れない）=====
-   CHECKLIST = { v:'版の名前', items:[ { id:'mu:…', note:'見てほしいこと' }, { page:'kiroku.html', label:'…', note:'…' } ] }
+   CHECKLIST = { v:'版の名前', items:[ { id:'mu:…', note:'見てほしいこと', peek:[{ k:'Wikipedia', t:'題名', s:'書き出しの1文', u:'URL' }] }, { page:'kiroku.html', label:'…', note:'…' } ] }
+   peek は、リンク先を Claude が開いて確かめた中身（.claude/mkcheck.py で作る）。リンクを開かずに、合っているかを見られるように
    GitHub Pages（lertroo.github.io）では読みに行かない */
 function renderCheck() {
   const C = window.CHECKLIST, box = $('chk');
@@ -2002,6 +2003,7 @@ function renderCheck() {
       const end = it ? '</button>' : x.page ? '</a>' : '</span>';
       return '<li class="' + (st.ok[i] ? 'done' : '') + (st.ng[i] ? ' ng' : '') + '"><label class="chkok"><input type="checkbox" data-i="' + i + '"' + (st.ok[i] ? ' checked' : '') + ' aria-label="OK"></label><div class="chkbody">' + go +
         '<b>' + esc(name) + '</b>' + (kind ? '<i class="nbk">' + esc(kind) + '</i>' : '') + (x.note ? '<span class="chkn">' + esc(x.note) + '</span>' : '') + (id && !it ? '<span class="chkn">（データに見つかりません：' + esc(id) + '）</span>' : '') + end +
+        (Array.isArray(x.peek) ? '<div class="chkpk">' + x.peek.map(p => '<span><i>' + esc(p.k || '') + '</i>' + (p.u ? '<a href="' + esc(p.u) + '" target="_blank" rel="noopener">' + esc(p.t || p.u) + '</a>' : esc(p.t || '')) + (p.s ? '<small>' + esc(p.s) + '</small>' : '') + '</span>').join('') + '</div>' : '') +
         (st.ng[i] ? '<input type="text" class="chkmemo" data-i="' + i + '" value="' + esc(st.memo[i] || '') + '" placeholder="気になること（なくてもよい）" aria-label="気になること">' : '') + '</div>' +
         '<button type="button" class="chkng" data-i="' + i + '" aria-pressed="' + !!st.ng[i] + '" title="気になる">気になる</button></li>';
     }).join('') + '</ol>';

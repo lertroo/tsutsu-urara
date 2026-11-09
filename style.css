@@ -70,6 +70,11 @@ h1 { margin: 0; }
 .chkn { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 .chkt em { font-style: normal; color: var(--stamp); }
 .chkbody { flex: 1; min-width: 0; }
+.chkpk { margin-top: 3px; font-size: 0.78rem; }
+.chkpk span { display: block; padding-left: 4.6em; text-indent: -4.6em; line-height: 1.45; }
+.chkpk i { display: inline-block; width: 4.6em; text-indent: 0; font-style: normal; color: var(--muted); }
+.chkpk a { color: var(--ink); }
+.chkpk small { display: block; text-indent: 0; color: var(--muted); font-size: 0.95em; }
 .chkng { flex: none; font: inherit; font-size: 0.72rem; color: var(--muted); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; cursor: pointer; }
 .chk li.ng .chkng { color: var(--bg); background: var(--stamp); border-color: var(--stamp); }
 .chkmemo { display: block; width: 100%; box-sizing: border-box; margin-top: 4px; font: inherit; font-size: 0.8rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 4px 6px; }
