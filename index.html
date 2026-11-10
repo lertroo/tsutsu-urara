@@ -500,7 +500,13 @@ function matchScore(it, q) {
 const jaCmp = new Intl.Collator('ja').compare;
 function orderItems(a) {
   const q = flt.q;
-  const base = (x, y) => (isVisited(y.id) - isVisited(x.id)) || (pfIdx(x) - pfIdx(y)) || jaCmp(x.n, y.n);
+  /* 番号のある種類（100名城の名城番号・百名山の第○座）は番号でも並べる：その種類だけを選んでいるときは番号の順だけ、
+     ほかの種類とまざるときは、同じ県の中の同じ種類どうしを番号の順に（2026-11-10） */
+  /* 百名山の行は、ふつう「自然」の行（TWIN の主）なので、番号は HM_OF から取る。同じ県の中は「城（番号順）→ 百名山（番号順）→ ほか（名前順）」 */
+  const grp = x => KIND.get(x.id) === 'castles' ? [1, x.no] : HM_OF[x.id] ? [2, HM_OF[x.id].no] : [3, 0];
+  const only = flt.kinds && flt.kinds.size === 1 ? flt.kinds.values().next().value : '', onlyNum = only === 'castles' || only === 'hyaku';
+  const base = onlyNum ? (x, y) => (isVisited(y.id) - isVisited(x.id)) || (grp(x)[1] - grp(y)[1])
+    : (x, y) => { const a = grp(x), b = grp(y); return (isVisited(y.id) - isVisited(x.id)) || (pfIdx(x) - pfIdx(y)) || (a[0] - b[0]) || (a[1] - b[1]) || jaCmp(x.n, y.n); };
   return a.slice().sort(q ? (x, y) => (matchScore(x, q) - matchScore(y, q)) || base(x, y) : base);
 }
 /* 1回の画面の更新で何度も呼ばれるので、条件（絞り込み・記録・データの数）が同じあいだは、前の結果を返す */
