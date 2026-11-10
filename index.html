@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261110e">
+<link rel="stylesheet" href="style.css?v=20261110h">
 
 <main class="app">
   <header>
@@ -59,12 +59,13 @@
           <button type="button" id="zout" aria-label="縮小" title="地図を縮小します">－</button>
           <button type="button" id="zfull" aria-label="全国を表示" title="日本全体が見える大きさに戻します">全国</button>
           <button type="button" id="zloc" aria-label="現在地へ移動" title="今いる場所へ地図を寄せて、一覧を近い順にします">現在地</button>
-          <button type="button" id="mset" class="cgap" aria-haspopup="true" aria-expanded="false" aria-controls="msetp" aria-label="地図の設定" title="地図の設定（県の塗り・背景・名前の大きさ・表示量）"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <button type="button" id="labm" class="cgap" aria-label="地図の名前の文字を小さく" title="地図に出す名前の文字を小さくします">名前 小</button>
+          <button type="button" id="labp" aria-label="地図の名前の文字を大きく" title="地図に出す名前の文字を大きくします">名前 大</button>
+          <button type="button" id="mset" class="cgap" aria-haspopup="true" aria-expanded="false" aria-controls="msetp" aria-label="地図の設定" title="地図の設定（県の塗り・背景・表示量）"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>設定</span></button>
         </div>
         <div class="msetp" id="msetp" role="group" aria-label="地図の設定" hidden>
           <div class="msrow"><div class="msh"><span class="msl">県を塗る</span><button type="button" id="zfill" aria-pressed="false">オフ</button></div><p class="msd">行った都道府県を、行った数に応じて色で塗ります。オンのあいだは、点の代わりに塗りを出します。</p></div>
           <div class="msrow"><div class="msh"><span class="msl">背景</span></div><div id="bgmenu" class="bgmenu" role="radiogroup" aria-label="背景の地図"></div><p class="msd">地図の下に敷く地図です。出しているあいだは、地図の右下に出典が出ます。</p></div>
-          <div class="msrow"><div class="msh"><span class="msl">名前の大きさ</span><button type="button" id="labm" aria-label="地図の名前の文字を小さく">小さく</button><button type="button" id="labp" aria-label="地図の名前の文字を大きく">大きく</button></div><p class="msd">地図に出す名前の文字の大きさです。ページ全体の文字の大きさは、右上の歯車で変えます。</p></div>
           <div class="msrow" id="clum"><div class="msh"><span class="msl" id="clul">表示量：標準</span></div><input type="range" id="clus" min="0" max="6" step="1" value="4" aria-label="地図に出す点と名前の量（左ほど少なく、右ほど多く）"><span class="clue" aria-hidden="true"><span>少</span><span>多</span></span><p class="msd">混み合う所では、点と名前を「数字の入った円」にまとめます。左ほど多くまとめて、右ほど一つずつ出します。</p></div>
         </div>
         <div class="legend" id="legend" aria-hidden="true"></div>
@@ -543,7 +544,7 @@ function drawFill() {
 /* 凡例の最後に付ける、地図の右のボタンの説明（スマホでは押す前の説明が出せないため） */
 const CTRL_HELP = '<div class="lghelp"><b>右のボタン</b>'
   + '<span><b>＋ －</b>拡大・縮小</span><span><b>全国</b>日本全体を表示</span><span><b>現在地</b>今いる場所へ寄せて、一覧を近い順に</span>'
-  + '<span><b>歯車</b>地図の設定（県を塗る・背景・名前の大きさ・表示量）</span></div>';
+  + '<span><b>歯車</b>地図の設定（県を塗る・背景・表示量）</span><span><b>名前 小・大</b>地図の名前の文字の大きさ</span></div>';
 function applyMapView() {
   $('mapwrap').classList.toggle('fillview', mapView === 'fill');
   $('zfill').setAttribute('aria-pressed', String(mapView === 'fill')); $('zfill').textContent = mapView === 'fill' ? 'オン' : 'オフ';

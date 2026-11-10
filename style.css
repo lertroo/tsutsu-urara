@@ -102,13 +102,13 @@ h1 { margin: 0; }
 .labbg2 { fill: var(--halo); fill-opacity: 0.62; stroke: none; pointer-events: none; }
 .lab { font-family: var(--font-body); font-weight: 700; fill: var(--ink); stroke: var(--halo); stroke-width: 3.8px; paint-order: stroke fill; stroke-linejoin: round; pointer-events: none; }
 .ctrl { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; }
-.ctrl button { font: inherit; font-weight: 700; min-width: 40px; height: 40px; padding: 0 8px; color: var(--ink); background: var(--btn-bg); border: 1px solid var(--btn-line); border-radius: 8px; cursor: pointer; }
+.ctrl button { font: inherit; font-weight: 700; min-width: 40px; height: 40px; padding: 0 8px; color: var(--ink); background: var(--btn-bg); border: 2px solid color-mix(in srgb, var(--accent) 45%, var(--btn-line)); box-shadow: 0 1px 3px rgba(0,0,0,.12); border-radius: 8px; cursor: pointer; }
 .ctrl button:hover { border-color: var(--accent); color: var(--accent); }
 /* 操作ボタンは「動かす」と「歯車（地図の設定）」に分け、あいだを空ける */
 .ctrl .cgap { margin-top: 8px; }
-.ctrl #zloc { font-size: .78rem; white-space: nowrap; }
-.ctrl #mset { display: grid; place-items: center; color: var(--muted); }
-.ctrl #mset svg { width: 20px; height: 20px; }
+.ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .78rem; white-space: nowrap; }
+.ctrl #mset { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: .78rem; }
+.ctrl #mset svg { width: 18px; height: 18px; flex: none; }
 .ctrl #mset[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
 /* 地図の設定の枠：ボタンの列の左に出す。地図より高くなるときは、枠の中を巻き取る */
 .msetp { position: absolute; top: 10px; right: 62px; z-index: 6; box-sizing: border-box; width: 17.5em; max-width: calc(100% - 80px); max-height: calc(100% - 20px); overflow-y: auto; display: grid; align-content: start; gap: 8px; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
@@ -474,9 +474,9 @@ body.xopen { overflow: hidden; }
 .xtx { display: flex; flex-direction: column; gap: 2px; font-size: .78rem; color: var(--muted); }
 .xtx input { width: 100%; box-sizing: border-box; }
 /* 狭い画面：操作ボタンを小さく */
-/* スマホでは地図が低いので、2列にまとめる（＋－、全国・現在地、歯車）。設定の枠は、ボタンの列の左いっぱいに出す */
-@media (max-width: 600px) { .ctrl { display: grid; grid-template-columns: auto auto; } .ctrl .cgap { margin-top: 0; } .msetp { top: 6px; left: 6px; right: 80px; width: auto; max-width: none; max-height: calc(100% - 12px); } .ctrl #mset svg { width: 16px; height: 16px; } }
-@media (max-width: 600px) { .ctrl { gap: 3px; top: 6px; right: 6px; } .ctrl button { min-width: 32px; height: 28px; padding: 0 4px; font-size: .8rem; border-radius: 6px; background: color-mix(in srgb, var(--btn-bg) 88%, transparent); } .ctrl #zloc { font-size: .64rem; } }
+/* スマホでは地図が低いので、2列にまとめる（＋－、全国・現在地、歯車、名前 小・大）。設定の枠は、ボタンの列の左いっぱいに出す */
+@media (max-width: 600px) { .ctrl { display: grid; grid-template-columns: auto auto; } .ctrl .cgap { margin-top: 0; } .msetp { top: 6px; left: 6px; right: 80px; width: auto; max-width: none; max-height: calc(100% - 12px); } .ctrl #mset { grid-column: 1 / -1; font-size: .64rem; } .ctrl #mset svg { width: 14px; height: 14px; } }
+@media (max-width: 600px) { .ctrl { gap: 3px; top: 6px; right: 6px; } .ctrl button { min-width: 32px; height: 28px; padding: 0 4px; font-size: .8rem; border-radius: 6px; background: color-mix(in srgb, var(--btn-bg) 88%, transparent); } .ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .64rem; } }
 /* PCの広い画面：全幅で使い、地図を縦いっぱいに */
 @media (min-width: 1100px) {
   body { padding-inline: clamp(32px, 3.2vw, 64px); padding-block: 12px 40px; }
