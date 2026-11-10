@@ -472,7 +472,7 @@ body.xopen { overflow: hidden; }
 .xk input { accent-color: var(--kc); }
 .xopts select, .xopts input[type=date], .xtx input { font: inherit; font-size: max(16px, .9rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; min-width: 0; max-width: 100%; }
 .xtx { display: flex; flex-direction: column; gap: 2px; font-size: .78rem; color: var(--muted); }
-.xtx input { width: 100%; }
+.xtx input { width: 100%; box-sizing: border-box; }
 /* 狭い画面：操作ボタンを小さく */
 /* スマホでは地図が低いので、2列にまとめる（＋－、全国・現在地、歯車）。設定の枠は、ボタンの列の左いっぱいに出す */
 @media (max-width: 600px) { .ctrl { display: grid; grid-template-columns: auto auto; } .ctrl .cgap { margin-top: 0; } .msetp { top: 6px; left: 6px; right: 80px; width: auto; max-width: none; max-height: calc(100% - 12px); } .ctrl #mset svg { width: 16px; height: 16px; } }

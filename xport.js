@@ -226,7 +226,7 @@ function xBuild() {
   $('x-save').onclick = xSave;
   $('x-share').onclick = xShare;
   $('x-post').onclick = xPost;
-  $('x-text').value = XSHARE;
+  $('x-text').value = xShareText(true);
   $('x-copy').onclick = xCopy;
   $('x-share').hidden = !xCanShare();
 }
@@ -261,7 +261,7 @@ function xOpen(from) {
   xBuild(); xOpener = from || document.activeElement;
   if (!rec.profiles.some(p => p.id === XPID)) XPID = rec.cur;
   XPID = XPID || rec.cur;
-  $('x-opts').innerHTML = xOptsHTML(); $('x-fb').innerHTML = '';
+  $('x-opts').innerHTML = xOptsHTML(); $('x-fb').innerHTML = ''; $('x-text').value = xShareText(true); $('x-cmsg').textContent = '';
   xEl.hidden = false; document.body.classList.add('xopen');
   $('x-close').focus(); xRender();
 }
@@ -275,6 +275,7 @@ function xOnChange(e) {
   else if (key === 'since') XS.since = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '';
   else XS[key] = (key === 'title' ? v.slice(0, 24) : key === 'note' ? v.slice(0, 40) : v);
   xSaveSettings();
+  if (key === 'note') $('x-text').value = xShareText(true);   /* ひとことは、共有用のテキストにも入れる */
   if (['names', 'dates', 'period', 'parts', 'dots'].includes(key) || key.startsWith('p:') || key === 'pid') { const keep = document.activeElement; $('x-opts').innerHTML = xOptsHTML(); if (keep && keep.dataset && keep.dataset.x) { const n = $('x-opts').querySelector('[data-x="' + keep.dataset.x + '"]'); if (n && n.type !== 'radio') try { n.focus(); } catch (e2) {} } }
   xQueue();
 }
@@ -306,7 +307,9 @@ async function xSave() {
   catch (e) { if (e && e.code === 'declined') msg.textContent = '保存をやめました。'; else fallback('保存できませんでした。'); }
 }
 /* 共有：スマホなどの「共有」の画面（Web Share）で、画像とサイトの住所を X などのアプリへ渡す。使えない画面では「共有」を出さない */
-const XSITE = 'https://lertroo.github.io/tsutsu-urara/', XTEXT = '#つつうらら', XSHARE = XTEXT + '\n' + XSITE;   /* 投稿の文は、名前をハッシュタグにして兼ねる（2026-11-10） */
+const XSITE = 'https://lertroo.github.io/tsutsu-urara/', XTEXT = '#つつうらら';   /* 投稿の文は、名前をハッシュタグにして兼ねる（2026-11-10） */
+/* 共有の文：画像に入れた「ひとこと」があれば先頭に置き、その下にハッシュタグ（withUrl のときは、さらに住所） */
+function xShareText(withUrl) { const n = (XS.note || '').trim(); return (n ? n + '\n' : '') + XTEXT + (withUrl ? '\n' + XSITE : ''); }
 /* 共有用のテキストをコピー。クリップボードが使えない画面では、文字を選んだ状態にして、手でコピーしてもらう */
 async function xCopy() {
   const ta = $('x-text'), m = $('x-cmsg');
@@ -320,7 +323,7 @@ async function xShare() {
   const msg = $('x-msg'); msg.classList.remove('err'); $('x-fb').innerHTML = '';
   const blob = await new Promise(r => $('x-cv').toBlob(r, 'image/png'));
   if (!blob) { msg.classList.add('err'); msg.textContent = '画像を作れませんでした。'; return; }
-  try { await navigator.share({ files:[new File([blob], xFileName(), { type:'image/png' })], text:XTEXT + ' ' + XSITE }); msg.textContent = ''; }
+  try { await navigator.share({ files:[new File([blob], xFileName(), { type:'image/png' })], text:xShareText(true) }); msg.textContent = ''; }
   catch (e) {
     if (e && e.name === 'AbortError') return;   /* 共有の画面を閉じただけ */
     msg.classList.add('err'); msg.textContent = 'この画面では共有が使えません。「X に投稿」か「画像を保存」を使ってください。';
@@ -330,7 +333,7 @@ async function xShare() {
 async function xPost() {
   const w = window.open('about:blank', '_blank');   /* 押したその場で開かないと、ブラウザに止められる */
   await xSave();
-  const u = 'https://x.com/intent/post?text=' + encodeURIComponent(XTEXT) + '&url=' + encodeURIComponent(XSITE);
+  const u = 'https://x.com/intent/post?text=' + encodeURIComponent(xShareText(false)) + '&url=' + encodeURIComponent(XSITE);
   let opened = false;
   if (w) { try { w.opener = null; w.location.href = u; opened = true; } catch (e) {} }
   if (!opened) { try { opened = !!window.open(u, '_blank', 'noopener'); } catch (e) {} }
