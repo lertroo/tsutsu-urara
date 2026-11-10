@@ -217,6 +217,7 @@ function xBuild() {
   xEl.innerHTML = '<div class="xpanel"><div class="xhead"><h2>画像を作る</h2><button type="button" class="btn" id="x-close">閉じる</button></div>' +
     '<div class="xprev"><canvas id="x-cv"></canvas></div><p class="msg" id="x-msg" role="status"></p>' +
     '<div class="xact"><button type="button" class="btn primary" id="x-save">画像を保存</button><button type="button" class="btn" id="x-share" hidden>共有</button><button type="button" class="btn" id="x-post">X に投稿</button><span class="xhint">設定はこのブラウザに覚えておきます。</span></div><div id="x-fb"></div>' +
+    '<div class="xcopy"><label for="x-text">共有用のテキスト（どこにでも貼れます）</label><div class="xcrow"><textarea id="x-text" rows="2" readonly></textarea><button type="button" class="btn" id="x-copy">コピー</button></div><p class="msg" id="x-cmsg" role="status"></p></div>' +
     '<div class="xopts" id="x-opts"></div></div>';
   document.body.appendChild(xEl);
   $('x-close').onclick = xClose;
@@ -225,6 +226,8 @@ function xBuild() {
   $('x-save').onclick = xSave;
   $('x-share').onclick = xShare;
   $('x-post').onclick = xPost;
+  $('x-text').value = XSHARE;
+  $('x-copy').onclick = xCopy;
   $('x-share').hidden = !xCanShare();
 }
 function xOptsHTML() {
@@ -303,7 +306,13 @@ async function xSave() {
   catch (e) { if (e && e.code === 'declined') msg.textContent = '保存をやめました。'; else fallback('保存できませんでした。'); }
 }
 /* 共有：スマホなどの「共有」の画面（Web Share）で、画像とサイトの住所を X などのアプリへ渡す。使えない画面では「共有」を出さない */
-const XSITE = 'https://lertroo.github.io/tsutsu-urara/', XTEXT = 'つつうらら';
+const XSITE = 'https://lertroo.github.io/tsutsu-urara/', XTEXT = '#つつうらら', XSHARE = XTEXT + '\n' + XSITE;   /* 投稿の文は、名前をハッシュタグにして兼ねる（2026-11-10） */
+/* 共有用のテキストをコピー。クリップボードが使えない画面では、文字を選んだ状態にして、手でコピーしてもらう */
+async function xCopy() {
+  const ta = $('x-text'), m = $('x-cmsg');
+  try { await navigator.clipboard.writeText(ta.value); m.textContent = 'コピーしました。'; }
+  catch (e) { ta.focus(); ta.select(); m.textContent = '文字を選んであります。コピーしてください。'; }
+}
 function xCanShare() {
   try { return !!(navigator.canShare && navigator.canShare({ files:[new File([new Blob(['x'], { type:'image/png' })], 'x.png', { type:'image/png' })] })); } catch (e) { return false; }
 }
