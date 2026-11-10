@@ -253,6 +253,7 @@ h1 { margin: 0; }
   --halo: #fbf8ef;
   --stamp: #c8372d;
   --shadow: 0 1px 2px rgba(60, 50, 30, .06), 0 6px 18px rgba(60, 50, 30, .07);
+  --font-brand: 'M PLUS Rounded 1c', 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', sans-serif;   /* 見出しの「つつうらら」とロゴのはんこだけ（2026-11-10。OGP の画像とそろえた） */
   --font-display: 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Sans CJK JP', sans-serif;
   --font-body: 'BIZ UDPGothic', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
   --t-n: #b8322a; --t-k: #c27a12; --t-s: #14607f; --t-a: #6b7f86; --t-N: var(--t-n);   /* 城の天守の区分の色（一覧の丸） */
@@ -281,10 +282,10 @@ body { background: var(--bg); background-image: radial-gradient(color-mix(in srg
 /* ヘッダー */
 .head { align-items: center; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.logo { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; width: 38px; height: 38px; padding: 3px; box-sizing: border-box; border: 2px solid var(--stamp); border-radius: 8px; color: var(--stamp); font-family: var(--font-display); font-weight: 700; font-size: 14px; line-height: 1; transform: rotate(-4deg); background: color-mix(in srgb, var(--stamp) 6%, transparent); }
+.logo { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; width: 38px; height: 38px; padding: 3px; box-sizing: border-box; border: 2px solid var(--stamp); border-radius: 8px; color: var(--stamp); font-family: var(--font-brand); font-weight: 800; font-size: 14px; line-height: 1; transform: rotate(-4deg); background: color-mix(in srgb, var(--stamp) 6%, transparent); }
 .logo span { display: grid; place-items: center; }
 .logo span:last-child { color: var(--accent); }
-h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.05em; font-size: clamp(1.25rem, 5.4vw, 2rem); white-space: nowrap; line-height: 1.15; }
+h1 { font-family: var(--font-brand); font-weight: 800; letter-spacing: 0.05em; font-size: clamp(1.25rem, 5.4vw, 2rem); white-space: nowrap; line-height: 1.15; }
 h1 small { display: block; font-family: var(--font-body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.32em; color: var(--muted); margin-top: 2px; }
 
 /* カテゴリのタブ */
@@ -406,6 +407,10 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .photo img { display: block; margin-inline: auto; width: auto; max-width: 100%; height: auto; max-height: 360px; border-radius: 10px; border: 1px solid var(--line); background: var(--sea); }
 .photo figcaption { margin-top: 4px; font-size: 0.72rem; color: var(--muted); line-height: 1.5; }
 .photo figcaption a { color: var(--accent); }
+/* 作者のひとこと：事実の欄と分けて、手書きのメモのように見せる */
+.anote { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid var(--kc, var(--accent)); background: color-mix(in srgb, var(--kc, var(--accent)) 7%, transparent); border-radius: 0 8px 8px 0; }
+.anh { font-size: .72rem; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+.anote p { margin: 2px 0 0; line-height: 1.7; }
 .vrow input.vd { font: inherit; font-size: max(16px, 1rem); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; min-width: 0; width: 8.5em; font-variant-numeric: tabular-nums; }
 .vrow input.vd.bad { border-color: #c0392b; background: #fbe4e1; color: #7a1f14; }
 .vcal { position: relative; flex: none; display: inline-flex; }
@@ -553,7 +558,7 @@ a.btn { display: inline-block; text-decoration: none; }
 .pmrow #theme { min-width: 4.5em; }
 .pmrow #fontsel { min-width: 6.5em; }
 /* フォント「端末の標準」：サイトの書体（Webフォント）を使わない */
-:root[data-font="sys"] { --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif; }
+:root[data-font="sys"] { --font-brand: system-ui, sans-serif; --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif; }
 .pmrow #prefreset { flex: 1 1 auto; }
 .prefmenu button { white-space: nowrap; }
 @media (max-width: 380px) { .bname .upd { font-size: .62rem; } .updl { display: none; } }

@@ -58,6 +58,7 @@ function xPath(k) { return X_PATHS[k] || (X_PATHS[k] = new Path2D(GEO_PREFS[k]))
 const XFONT = (px, w) => (w || 400) + ' ' + px + 'px "BIZ UDPGothic","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif';
 /* ロゴ・タイトル・大きな数字は、画面の見出し（--font-display）と同じ丸ゴシック */
 const XHEAD = (px, w) => (w || 400) + ' ' + px + 'px "Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN","Yu Gothic","Noto Sans CJK JP",sans-serif';
+const XBRAND = (px, w) => (w || 800) + ' ' + px + 'px "M PLUS Rounded 1c","Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif';   /* はんこと「つつうらら」だけ（サイトの見出し・ロゴと同じ。読み込むのは7字だけなので、ほかの字は Zen Maru Gothic になる） */
 function xRR(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 function xFit(c, s, maxW) { if (c.measureText(s).width <= maxW) return s; let t = s; while (t.length > 1 && c.measureText(t + '…').width > maxW) t = t.slice(0, -1); return t + '…'; }
 function xDraw(cv, D) {
@@ -68,13 +69,13 @@ function xDraw(cv, D) {
   // 見出し
   c.save(); c.translate(pad + 38, pad + 38); c.rotate(-0.07);
   c.strokeStyle = P.stamp; c.lineWidth = 4; xRR(c, -38, -38, 76, 76, 12); c.stroke();
-  c.fillStyle = P.stamp; c.font = XHEAD(30, 700); c.textAlign = 'center';
+  c.fillStyle = P.stamp; c.font = XBRAND(30, 800); c.textAlign = 'center';
   ['津', '々', '浦', 'ラ'].forEach((ch, i) => { c.fillStyle = i === 3 ? P.accent : P.stamp; c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)); });
   c.restore();
   c.textAlign = 'left'; c.fillStyle = P.ink; c.font = XFONT(54, 700);
   const rightTxt = xPeriodLabel();
   c.font = XFONT(28, 400); const rw = c.measureText(rightTxt).width;
-  c.font = XHEAD(54, 700); c.fillText(xFit(c, XS.title || 'ツツウララ', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
+  c.font = XBRAND(54, 800); c.fillText(xFit(c, XS.title || 'つつうらら', W - pad * 2 - 100 - rw - 24), pad + 100, pad + 40);
   if (XS.who) { c.font = XFONT(28, 400); c.fillStyle = P.muted; c.fillText(xFit(c, curNameOf(XPID), W - pad * 2 - 100 - rw - 24), pad + 100, pad + 82); }
   c.font = XFONT(28, 400); c.fillStyle = P.muted; c.textAlign = 'right'; c.fillText(rightTxt, W - pad, pad + 40); c.textAlign = 'left';
   c.fillStyle = P.line; c.fillRect(pad, pad + 108, W - pad * 2, 2);
@@ -111,7 +112,15 @@ function xDraw(cv, D) {
     ks.forEach((k, i) => { const sw = w * D.kc[k] / sum; c.fillStyle = KCOL[k]; c.fillRect(cx, by, Math.max(3, sw - (i < ks.length - 1 ? gap : 0)), bh); cx += sw; });
     c.restore();
     const ew = (w - (cols - 1) * 24) / cols, ly = by + bh + 16;
-    ks.slice(0, rows * cols).forEach((k, i) => {
+    /* 入りきらないときは、最後の行を「ほか ○種類」にまとめる（上の帯には全部の種類が出ている） */
+    const slots = rows * cols, over = ks.length > slots, shown = over ? ks.slice(0, Math.max(0, slots - 1)) : ks;
+    if (over) {
+      const rest = ks.slice(shown.length), i = shown.length, col = Math.floor(i / rows), r = i % rows, lx = x + col * (ew + 24), ry = ly + r * rowH;
+      const cntTxt = String(rest.reduce((t, k) => t + D.kc[k], 0));
+      c.textAlign = 'right'; c.font = XFONT(30, 700); c.fillStyle = P.muted; c.fillText(cntTxt, lx + ew, ry + 30); c.textAlign = 'left';
+      c.font = XFONT(28, 700); c.fillText('ほか ' + rest.length + '種類', lx + 34, ry + 30);
+    }
+    shown.forEach((k, i) => {
       const col = Math.floor(i / rows), r = i % rows, lx = x + col * (ew + 24), ry = ly + r * rowH;
       c.fillStyle = KCOL[k]; xRR(c, lx, ry + 8, 22, 22, 5); c.fill();
       const cntTxt = String(D.kc[k]);   /* 割合（%）は出さない。全体のうちの何%（コンプリート率）に読まれるため。割合は上の帯で見せる */
@@ -186,7 +195,9 @@ function xDraw(cv, D) {
   if (hasA) {
     let y = y0; const cap = yEnd - y0;
     if (T.count) y += blkCount(ax, y, aw);
-    if (T.share) y += blkShare(ax, y, aw, Math.max(110, cap - (y - y0)));
+    /* 下に「最近の足あと」「年ごとの回数」を出すときは、内訳を地図の下の端までで止める（種類が多いと、下の分が入らなくなるため） */
+    const shareCap = mapOn && (wantRecent || wantYears) ? mapH : cap;
+    if (T.share) y += blkShare(ax, y, aw, Math.max(110, shareCap - (y - y0)));
     row1 = Math.max(row1, y - y0);
   }
   let y = y0 + row1 + 36;
@@ -205,13 +216,16 @@ function xBuild() {
   xEl = document.createElement('div'); xEl.id = 'xmodal'; xEl.hidden = true; xEl.setAttribute('role', 'dialog'); xEl.setAttribute('aria-modal', 'true'); xEl.setAttribute('aria-label', '画像を作る');
   xEl.innerHTML = '<div class="xpanel"><div class="xhead"><h2>画像を作る</h2><button type="button" class="btn" id="x-close">閉じる</button></div>' +
     '<div class="xprev"><canvas id="x-cv"></canvas></div><p class="msg" id="x-msg" role="status"></p>' +
-    '<div class="xact"><button type="button" class="btn primary" id="x-save">画像を保存</button><span class="xhint">設定はこのブラウザに覚えておきます。</span></div><div id="x-fb"></div>' +
+    '<div class="xact"><button type="button" class="btn primary" id="x-save">画像を保存</button><button type="button" class="btn" id="x-share" hidden>共有</button><button type="button" class="btn" id="x-post">X に投稿</button><span class="xhint">設定はこのブラウザに覚えておきます。</span></div><div id="x-fb"></div>' +
     '<div class="xopts" id="x-opts"></div></div>';
   document.body.appendChild(xEl);
   $('x-close').onclick = xClose;
   xEl.addEventListener('click', e => { if (e.target === xEl) xClose(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && xEl && !xEl.hidden) xClose(); });
   $('x-save').onclick = xSave;
+  $('x-share').onclick = xShare;
+  $('x-post').onclick = xPost;
+  $('x-share').hidden = !xCanShare();
 }
 function xOptsHTML() {
   const ck = (id, label, on, dis) => '<label class="xck' + (dis ? ' off' : '') + '"><input type="checkbox" data-x="' + id + '"' + (on ? ' checked' : '') + (dis ? ' disabled' : '') + '>' + label + '</label>';
@@ -225,16 +239,16 @@ function xOptsHTML() {
   h += '<fieldset><legend>期間</legend><select data-x="period"><option value="all"' + (XS.period === 'all' ? ' selected' : '') + '>全期間</option><option value="year"' + (XS.period === 'year' ? ' selected' : '') + '>今年</option><option value="d30"' + (XS.period === 'd30' ? ' selected' : '') + '>直近30日</option><option value="since"' + (XS.period === 'since' ? ' selected' : '') + '>指定した日から</option></select>' +
     (XS.period === 'since' ? ' <input type="date" data-x="since" value="' + esc(XS.since) + '">' : '') + '<p class="xnote">期間を決めると、日付のある記録だけが対象です。</p></fieldset>';
   h += '<fieldset><legend>見た目</legend><div class="xrow">' + rd('size', 'tall', '縦長', XS.size) + rd('size', 'square', '正方形', XS.size) + rd('size', 'wide', '横長', XS.size) + '</div><div class="xrow">' + rd('theme', 'light', 'ライト', XS.theme) + rd('theme', 'dark', 'ダーク', XS.theme) + '</div></fieldset>';
-  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="ツツウララ" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="空欄なら出しません" value="' + esc(XS.note) + '"></label></fieldset>';
+  h += '<fieldset><legend>文字</legend><label class="xtx">タイトル<input type="text" data-x="title" maxlength="24" placeholder="つつうらら" value="' + esc(XS.title) + '"></label><label class="xtx">ひとこと<input type="text" data-x="note" maxlength="40" placeholder="空欄なら出しません" value="' + esc(XS.note) + '"></label></fieldset>';
   return h;
 }
 let xFontsOK = false;
 async function xRender() {
   if (!xEl || xEl.hidden) return;
-  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦ラあア漢'), document.fonts.load(XFONT(30, 400), '津々浦ラあア漢'), document.fonts.load(XHEAD(30, 700), '津々浦ラあア漢')]); } catch (e) {} xFontsOK = true; }
+  if (!xFontsOK) { try { await Promise.all([document.fonts.load(XFONT(30, 700), '津々浦ラあア漢'), document.fonts.load(XFONT(30, 400), '津々浦ラあア漢'), document.fonts.load(XHEAD(30, 700), '津々浦ラあア漢'), document.fonts.load(XBRAND(30, 800), 'つうら津々浦ラ')]); } catch (e) {} xFontsOK = true; }
   const D = xCollect(); xData = D;
   xDraw($('x-cv'), D);
-  $('x-save').disabled = !D.nv;
+  $('x-save').disabled = $('x-share').disabled = $('x-post').disabled = !D.nv;
   $('x-msg').textContent = D.nv ? '' : 'この条件に当てはまる記録がありません。期間や種類を変えてみてください。';
   $('x-msg').classList.remove('err');
 }
@@ -287,5 +301,33 @@ async function xSave() {
   }
   try { await dlNs.save({ filename: xFileName(), data: blob }); msg.textContent = '保存しました。'; }
   catch (e) { if (e && e.code === 'declined') msg.textContent = '保存をやめました。'; else fallback('保存できませんでした。'); }
+}
+/* 共有：スマホなどの「共有」の画面（Web Share）で、画像とサイトの住所を X などのアプリへ渡す。使えない画面では「共有」を出さない */
+const XSITE = 'https://lertroo.github.io/tsutsu-urara/', XTEXT = 'つつうらら';
+function xCanShare() {
+  try { return !!(navigator.canShare && navigator.canShare({ files:[new File([new Blob(['x'], { type:'image/png' })], 'x.png', { type:'image/png' })] })); } catch (e) { return false; }
+}
+async function xShare() {
+  const msg = $('x-msg'); msg.classList.remove('err'); $('x-fb').innerHTML = '';
+  const blob = await new Promise(r => $('x-cv').toBlob(r, 'image/png'));
+  if (!blob) { msg.classList.add('err'); msg.textContent = '画像を作れませんでした。'; return; }
+  try { await navigator.share({ files:[new File([blob], xFileName(), { type:'image/png' })], text:XTEXT + ' ' + XSITE }); msg.textContent = ''; }
+  catch (e) {
+    if (e && e.name === 'AbortError') return;   /* 共有の画面を閉じただけ */
+    msg.classList.add('err'); msg.textContent = 'この画面では共有が使えません。「X に投稿」か「画像を保存」を使ってください。';
+  }
+}
+/* X に投稿：X の投稿画面は、外から画像を渡せない。画像を保存してから、文とサイトの住所の入った投稿画面を開くので、画像はそこで添付する */
+async function xPost() {
+  const w = window.open('about:blank', '_blank');   /* 押したその場で開かないと、ブラウザに止められる */
+  await xSave();
+  const u = 'https://x.com/intent/post?text=' + encodeURIComponent(XTEXT) + '&url=' + encodeURIComponent(XSITE);
+  let opened = false;
+  if (w) { try { w.opener = null; w.location.href = u; opened = true; } catch (e) {} }
+  if (!opened) { try { opened = !!window.open(u, '_blank', 'noopener'); } catch (e) {} }
+  const msg = $('x-msg'), saved = msg.textContent === '保存しました。';
+  if (saved) msg.textContent = '画像を保存しました。' + (opened ? '開いた X の投稿画面で、保存した画像を添付してください。' : '');
+  /* 新しいタブを開けなかったとき（claude.ai の中など）は、押して開くリンクを出す */
+  if (!opened) $('x-fb').insertAdjacentHTML('beforeend', '<p class="xhint"><a href="' + u + '" target="_blank" rel="noopener">X の投稿画面を開く</a>（開いたら、保存した画像を添付してください）</p>');
 }
 document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-act="xport"]'); if (b) xOpen(b); });

@@ -1,8 +1,10 @@
 /* ===== 写真（施設ごとに1枚。出典と条件つき）=====
    形：id → { f:'photos/ファイル名', by:'作者', lic:'CC BY-SA 4.0', licUrl:'ライセンスのURL', src:'写真のページのURL', from:'Wikimedia Commons', mod:'縮小' }
+   作者（letroo）が撮った写真は { f, by:'letroo', own:true, when:'撮った年月', what:'写っているもの（任意）' }。位置などの情報（Exif）は消して、縮小して置く。
    ファイルは photos/ に置く（外部のURLから直接は読まない）。作者・ライセンス・出典が分からない写真は載せない。
    条件の例：CC BY / CC BY-SA は、作者名・ライセンス・出典の表示が必要（BY-SA は、その写真を改変したときの再配布も同じライセンス）。CC0・パブリックドメインは表示不要だが、出典は書く。 */
 const PHOTOS = {
+  "mu:博物館明治村": { f:"photos/mu-meijimura.jpg", by:"letroo", own:true, when:"2016年5月", what:"東山梨郡役所（明治村の村長室がある建物）" },
   "cp:さいたま市": { f:"photos/cp-saitama.jpg", by:"ブツチチ", lic:"CC BY-SA 4.0", licUrl:"https://creativecommons.org/licenses/by-sa/4.0", src:"https://commons.wikimedia.org/wiki/File:%E5%9F%BC%E7%8E%89%E7%9C%8C%E5%BA%81%E8%88%8E.JPG", from:"Wikimedia Commons", mod:"縮小（元：2063×1423、2015年3月12日撮影）" },
   "cp:名古屋市": { f:"photos/cp-nagoya.jpg", by:"Alpsdake", lic:"CC BY-SA 4.0", licUrl:"https://creativecommons.org/licenses/by-sa/4.0", src:"https://commons.wikimedia.org/wiki/File:Aichi_Prefectural_Government_Office.JPG", from:"Wikimedia Commons", mod:"縮小（元：2576×1546、2014年9月7日撮影）" },
   "cp:岐阜市": { f:"photos/cp-gifu.jpg", by:"Aquanaut63619", lic:"CC BY-SA 3.0", licUrl:"https://creativecommons.org/licenses/by-sa/3.0/", src:"https://commons.wikimedia.org/wiki/File:%E5%B2%90%E9%98%9C%E7%9C%8C%E5%BA%81.jpg", from:"Wikimedia Commons", mod:"2012年7月16日撮影" },

@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:transparent;color:inherit}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f2eee4"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="description" content="日本地図で、行った場所を記録するサイト。"><meta property="og:type" content="website"><meta property="og:site_name" content="つつうらら"><meta property="og:title" content="つつうらら"><meta property="og:description" content="日本地図で、行った場所を記録するサイト。"><meta property="og:url" content="https://lertroo.github.io/tsutsu-urara/"><meta property="og:image" content="https://lertroo.github.io/tsutsu-urara/icons/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="つつうらら：日本地図で、行った場所を記録する"><meta name="twitter:card" content="summary_large_image"><script>/* 表示モードと文字の大きさを、描く前に当てる（ページを移るときに白く光らないように。決まりは site.js の applyPrefs と同じ） */(()=>{let t=null,f=0;try{t=localStorage.getItem('jp-theme');f=parseInt(localStorage.getItem('jp-fs'),10)}catch(e){}const r=document.documentElement;if(t==='light'||t==='dark')r.setAttribute('data-theme',t);try{if(localStorage.getItem('jp-font')==='sys')r.setAttribute('data-font','sys')}catch(e){}if(f>=80&&f<=150)r.style.fontSize=f+'%';const d=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches),c=d?'#12171d':'#f2eee4';r.style.background=c;r.style.colorScheme=d?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=c})()</script></head><body>
 <title>津々浦ラ</title>
 <script>
   (() => {
@@ -14,12 +14,12 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261110a">
+<link rel="stylesheet" href="style.css?v=20261110c">
 
 <main class="app">
   <header>
     <div class="head">
-      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>ツツウララ</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
+      <div class="brand"><span class="logo" aria-hidden="true"><span>津</span><span>々</span><span>浦</span><span>ラ</span></span><div class="bname"><h1>つつうらら</h1><p class="upd"><span class="updl">データ</span>更新：<span id="dupd"></span></p></div></div>
       <div class="topbar prefs">
         <button type="button" class="prefbtn" id="prefbtn" aria-label="表示の設定" title="表示の設定" aria-expanded="false" aria-controls="prefmenu"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
         <div class="prefmenu" id="prefmenu" role="group" aria-label="表示の設定" hidden>
@@ -119,9 +119,10 @@
 <script src="data/museums.js"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
-<script src="site.js?v=20261109b"></script>
+<script src="data/hitokoto.js?v=20261110a"></script>
+<script src="site.js?v=20261110b"></script>
 <script src="core.js?v=20261109a"></script>
-<script src="xport.js?v=20261102c"></script>
+<script src="xport.js?v=20261110e"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -901,7 +902,6 @@ function markSel(noLabel) {
 
 /* ===== 詳細 ===== */
 function mReg(it) { return it.rj === '登録・指定の一覧に掲載なし' ? '一覧に掲載なし' : (it.rj || ''); }
-function fmtZooHa(a) { const h = a / 10000; return (h >= 10 ? Math.round(h) : h.toFixed(1)) + ' ha'; }
 function fmtKm(a) { return (a >= 10 ? a.toFixed(1) : a.toFixed(2)) + ' km²'; }
 /* 日本百名山にも入っている場所は、詳細に「日本百名山」の印と、本の番号・山名・標高を足す */
 function decorateTwin(it) {
@@ -1012,6 +1012,8 @@ const fRow = (dt, html, num) => '<div class="row"><dt>' + dt + '</dt><dd' + (num
 const fTxt = (dt, v, num) => v ? fRow(dt, esc(v), num) : '';
 const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
 const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
+/* 開設の日付：データには「1965」「1937-03」「2004-07-13」の形が混ざっているので、「1965年」「1937年3月」「2004年7月13日」にそろえて出す（「1965年」のように書いてあるものは、そのまま） */
+const fmtYmd = s => { const m = /^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?$/.exec(s || ''); return m ? m[1] + '年' + (m[2] ? +m[2] + '月' : '') + (m[3] ? +m[3] + '日' : '') : s; };
 const fPos = (it, what, after) => typeof it.la === 'number' ? fRow('位置（' + esc(what || '目安') + '）', fLL(it.la, it.lo) + (after || ''), 1) : fRow('位置', '地図には表示していません（位置情報なし）');
 const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '') + '">' + esc(t) + '</span>';
 /* 押すと、その種類の細かい絞り込み（TYPEF の値 ft）で一覧を出すバッジ */
@@ -1025,7 +1027,7 @@ const tagNotes = it => (it.tag ? it.tag.split('、') : []).filter(t => TAG_NOTE[
 let dK = '';   /* いま詳細を作っている種類（dHead がタグのチップに使う） */
 const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' + tagNotes(it) +
   '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
-/* 区域と面積のある施設（動物園・水族館・植物園・テーマパーク）は、同じ形で出す */
+/* 動物園・水族館・植物園・テーマパークは、同じ形で出す（OSM の区域から計算した面積 ar は、データには残すが出さない。2026-11-10 にユーザーが決めた） */
 const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
 const TW_BL_FT = { 'イースト':'east', 'セントラル':'central', 'カンサイ':'kansai', 'ウエスト':'west', 'letroo基準':'letroo' };
 const parkSb = it => it.sb === 'その他' ? 'その他の公園' : it.sb + '公園';
@@ -1039,7 +1041,7 @@ function detailHTML(it, k) {
   /* x は閉園した年。年が分からないときは true（「閉園済み」とだけ出す）。xw は「閉園」以外の言葉（閉館・閉鎖など） */
   const xBadge = it.x ? badge((it.xw || '閉園') + '済み' + (it.x === true ? '' : '（' + it.x + '年）'), 1) : '';
   if (FAC[k]) return dHead(badge(FAC[k]) + xBadge + (it.tg ? badge(FAC[k] + '＋' + it.tg.split('、').join('＋'), 1) : ''), it, pfs) +
-    facts(fIn, fRow('面積（概算）', it.ar ? '約 ' + fmtZooHa(it.ar) : '不明', 1), fTxt('旧称', it.o), nt, fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+    facts(fIn, fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
   if (k === 'parks') { const toshi = it.sb !== 'その他';   /* 都市公園法の国営・広域公園か */
     return dHead(badge('公園') + xBadge + fbadge(parkSb(it), 'parks', ({ 国営:'kokuei', 広域:'kouiki' })[it.sb] || 'etc'), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('別名', it.o), toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, web, fPos(it, rp)); }
@@ -1077,7 +1079,7 @@ function detailHTML(it, k) {
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
   if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? fbadge(it.kb, 'museums', MU_KB_FT[it.kb]) : '') + (mReg(it) ? fbadge(mReg(it), 'museums', MU_RJ_FT[it.rj]) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('旧称', it.o), fTxt('通称', it.al), fIn, fTxt('含む施設', it.inc), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
-      it.ar ? fRow('面積（概算）', '約 ' + fmtZooHa(it.ar), 1) : '', fTxt('開設', it.sd, 1), wiki, web, fPos(it));
+      fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
   if (k === 'airports') {
     const rws = String(it.rw || '').split(',').filter(Boolean).map(x => x + ' m').join('、');
     const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
@@ -1114,7 +1116,7 @@ function renderDetail() {
     box.querySelectorAll('.nbr').forEach(b => b.onclick = () => showOnMap(b.dataset.id, () => select(b.dataset.id, false), true));
   }
   const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
-  if (vAnchor) vAnchor.insertAdjacentHTML('afterend', photoHTML(it) + actionsHTML(it) + visBlock(it)); else box.insertAdjacentHTML('beforeend', visBlock(it));
+  if (vAnchor) vAnchor.insertAdjacentHTML('afterend', photoHTML(it) + noteHTML(it) + actionsHTML(it) + visBlock(it)); else box.insertAdjacentHTML('beforeend', visBlock(it));
   bindVis(it);
   const ph = box.querySelector('h2.place');
   if (ph && dotEls[it.id]) {   /* 施設名を押すと、地図をその位置へ動かす（位置がない施設は何もしない） */
@@ -1133,7 +1135,14 @@ function photoHTML(it) {
   const p = typeof PHOTOS === 'object' && (PHOTOS[it.id] || (it.na && PHOTOS[it.na]));
   if (!p || !/^photos\/[\w.\-]+$/.test(p.f || '')) return '';
   const lk = (u, t) => /^https:\/\//.test(u || '') ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(t) + '</a>' : esc(t);
-  return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '') + '</figcaption></figure>';
+  const cap = p.own ? '写真：' + esc(p.by) + '撮影' + (p.when ? '（' + esc(p.when) + '）' : '') + (p.what ? '／' + esc(p.what) : '')   /* 作者が撮った写真 */
+    : '写真：' + esc(p.by || '作者不明') + '（' + lk(p.licUrl, p.lic || 'ライセンス不明') + '）／' + lk(p.src, p.from || '出典') + (p.mod ? '／' + esc(p.mod) : '');
+  return '<figure class="photo"><img src="' + esc(p.f) + '" alt="' + esc(it.n) + 'の写真" loading="lazy" decoding="async"><figcaption>' + cap + '</figcaption></figure>';
+}
+/* 作者のひとこと（data/hitokoto.js の HITOKOTO） */
+function noteHTML(it) {
+  const t = typeof HITOKOTO === 'object' && HITOKOTO[it.id];
+  return t ? '<div class="anote"><div class="anh">ひとこと</div><p>' + esc(t) + '</p></div>' : '';
 }
 /* 近くの施設。TWIN の副（ほかの種類の同じ場所）は、主のほうで数える */
 function nearItems(it, n, same, k) {
@@ -2049,6 +2058,6 @@ if (location.hostname !== 'lertroo.github.io') {
 }
 </script>
 <!-- 文字の CSS は、スクリプトの後ろで読む（前に置くと、届くまでスクリプト全体が待たされる） -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Maru+Gothic:wght@500;700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&text=%E3%81%A4%E3%81%86%E3%82%89%E6%B4%A5%E3%80%85%E6%B5%A6%E3%83%A9&display=swap">
 
 </body></html>
