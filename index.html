@@ -106,7 +106,7 @@
 <script src="data/koei.js"></script>
 <script src="data/parks.js"></script>
 <script src="data/castles.js"></script>
-<script src="data/airports.js"></script>
+<script src="data/airports.js?v=20261111a"></script>
 <script src="data/stations.js"></script>
 <script src="data/zoos.js"></script>
 <script src="data/capitals.js"></script>
@@ -1092,7 +1092,7 @@ function detailHTML(it, k) {
     const hm = s => (s && /^\d{4}$/.test(s)) ? (+s.slice(0, 2)) + ':' + s.slice(2) : '';
     return dHead(badge('空港') + badge(AIR_FL_SHORT[it.fl], 1), it, pfs + '（' + (AIR_ST[it.st] || '') + '）') +
       facts(fRow('面積（概算）', '約 ' + fmtKm(it.ar), 1), fTxt('区分', AIR_TYPE[it.t]), fTxt('定期便', AIR_FL[it.fl]), fTxt('滑走路', rws || '不明', 1),
-        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), web, fPos(it, '標点'));
+        fTxt('運用時間', (hm(it.o) && hm(it.c)) ? hm(it.o) + '〜' + hm(it.c) : '不明', 1), wiki, web, fPos(it, '標点'));
   }
   if (k === 'stations') {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
