@@ -84,7 +84,7 @@ const TPARKS = [
 {"id":"th:猟師工房ドライブイン","n":"猟師工房ドライブイン","pf":"千葉","lo":140.06894,"la":35.19744,"ar":null,"tg":"","nt":"","wp":"ja:猟師工房ドライブイン","web":"","sd":""},
 {"id":"th:蓮沼海浜公園 こどものひろば","n":"蓮沼海浜公園 こどものひろば","pf":"千葉","lo":140.50325,"la":35.58958,"ar":58762,"tg":"","nt":"","wp":"","web":"http://kodomonohiroba.hasunuma.co.jp/","sd":""},
 {"id":"th:谷津遊園","n":"谷津遊園","pf":"千葉","x":1982,"lo":140.00556,"la":35.68086,"ar":null,"tg":"","nt":"1982年に閉園（Wikipedia の記述による）","wp":"Q11633027","web":"","sd":""},
-{"id":"th:NHKスタジオパーク","n":"NHKスタジオパーク","pf":"東京","x":2020,"lo":139.69659,"la":35.66511,"ar":null,"tg":"","nt":"","wp":"ja:NHKスタジオパーク","web":"https://park.tachikawaonline.jp/themepark/10_nhk.htm","sd":""},
+{"id":"th:NHKスタジオパーク","n":"NHKスタジオパーク","pf":"東京","xw":"閉館","x":2020,"lo":139.69659,"la":35.66511,"ar":null,"tg":"","nt":"","wp":"ja:NHKスタジオパーク","web":"https://park.tachikawaonline.jp/themepark/10_nhk.htm","sd":""},
 {"id":"th:あらかわ遊園","n":"あらかわ遊園","pf":"東京","lo":139.7587,"la":35.75349,"ar":31510,"tg":"","nt":"","wp":"ja:あらかわ遊園","web":"https://www.city.arakawa.tokyo.jp/yuuen/","sd":""},
 {"id":"th:いぬたま・ねこたま","n":"いぬたま・ねこたま","pf":"東京","x":2006,"lo":139.63056,"la":35.61056,"ar":null,"tg":"","nt":"2006年に閉園（Wikipedia の記述による）","wp":"Q11259876","web":"","sd":""},
 {"id":"th:わんダフルネイチャーヴィレッジ","n":"わんダフルネイチャーヴィレッジ","pf":"東京","lo":139.2632,"la":35.71671,"ar":49970,"tg":"","nt":"","wp":"","web":"https://www.wnv.tokyo/","sd":""},
