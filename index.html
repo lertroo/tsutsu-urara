@@ -100,14 +100,14 @@
 
 <script src="data/geo.js"></script>
 <script src="data/lakes.js"></script>
-<script src="data/shinkansen.js"></script>
+<script src="data/shinkansen.js?v=20261111a"></script>
 <script src="data/ikenai.js?v=20261109a"></script>
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
 <script src="data/parks.js"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111b"></script>
-<script src="data/stations.js"></script>
+<script src="data/stations.js?v=20261111b"></script>
 <script src="data/zoos.js"></script>
 <script src="data/capitals.js"></script>
 <script src="data/worldheritage.js"></script>
@@ -1061,7 +1061,7 @@ function detailHTML(it, k) {
     facts(fTxt('国立公園', it.pk), fTxt('選定', it.sl), fTxt('種類', it.ty), nt, wiki, fPos(it, rp));
   if (k === 'hyaku') return dHead(badge('日本百名山') + badge('第' + it.no + '座', 1), it, it.ps + (it.al ? '（記事名：' + it.al + '）' : '')) +
     facts(fRow('標高', it.el.toLocaleString() + ' m', 1), fTxt('山系', it.rg), fTxt('国立公園', it.pk), wiki, fPos(it, rp));
-  if (k === 'shin') return dHead(badge('新幹線の駅'), it, pfs) + facts(fTxt('路線', it.ln.join('・')), fTxt('所在', pfs), nt, fPos(it, rp));
+  if (k === 'shin') return dHead(badge('新幹線の駅'), it, pfs) + facts(fTxt('路線', it.ln.join('・')), fTxt('所在', pfs), nt, wiki, fPos(it, rp));
   if (k === 'edge') {
     /* 記録を共通にしている先（SHARE）。主の行の名前と種類を出す */
     const rid = cid(it.id), rIt = rid !== it.id ? findItem(rid) : null;
@@ -1096,7 +1096,7 @@ function detailHTML(it, k) {
   }
   if (k === 'stations') {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
-    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
+    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, wiki, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
   }
   return dHead(badge('日本100名城 No.' + it.no) + badge(TYPE_LABEL[it.t], 1), it, pfs) + facts(fTxt('別名', it.al), fIn, fPos(it), fTxt('備考', it.rm), wiki, web);   /* 城 */
 }
