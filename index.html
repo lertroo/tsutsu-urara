@@ -104,7 +104,7 @@
 <script src="data/ikenai.js?v=20261109a"></script>
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
-<script src="data/parks.js?v=20261113h"></script>
+<script src="data/parks.js?v=20261113i"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
 <script src="data/stations.js?v=20261111b"></script>
@@ -121,7 +121,7 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
-<script src="site.js?v=20261113a"></script>
+<script src="site.js?v=20261113b"></script>
 <script src="core.js?v=20261113i"></script>
 <script src="xport.js?v=20261110g"></script>
 <script>
@@ -573,7 +573,7 @@ function drawDots() {
     const xy = proj(it.lo, it.la);
     const g = el('g', { 'data-id':it.id }, gDots);
     const k = curKind(it);
-    const mk = el('rect', { class:'mk' + (k === 'koei' && it.x ? ' gone' : ''), style:'--kc:' + KCOL[k] }, g);
+    const mk = el('rect', { class:'mk' + (it.x ? ' gone' : ''), style:'--kc:' + KCOL[k] }, g);
     const title = el('title', {}, g); title.textContent = k === 'stations' ? dn(it) : it.n;
     if (!shown.has(it.id)) g.classList.add('dim');
     if (isVisited(it.id)) g.classList.add('vis');
@@ -1020,6 +1020,9 @@ const fTxt = (dt, v, num) => v ? fRow(dt, esc(v), num) : '';
 const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
 const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
 /* 開設の日付：データには「1965」「1937-03」「2004-07-13」の形が混ざっているので、「1965年」「1937年3月」「2004年7月13日」にそろえて出す（「1965年」のように書いてあるものは、そのまま） */
+/* 閉館・閉園などの言葉と、一覧・詳細に出す「2015年閉園」の形（2026-11-13 にそろえた）。xw がないときは種類で決める（道の駅は閉鎖、博物館・水族館は閉館、ほかは閉園） */
+function xWord(it, k) { return it.xw || ({ stations:'閉鎖', museums:'閉館', aquas:'閉館' })[k || KIND.get(it.id)] || '閉園'; }
+function xLabel(it, k) { return (it.x === true ? '' : it.x + '年') + xWord(it, k); }
 const fmtYmd = s => { const m = /^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?$/.exec(s || ''); return m ? m[1] + '年' + (m[2] ? +m[2] + '月' : '') + (m[3] ? +m[3] + '日' : '') : s; };
 const fPos = (it, what, after) => typeof it.la === 'number' ? fRow('位置（' + esc(what || '目安') + '）', fLL(it.la, it.lo) + (after || ''), 1) : fRow('位置', '地図には表示していません（位置情報なし）');
 const badge = (t, outline) => '<span class="badge' + (outline ? ' outline' : '') + '">' + esc(t) + '</span>';
@@ -1029,12 +1032,12 @@ const CA_T_FT = { N:'N', k:'tower', s:'s', a:'a' };   /* 城の区分 → TYPEF 
 const KO_SH_FT = { 競馬場:'keiba', 競輪場:'keirin', 競艇場:'kyotei', オートレース場:'auto' };
 const MU_KB_FT = { '都道府県立':'pref', '国立':'nat', '国立大学':'nat', '国宝所蔵':'kokuho', 'letroo基準':'letroo' }, MU_RJ_FT = { '登録博物館':'reg', '指定施設':'des' };
 /* タグの説明（付箋）。詳細のタグの下に出す。×で閉じたタグは、このブラウザでは次から出さない。文のないタグには出ない */
-const TAG_NOTE = { しょくぶつ:'タグ「しょくぶつ」は、花や木を見に行ける公園の目印です。', いきもの:'タグ「いきもの」は、動物に会える公園などの目印です。' };
+const TAG_NOTE = { しょくぶつ:'タグ「しょくぶつ」は、花や木を見に行ける公園の目印です。', いきもの:'タグ「いきもの」は、公園・植物園・博物館などで、動物に会える所の目印です。' };
 let tagNoteOff = []; try { const v = JSON.parse(localStorage.getItem('jp-tagnote')); if (Array.isArray(v)) tagNoteOff = v; } catch (e) {}
 const tagNotes = it => (it.tag ? it.tag.split('、') : []).filter(t => TAG_NOTE[t] && !tagNoteOff.includes(t)).map(t => '<div class="tnote"><span>📌 ' + esc(TAG_NOTE[t]) + '</span><button type="button" class="tnx" data-t="' + esc(t) + '" aria-label="この説明を閉じる" title="この説明を閉じる">×</button></div>').join('');
 /* 見出し：種類などの印と地方、名前、名前の下の一行 */
 let dK = '';   /* いま詳細を作っている種類（dHead がタグのチップに使う） */
-const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' + tagNotes(it) +
+const dHead = (badges, it, sub, name) => '<div class="kicker">' + badges + (it.kg ? badge('休業中', 1) : '') + (it.tag ? it.tag.split('、').map(t => fbadge(t, dK, 'tag:' + t)).join('') : '') + (REGION_OF[it.pf] ? '<span class="sub" style="margin:0">' + esc(REGION_OF[it.pf]) + '</span>' : '') + '</div>' + tagNotes(it) +
   '<h2 class="place">' + esc(name || it.n) + '</h2><p class="sub">' + esc(sub) + '</p>';
 /* 動物園・水族館・植物園・テーマパークは、同じ形で出す（OSM の区域から計算した面積 ar は、データには残すが出さない。2026-11-10 にユーザーが決めた） */
 const FAC = { zoos:'動物園', aquas:'水族館', bots:'植物園', themes:'テーマパーク' };
@@ -1048,7 +1051,7 @@ function detailHTML(it, k) {
   const fIn = fTxt('場所', it.in ? it.in + 'の中' : it.by ? it.by + 'に併設' : '');   /* ほかの施設の中にあるとき（in はその施設の名前。一覧の行と検索にも使う。一覧の行は、短い名前 ins があればそちら。by は併設している施設で、検索にだけ使う） */
   const facts = (...rows) => '<dl class="facts">' + rows.join('') + '</dl>';
   /* x は閉園した年。年が分からないときは true（「閉園済み」とだけ出す）。xw は「閉園」以外の言葉（閉館・閉鎖など） */
-  const xBadge = it.x ? badge((it.xw || '閉園') + '済み' + (it.x === true ? '' : '（' + it.x + '年）'), 1) : '';
+  const xBadge = it.x ? badge(xLabel(it, k), 1) : '';
   if (FAC[k]) return dHead(badge(FAC[k]) + xBadge + (it.tg ? fbadge(FAC[k] + '＋' + it.tg.split('、').join('＋'), k, 'combo') : ''), it, pfs) +
     facts(fIn, fTxt('別名', it.al), fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
   if (k === 'parks') { const toshi = it.sb !== 'その他';   /* 都市公園法の国営・広域公園か */
@@ -1078,15 +1081,15 @@ function detailHTML(it, k) {
     return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
       facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
   }
-  if (k === 'koei') return dHead(fbadge(it.sh, 'koei', KO_SH_FT[it.sh]) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
-    facts(fTxt('状況', it.x ? it.x + '年に' + it.xw : ''), fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
+  if (k === 'koei') return dHead(fbadge(it.sh, 'koei', KO_SH_FT[it.sh]) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : '') + xBadge, it, pfs + (it.ci ? ' ' + it.ci : '')) +
+    facts(fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
   if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
     facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, fPos(it, rp));
   if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
-  if (k === 'museums') return dHead(badge('博物・美術館') + (it.x ? badge('閉館済み（' + it.x + '年）', 1) : '') + (it.kb ? fbadge(it.kb, 'museums', MU_KB_FT[it.kb]) : '') + (mReg(it) ? fbadge(mReg(it), 'museums', MU_RJ_FT[it.rj]) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
+  if (k === 'museums') return dHead(badge('博物・美術館') + xBadge + (it.kb ? fbadge(it.kb, 'museums', MU_KB_FT[it.kb]) : '') + (mReg(it) ? fbadge(mReg(it), 'museums', MU_RJ_FT[it.rj]) : ''), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('旧称', it.o), fTxt('通称', it.al), fIn, fTxt('含む施設', it.inc), fTxt('種別', it.st), fTxt('登録状況', it.rj ? it.rj + '（文化庁の一覧・2026年10月8日版）' : ''), fTxt('備考', it.rm),
       fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
   if (k === 'airports') {
@@ -1098,9 +1101,19 @@ function detailHTML(it, k) {
   }
   if (k === 'stations') {
     const src = { o:'OpenStreetMap', w:'Wikidata', m:'OpenStreetMap等', h:'地図から', p:'Wikipedia' }[it.s];
-    return dHead(badge('道の駅') + (it.x ? badge('閉鎖済み（' + it.x + '年）', 1) : ''), it, pfs, dn(it)) + facts(nt, wiki, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
+    return dHead(badge('道の駅') + xBadge, it, pfs, dn(it)) + facts(nt, wiki, web, fPos(it, '', src ? '（' + src + '）' : ''), fTxt('移転', it.mv), (it.ov ? fRow('旧施設の位置', '<a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + it.ov[0].toFixed(5) + ',' + it.ov[1].toFixed(5) + '">' + fLL(it.ov[0], it.ov[1]) + '</a>' + (it.ov[2] ? '（' + esc(it.ov[2]) + '）' : ''), 1) : ''));
   }
   return dHead(badge('日本100名城 No.' + it.no) + fbadge(TYPE_LABEL[it.t], 'castles', CA_T_FT[it.t]), it, pfs) + facts(fTxt('別名', it.al), fIn, fPos(it), fTxt('備考', it.rm), wiki, web);   /* 城 */
+}
+/* 中にある施設：ほかの行の in（親の名前）が、この行に当たるもの（2026-11-13）。
+   親の名前・名前の後ろの（…）や「〜…〜」を除いた名前・別名・旧称で当てる（例：in「大森山動物園」→「大森山動物園〜あきぎんオモリンの森〜（ミルヴェ）」） */
+let inKidsRev = -1, inKids = null;
+function kidsOf(it) {
+  if (inKidsRev !== dataRev) { inKidsRev = dataRev; inKids = new Map(); ALLX.forEach(x => { if (x.in) { const a = inKids.get(x.in); if (a) a.push(x); else inKids.set(x.in, [x]); } }); }
+  const n = it.n || '', keys = new Set([n, n.replace(/（[^）]*）$/, ''), n.replace(/〜.*$/, '')].concat(String(it.al || '').split('、'), String(it.o || '').split('、')).filter(Boolean));
+  const out = [];
+  keys.forEach(key => (inKids.get(key) || []).forEach(x => { if (x !== it && !out.includes(x)) out.push(x); }));
+  return out.sort((a, b) => jaCmp(a.n, b.n));
 }
 function renderDetail() {
   const box = $('detail');
@@ -1118,10 +1131,15 @@ function renderDetail() {
   }
   const nbS = nearItems(it, 5, true, k), nbO = nearItems(it, 5, false, k);
   const nbRow = o => '<button type="button" class="nbr" data-id="' + esc(o.it.id) + '"><span>' + (o.m !== k ? '<i class="nbk">' + MODE_LABEL[o.m] + '</i>' : '') + esc(o.m === 'stations' ? dn(o.it) : o.it.n) + '</span><span class="nbd">' + (o.d < 10 ? o.d.toFixed(1) : Math.round(o.d)) + ' km</span></button>';
-  if (nbS.length || nbO.length) {
-    box.insertAdjacentHTML('beforeend', '<div class="nbrs">' +
-      (nbS.length ? '<div class="nbh">近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join('') : '') +
-      (nbO.length ? '<div class="nbh" style="margin-top:12px">近くのほかの種類</div>' + nbO.map(nbRow).join('') : '') + '</div>');
+  const kids = kidsOf(it);
+  const kidRow = x => { const m = KIND.get(x.id); return '<button type="button" class="nbr" data-id="' + esc(x.id) + '"><span><i class="nbk">' + MODE_LABEL[m] + '</i>' + esc(m === 'stations' ? dn(x) : x.n) + (x.x ? '<span class="rx">（' + esc(xLabel(x, m)) + '）</span>' : '') + (x.kg ? '<span class="rx">（休業）</span>' : '') + '</span></button>'; };
+  if (kids.length || nbS.length || nbO.length) {
+    const hs = () => box.querySelector('.nbrs .nbh') ? ' style="margin-top:12px"' : '';
+    box.insertAdjacentHTML('beforeend', '<div class="nbrs"></div>');
+    const nb = box.querySelector('.nbrs');
+    if (kids.length) nb.insertAdjacentHTML('beforeend', '<div class="nbh">中にある施設</div>' + kids.map(kidRow).join(''));
+    if (nbS.length) nb.insertAdjacentHTML('beforeend', '<div class="nbh"' + hs() + '>近くの同じ種類（' + MODE_LABEL[k] + '）</div>' + nbS.map(nbRow).join(''));
+    if (nbO.length) nb.insertAdjacentHTML('beforeend', '<div class="nbh"' + hs() + '>近くのほかの種類</div>' + nbO.map(nbRow).join(''));
     box.querySelectorAll('.nbr').forEach(b => b.onclick = () => showOnMap(b.dataset.id, () => select(b.dataset.id, false), true));
   }
   const vAnchor = box.querySelector('h2.place + p.sub') || box.querySelector('h2.place');
@@ -1260,7 +1278,7 @@ function renderList(keepCount) {
     const k = KIND.get(it.id), hmr = rk1 === 'hyaku' ? HM_OF[it.id] : null;
     const tagc = qtagHits(it).map(g => '<i class="nbk rtag">タグ：' + esc(g) + '</i>').join('');   /* 検索語がタグだけに当たったとき */
     const row = (name, sub, no, gone) => '<span class="rno">' + (no || '') + '</span><span class="rname' + (gone ? ' gone' : '') + '">' + visMark(it.id) + name + '</span><span class="rval"></span><span class="rsub">' + tagc + sub + '</span>';
-    const name = (k === 'stations' ? (rk1 === 'stations' ? '' : '道の駅') + esc(dn(it)) : esc(it.n) + (it.in ? '<span class="rx">（' + esc(it.ins || it.in) + '内）</span>' : '') + (it.x ? '<span class="rx">（' + esc((it.x === true ? '' : it.x + '年') + (it.xw || '閉園')) + '）</span>' : '')) + (it.kg ? '<span class="rx">（休業）</span>' : '');   /* kg：休業中（くわしくは注釈に書く） */
+    const name = (k === 'stations' ? (rk1 === 'stations' ? '' : '道の駅') + esc(dn(it)) : esc(it.n) + (it.in ? '<span class="rx">（' + esc(it.ins || it.in) + '内）</span>' : '') + (it.x ? '<span class="rx">（' + esc(xLabel(it, k)) + '）</span>' : '')) + (it.x && k === 'stations' ? '<span class="rx">（' + esc(xLabel(it, k)) + '）</span>' : '') + (it.kg ? '<span class="rx">（休業）</span>' : '');   /* kg：休業中（くわしくは注釈に書く） */
     if (hmr) b.innerHTML = row(esc(hmr.n), esc(prefFull(hmr.pf)) + ' / ' + hmr.el.toLocaleString() + ' m・' + esc(hmr.rg), hmr.no);
     else if (k === rk1 && k === 'castles') b.innerHTML = '<span class="rno">' + it.no + '</span><span class="rname">' + visMark(it.id) + esc(it.n) + (it.kg ? '<span class="rx">（休業）</span>' : '') + '</span><span class="rval"><span class="tdot" style="background:var(--t-' + it.t + ')"></span>' + esc(it.pf) + '</span>';
     else if (k === rk1 && ROW_SUB[k]) b.innerHTML = row(name, ROW_SUB[k](it), '', it.x);
