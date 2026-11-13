@@ -104,25 +104,25 @@
 <script src="data/ikenai.js?v=20261109a"></script>
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
-<script src="data/parks.js?v=20261113b"></script>
+<script src="data/parks.js?v=20261113e"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
 <script src="data/stations.js?v=20261111b"></script>
-<script src="data/zoos.js?v=20261112k"></script>
+<script src="data/zoos.js?v=20261113b"></script>
 <script src="data/capitals.js"></script>
 <script src="data/worldheritage.js"></script>
 <script src="data/scenic.js"></script>
 <script src="data/nature.js?v=20261111a"></script>
 <script src="data/hyakumeizan.js?v=20261111a"></script>
-<script src="data/aquariums.js?v=20261112a"></script>
-<script src="data/gardens.js?v=20261112b"></script>
+<script src="data/aquariums.js?v=20261113c"></script>
+<script src="data/gardens.js?v=20261113t"></script>
 <script src="data/themeparks.js?v=20261112i"></script>
-<script src="data/museums.js?v=20261112d"></script>
+<script src="data/museums.js?v=20261113b"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
-<script src="site.js?v=20261112a"></script>
-<script src="core.js?v=20261112e"></script>
+<script src="site.js?v=20261113a"></script>
+<script src="core.js?v=20261113g"></script>
 <script src="xport.js?v=20261110g"></script>
 <script>
 
@@ -1050,7 +1050,7 @@ function detailHTML(it, k) {
   /* x は閉園した年。年が分からないときは true（「閉園済み」とだけ出す）。xw は「閉園」以外の言葉（閉館・閉鎖など） */
   const xBadge = it.x ? badge((it.xw || '閉園') + '済み' + (it.x === true ? '' : '（' + it.x + '年）'), 1) : '';
   if (FAC[k]) return dHead(badge(FAC[k]) + xBadge + (it.tg ? fbadge(FAC[k] + '＋' + it.tg.split('、').join('＋'), k, 'combo') : ''), it, pfs) +
-    facts(fIn, fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
+    facts(fIn, fTxt('別名', it.al), fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), wiki, web, fPos(it));
   if (k === 'parks') { const toshi = it.sb !== 'その他';   /* 都市公園法の国営・広域公園か */
     return dHead(badge('公園') + xBadge + fbadge(parkSb(it), 'parks', ({ 国営:'kokuei', 広域:'kouiki' })[it.sb] || 'etc'), it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('別名', it.o), toshi ? fTxt('種別', it.sb + '公園（都市公園法）') : '', toshi || it.ha != null ? fRow('開設面積', it.ha != null ? esc(it.ha.toLocaleString('ja-JP')) + ' ha（2021年3月末）' : '不明', 1) : '', fTxt('開園', it.sd, 1), nt, wiki, web, fPos(it, rp)); }
@@ -1995,8 +1995,10 @@ function restoreMapState(st) {
 function renderCheck() {
   const C = window.CHECKLIST, box = $('chk');
   if (!C || !Array.isArray(C.items) || !C.items.length) { box.hidden = true; return; }
-  /* 状態は { ok:{番号:1}, ng:{番号:1}, memo:{番号:'一言'} }。ブラウザに置き、アーティファクトでは db の checks/〈版の名前から作った記号〉にも書く（Claude が読む） */
-  const key = 'jp-chk-' + (C.v || ''), blank = () => ({ ok: {}, ng: {}, memo: {} });
+  /* 状態は { ok:{記号:1}, ng:{記号:1}, memo:{記号:'一言'} }。記号は項目の id（ページなら page:〈ファイル名〉）。番号にすると、項目を抜いたり足したりしたときに記入がずれるため（2026-11-13）。
+     ブラウザに置き、アーティファクトでは db の checks/〈版の名前から作った記号〉にも書く（Claude が読む）。済んだ項目は、Claude が出し直すときに抜く */
+  const ik = x => x.id || (x.page ? 'page:' + x.page : 'label:' + (x.label || ''));
+  const key = 'jp-chk2-' + (C.v || ''), blank = () => ({ ok: {}, ng: {}, memo: {} });
   const norm = o => { o = o && typeof o === 'object' ? o : {}; if (!o.ok && !o.ng && !o.memo) o = { ok: o }; return { ok: o.ok || {}, ng: o.ng || {}, memo: o.memo || {} }; };
   const stRead = () => { try { return norm(JSON.parse(localStorage.getItem(key) || '{}')); } catch (e) { return blank(); } };
   let st = stRead(), open = true, cdb = null, saved = '';
@@ -2007,30 +2009,30 @@ function renderCheck() {
   const push = () => {
     try { localStorage.setItem(key, JSON.stringify(st)); } catch (err) {}
     if (!cdb) return;
-    const body = { v: C.v || '', at: new Date().toISOString(), items: C.items.map((x, i) => ({ id: x.id || '', page: x.page || '', name: itemName(x).name, ok: !!st.ok[i], ng: !!st.ng[i], memo: st.memo[i] || '' })) };
+    const body = { v: C.v || '', at: new Date().toISOString(), items: C.items.map(x => { const k = ik(x); return { id: x.id || '', page: x.page || '', name: itemName(x).name, ok: !!st.ok[k], ng: !!st.ng[k], memo: st.memo[k] || '' }; }) };
     const sig = JSON.stringify(body.items); if (sig === saved) return; saved = sig;
     cdb.doc(docPath).set(body).catch(() => { saved = ''; });
   };
   const draw = () => {
-    const n = C.items.length, m = C.items.filter((x, i) => st.ok[i]).length, g = C.items.filter((x, i) => st.ng[i]).length;
+    const n = C.items.length, m = C.items.filter(x => st.ok[ik(x)]).length, g = C.items.filter(x => st.ng[ik(x)]).length;
     let h = '<div class="chkh"><button type="button" class="chkt" aria-expanded="' + open + '">確認リスト <span>' + m + ' / ' + n + ' OK</span>' + (g ? '<em>気になる ' + g + '</em>' : '') + (C.v ? '<small>' + esc(C.v) + '</small>' : '') + '<i aria-hidden="true">' + (open ? '▲' : '▼') + '</i></button></div>';
     if (open) h += '<ol>' + C.items.map((x, i) => {
-      const { id, it, name } = itemName(x);
+      const { id, it, name } = itemName(x), k = ik(x), dk = ' data-k="' + esc(k) + '"';
       const kind = it ? MODE_LABEL[KIND.get(id)] : x.page ? 'ページ' : '';
       const go = it ? '<button type="button" class="chkgo" data-i="' + i + '">' : x.page ? '<a class="chkgo" href="' + esc(x.page) + '">' : '<span class="chkgo">';
       const end = it ? '</button>' : x.page ? '</a>' : '</span>';
-      return '<li class="' + (st.ok[i] ? 'done' : '') + (st.ng[i] ? ' ng' : '') + '"><label class="chkok"><input type="checkbox" data-i="' + i + '"' + (st.ok[i] ? ' checked' : '') + ' aria-label="OK"></label><div class="chkbody">' + go +
+      return '<li class="' + (st.ok[k] ? 'done' : '') + (st.ng[k] ? ' ng' : '') + '"><label class="chkok"><input type="checkbox"' + dk + (st.ok[k] ? ' checked' : '') + ' aria-label="OK"></label><div class="chkbody">' + go +
         '<b>' + esc(name) + '</b>' + (kind ? '<i class="nbk">' + esc(kind) + '</i>' : '') + (x.note ? '<span class="chkn">' + esc(x.note) + '</span>' : '') + (id && !it ? '<span class="chkn">（データに見つかりません：' + esc(id) + '）</span>' : '') + end +
         (Array.isArray(x.peek) ? '<div class="chkpk">' + x.peek.map(p => '<span><i>' + esc(p.k || '') + '</i>' + (p.u ? '<a href="' + esc(p.u) + '" target="_blank" rel="noopener">' + esc(p.t || p.u) + '</a>' : esc(p.t || '')) + (p.s ? '<small>' + esc(p.s) + '</small>' : '') + '</span>').join('') + '</div>' : '') +
-        (st.ng[i] ? '<input type="text" class="chkmemo" data-i="' + i + '" value="' + esc(st.memo[i] || '') + '" placeholder="気になること（なくてもよい）" aria-label="気になること">' : '') + '</div>' +
-        '<button type="button" class="chkng" data-i="' + i + '" aria-pressed="' + !!st.ng[i] + '" title="気になる">気になる</button></li>';
+        (st.ng[k] ? '<input type="text" class="chkmemo"' + dk + ' value="' + esc(st.memo[k] || '') + '" placeholder="気になること（なくてもよい）" aria-label="気になること">' : '') + '</div>' +
+        '<button type="button" class="chkng"' + dk + ' aria-pressed="' + !!st.ng[k] + '" title="気になる">気になる</button></li>';
     }).join('') + '</ol>';
     box.innerHTML = h; box.hidden = false;
   };
   box.onclick = e => {
     if (e.target.closest('.chkt')) { open = !open; try { localStorage.setItem('jp-chk-open', open ? '1' : '0'); } catch (err) {} draw(); return; }
     const ng = e.target.closest('button.chkng');
-    if (ng) { const i = ng.dataset.i; if (st.ng[i]) { delete st.ng[i]; delete st.memo[i]; } else { st.ng[i] = 1; delete st.ok[i]; } push(); draw(); if (st.ng[i]) { const f = box.querySelector('.chkmemo[data-i="' + i + '"]'); if (f) f.focus(); } return; }
+    if (ng) { const k = ng.dataset.k; if (st.ng[k]) { delete st.ng[k]; delete st.memo[k]; } else { st.ng[k] = 1; delete st.ok[k]; } push(); draw(); if (st.ng[k]) { const f = [...box.querySelectorAll('.chkmemo')].find(x => x.dataset.k === k); if (f) f.focus(); } return; }
     const b = e.target.closest('button.chkgo'); if (!b) return;
     const id = ID_ALIAS[C.items[+b.dataset.i].id] || C.items[+b.dataset.i].id;
     if (!currentItems().some(x => x.id === id)) resetAll(false, true, [KIND.get(id)]);   /* 一覧に出ていないときは、その種類だけを出し直す */
@@ -2038,9 +2040,9 @@ function renderCheck() {
   };
   box.onchange = e => {
     const t = e.target.closest('.chkmemo');
-    if (t) { const v = t.value.trim().slice(0, 300); if (v) st.memo[t.dataset.i] = v; else delete st.memo[t.dataset.i]; push(); return; }
+    if (t) { const k = t.dataset.k, v = t.value.trim().slice(0, 300); if (v) st.memo[k] = v; else delete st.memo[k]; push(); return; }
     const c = e.target.closest('input[type=checkbox]'); if (!c) return;
-    if (c.checked) { st.ok[c.dataset.i] = 1; delete st.ng[c.dataset.i]; delete st.memo[c.dataset.i]; } else delete st.ok[c.dataset.i];
+    const k = c.dataset.k; if (c.checked) { st.ok[k] = 1; delete st.ng[k]; delete st.memo[k]; } else delete st.ok[k];
     push(); draw();
   };
   box.onkeydown = e => { if (e.key === 'Enter' && e.target.closest('.chkmemo')) e.target.blur(); };
@@ -2052,7 +2054,7 @@ function renderCheck() {
       const db = await claude.use('db'); if (!db) return;
       const snap = await db.doc(docPath).get();
       if (snap.exists && snap.data && Array.isArray(snap.data.items)) {
-        const o = blank(); snap.data.items.forEach((x, i) => { if (x.ok) o.ok[i] = 1; if (x.ng) o.ng[i] = 1; if (x.memo) o.memo[i] = x.memo; });
+        const o = blank(); snap.data.items.forEach(x => { const k = ik(x); if (x.ok) o.ok[k] = 1; if (x.ng) o.ng[k] = 1; if (x.memo) o.memo[k] = x.memo; });
         st = o; saved = JSON.stringify(snap.data.items); try { localStorage.setItem(key, JSON.stringify(st)); } catch (err) {}
         if (!box.querySelector('.chkmemo:focus')) draw();
       }
