@@ -152,6 +152,7 @@ h1 { margin: 0; }
 .lghelp { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 2px 12px; margin-top: 3px; padding-top: 5px; border-top: 1px solid var(--line); }
 .lghelp b { color: var(--ink); margin-right: 4px; white-space: nowrap; }
 .lghelp > b { flex: 1 1 100%; margin: 0; }
+.legend.below { position: static; max-width: none; background: var(--panel); }   /* スマホ：地図の下に出す */
 .legtog { position: absolute; left: 10px; bottom: 10px; font: inherit; font-size: 0.75rem; font-weight: 700; color: var(--muted); background: color-mix(in srgb, var(--panel) 88%, transparent); border: 1px solid var(--btn-line); border-radius: 8px; padding: 5px 10px; cursor: pointer; }
 .legtog[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }

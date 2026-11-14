@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261114a">
+<link rel="stylesheet" href="style.css?v=20261114b">
 
 <main class="app">
   <header>
@@ -544,7 +544,7 @@ function drawFill() {
 /* 凡例の最後に付ける、地図の右のボタンの説明（スマホでは押す前の説明が出せないため） */
 const CTRL_HELP = '<div class="lghelp"><b>右のボタン</b>'
   + '<span><b>＋ －</b>拡大・縮小</span><span><b>全国</b>日本全体を表示</span><span><b>現在地</b>今いる場所へ寄せて、一覧を近い順に</span>'
-  + '<span><b>歯車</b>地図の設定（県を塗る・背景・表示量）</span><span><b>名前 小・大</b>地図の名前の文字の大きさ</span></div>';
+  + '<span><b>名前 小・大</b>地図の名前の文字の大きさ</span><span><b>歯車</b>地図の設定（県を塗る・背景・表示量）</span></div>';
 function applyMapView() {
   $('mapwrap').classList.toggle('fillview', mapView === 'fill');
   $('zfill').setAttribute('aria-pressed', String(mapView === 'fill')); $('zfill').textContent = mapView === 'fill' ? 'オン' : 'オフ';
@@ -702,7 +702,7 @@ function dodgeLabels(arr, fs, k) {
     const sr = svg.getBoundingClientRect(), cb = rect(document.querySelector('#mapwrap .ctrl'));
     const ctlBot = cb ? vb.y + u(cb.bottom - sr.top + 4) : vb.y, ctlLeft = cb ? vb.x + u(cb.left - sr.left - 6) : vb.x + vb.w - u(6);
     /* 凡例ボタン（開いているときは凡例の枠も）の右と上：下の段と左の列は、ここを避ける */
-    const lg = rect(byId('legtog')), lp = byId('legend') && !byId('legend').classList.contains('off') ? rect(byId('legend')) : null;
+    const lg = rect(byId('legtog')), lp = byId('legend') && !byId('legend').classList.contains('off') && !byId('legend').classList.contains('below') ? rect(byId('legend')) : null;
     const legRight = vb.x + u(Math.max(lg ? lg.right - sr.left : 0, lp ? lp.right - sr.left : 0) + 6);
     const legTop = vb.y + u(Math.min(lg ? lg.top - sr.top : 1e6, lp ? lp.top - sr.top : 1e6) - 4);
     const xL = vb.x + u(6), xR = vb.x + vb.w - u(6), yT = vb.y + u(8), yB = vb.y + vb.h - u(12);
@@ -1445,6 +1445,17 @@ let legOpen = store.get('jp-legend') ? store.get('jp-legend') === '1' : window.i
 function applyLegend() { $('legend').classList.toggle('off', !legOpen); $('legtog').setAttribute('aria-expanded', String(legOpen)); $('legtog').textContent = legOpen ? '凡例 ✕' : '凡例'; }
 $('legtog').onclick = () => { legOpen = !legOpen; store.set('jp-legend', legOpen ? '1' : '0'); applyLegend(); };
 applyLegend();
+/* スマホでは、凡例を地図に重ねず、地図の下（高さを変える棒の下）に出す。ボタン「凡例」は地図の上のまま */
+{
+  const NARROW = window.matchMedia('(max-width: 600px)');
+  const placeLegend = () => {
+    const lg = $('legend'), below = NARROW.matches;
+    if (below) $('mapnote').before(lg); else $('tattr').before(lg);
+    lg.classList.toggle('below', below);
+  };
+  if (NARROW.addEventListener) NARROW.addEventListener('change', placeLegend); else if (NARROW.addListener) NARROW.addListener(placeLegend);
+  placeLegend();
+}
 /* 画面の表示設定を初期状態に戻す（行った記録・自分の地点・書き出しの設定は、そのまま） */
 $('prefreset').onclick = () => {
   ['jp-fs', 'jp-theme', 'jp-font', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap', 'jp-tagnote'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
