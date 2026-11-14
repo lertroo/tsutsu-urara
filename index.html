@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261114b">
+<link rel="stylesheet" href="style.css?v=20261114f">
 
 <main class="app">
   <header>
@@ -97,6 +97,9 @@
     </section>
   </div>
 </main>
+<button type="button" class="fbtn" id="fbtn" aria-controls="fsheet" aria-expanded="false"></button>
+<div class="fsback" id="fsback" hidden></div>
+<div class="fsheet" id="fsheet" role="dialog" aria-label="絞り込み" hidden><div class="fsh"><b>絞り込み</b></div><div class="fsb" id="fsb"></div></div>
 
 <script src="data/geo.js"></script>
 <script src="data/lakes.js"></script>
@@ -512,13 +515,17 @@ function orderItems(a) {
 }
 /* 1回の画面の更新で何度も呼ばれるので、条件（絞り込み・記録・データの数）が同じあいだは、前の結果を返す */
 let ciKey = '', ciVal = null;
+/* 細かい絞り込み（タグなど）は複数選べる。選んだもののどれかに当たる行を出す（OR）。flt.type は値を「,」でつないだ文字列（何も選んでいなければ 'all'） */
+const typeSel = () => flt.type === 'all' ? [] : flt.type.split(',');
+const setTypeSel = a => { flt.type = a.length ? a.join(',') : 'all'; };
+const typeTest = (tk, sel) => { const fs = sel.map(v => (TYPEF[tk].find(t => t[1] === v) || [])[2]).filter(Boolean); return fs.length ? x => fs.some(f => f(x)) : () => true; };
 function currentItems() {
   const key = [flt.q, flt.vis, flt.region, flt.type, flt.pfk, flt.kinds ? [...flt.kinds].join() : '-', rec.cur, rec.rev, dataRev].join('|');
   if (key === ciKey) return ciVal;
   let a = ALLX;
   if (flt.kinds && flt.kinds.size < KORDER.length) a = a.filter(kindOn);
-  const tk = typeKind(), tf = tk && flt.type !== 'all' && (TYPEF[tk].find(t => t[1] === flt.type) || [])[2];
-  if (tf) a = a.filter(tf);
+  const tk = typeKind();
+  if (tk) a = a.filter(typeTest(tk, typeSel()));
   if (flt.region !== 'all') a = a.filter(x => (x.rg || REGION_OF[x.pf]) === flt.region);
   if (flt.q) a = a.filter(qm);
   if (flt.pfk) a = a.filter(x => PREF_KEY[x.pf] === flt.pfk);
@@ -1302,6 +1309,26 @@ function renderList(keepCount) {
   const want = Math.max(LIST_CHUNK, keepCount || 0);
   listEntries = entries; listMore(want); if (selId) listEnsure(selId);
 }
+/* スマホ（1列の画面）：右下のボタンで、絞り込み（記録・種類・タグ・地方）を下から出る板に出す。一覧の下までスクロールしなくてよいように。
+   板を開くあいだだけ、#chips を板の中へ移す */
+let fsOpen = false;
+function fsLabel(nk) {
+  const n = typeSel().length;
+  $('fbtn').innerHTML = fsOpen ? '<b>閉じる</b>' : '<b>種類</b><span>' + nk + '/' + KORDER.length + '</span>' + (n ? '<span>タグ ' + n + '</span>' : '');
+}
+function fsShow(on) {
+  fsOpen = on;
+  if (on) $('fsb').appendChild($('chips')); else $('tools').before($('chips'));
+  $('fsheet').hidden = $('fsback').hidden = !on;
+  document.documentElement.style.overflow = on ? 'hidden' : '';   /* 板（全画面）を開いているあいだは、後ろのページを動かさない */
+  $('fbtn').setAttribute('aria-expanded', String(on));
+  refresh();
+  if (on) $('fsb').scrollTop = 0;
+}
+/* 右下の三角（ドッグイヤー）：閉じているときは開く、開いているときは閉じる */
+$('fbtn').onclick = () => fsShow(!fsOpen);
+$('fsback').onclick = () => fsShow(false);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && fsOpen) fsShow(false); });
 function renderControls() {
   const chips = $('chips'), tools = $('tools');
   chips.innerHTML = ''; tools.innerHTML = '';
@@ -1326,14 +1353,15 @@ function renderControls() {
     /* 種類を複数選べる */
     const kn = {}, kv = {}; ALLX.forEach(x => { const k = KIND.get(x.id); kn[k] = (kn[k] || 0) + 1; if (isVisited(x.id)) kv[k] = (kv[k] || 0) + 1; });
     const allOn = flt.kinds.size === KORDER.length;
-    const kg = document.createElement('div'); kg.className = 'kgrid' + (store.get('jp-kopen') === '1' ? ' open' : '');
+    const inSheet = fsOpen, kg = document.createElement('div'); kg.className = 'kgrid' + (inSheet || store.get('jp-kopen') === '1' ? ' open' : '');
          const mk = (k, label, n, on, fn, cls) => { const c = document.createElement('button'); c.type = 'button'; c.className = 'kb' + (cls ? ' ' + cls : ''); if (k) c.dataset.k = k; c.style.setProperty('--kc', k ? KCOL[k] : 'var(--ink)'); if (on != null) c.setAttribute('aria-pressed', String(on)); c.innerHTML = '<span class="ti">' + icon(k || 'all') + '</span><span class="tl">' + esc(label) + '</span>' + (n ? '<span class="tn">' + n + '</span>' : ''); c.onclick = fn; kg.appendChild(c); return c; };
          /* ふだんは1行にたたむ（選んでいる種類を短く出す）。開いたかどうかは、この端末に保存 */
-         const kOpen = store.get('jp-kopen') === '1', sel = KORDER.filter(k => flt.kinds.has(k));
+         const kOpen = inSheet || store.get('jp-kopen') === '1', sel = KORDER.filter(k => flt.kinds.has(k));
          const sumL = allOn ? 'すべて' : !sel.length ? 'なし' : sel.length <= 2 ? sel.map(k => MODE_LABEL[k]).join('・') : sel.slice(0, 2).map(k => MODE_LABEL[k]).join('・') + 'ほか' + (sel.length - 2) + '種';
          const kTog = () => { store.set('jp-kopen', kOpen ? '0' : '1'); refresh(); };
-         const sm = mk(null, '種類：' + sumL + '（' + (allOn ? KORDER.length : sel.length + '／' + KORDER.length) + '種）', kOpen ? '閉じる' : '選ぶ', null, kTog, 'all ksum');
-         sm.setAttribute('aria-expanded', String(kOpen)); sm.querySelector('.ti').innerHTML = icon(kOpen ? 'kup' : 'kdown');
+         const sm = inSheet ? null : mk(null, '種類：' + sumL + '（' + (allOn ? KORDER.length : sel.length + '／' + KORDER.length) + '種）', kOpen ? '閉じる' : '選ぶ', null, kTog, 'all ksum');
+         if (sm) { sm.setAttribute('aria-expanded', String(kOpen)); sm.querySelector('.ti').innerHTML = icon(kOpen ? 'kup' : 'kdown'); }
+         fsLabel(allOn ? KORDER.length : sel.length);
          if (kOpen) {
            /* 全種類のオン・オフは、種類のボタンと見分けがつくように、小さい丸い札にする */
            const ka = document.createElement('button'); ka.type = 'button'; ka.className = 'kall'; ka.setAttribute('aria-pressed', String(allOn));
@@ -1348,12 +1376,22 @@ function renderControls() {
              ks.forEach(k => mk(k, MODE_LABEL[k], '', flt.kinds.has(k), () => { if (allOn) flt.kinds = new Set(KORDER.filter(x => x !== k)); else { if (flt.kinds.has(k)) flt.kinds.delete(k); else flt.kinds.add(k); } refresh(); if (flt.kinds.size === 1 && flt.kinds.has('biwa')) focusBiwa(); }));
            });
            /* 下にも閉じるボタン（選び終わったところで、上まで戻らずに閉じられるように） */
-           mk(null, '種類のボタンを閉じる', '', null, kTog, 'all kclose').querySelector('.ti').innerHTML = icon('kup');
+           if (!inSheet) mk(null, '種類のボタンを閉じる', '', null, kTog, 'all kclose').querySelector('.ti').innerHTML = icon('kup');
          }
          chips.appendChild(kg);
          brk();
     const tk = typeKind();
-    if (tk) { const src = ALLX.filter(kindOn); TYPEF[tk].forEach(t => add(t[0], t[1], 'type', t[2] ? src.filter(t[2]).length : src.length)); brk(); }
+    if (tk) {
+      /* 数は、そのボタンだけで絞ったときの件数 */
+      const src = ALLX.filter(kindOn), sel = typeSel();
+      TYPEF[tk].forEach(t => {
+        const v = t[1], on = v === 'all' ? !sel.length : sel.includes(v);
+        const c = add(t[0], v, 'type', v === 'all' ? src.length : t[2] ? src.filter(t[2]).length : src.length);
+        c.setAttribute('aria-pressed', String(on));
+        c.onclick = () => { setTypeSel(v === 'all' ? [] : on ? sel.filter(x => x !== v) : sel.concat(v)); refresh(); };
+      });
+      brk();
+    }
   }
   const base = ALLX.filter(kindOn), regOf = x => x.rg || REGION_OF[x.pf];
   const sep = document.createElement('div'); sep.style.flexBasis = '100%'; sep.style.height = '0';

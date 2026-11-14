@@ -633,3 +633,17 @@ a.btn { display: inline-block; text-decoration: none; }
 @keyframes tk { from { transform: translateX(var(--tk-from)); } to { transform: translateX(var(--tk-to)); } }
 @media (prefers-reduced-motion: reduce) { .ticker { -webkit-mask-image: none; mask-image: none; } .ticker .tk { max-width: 100%; overflow: hidden; text-overflow: ellipsis; } }
 @media (min-width: 1100px) { header .ticker { align-self: center; margin: 0 16px; max-width: 520px; } }
+/* スマホ（1列の画面）：右下の絞り込みボタンと、下から出る板（2026-11-14）。
+   ボタンは画面の右下の角を折った三角（ドッグイヤー）。開くと板の左上にも三角が付き、右下の三角は「閉じる」になる */
+.fbtn { display: none; }
+@media (max-width: 919px) {
+  .fbtn { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; position: fixed; right: 0; bottom: 0; z-index: 33; box-sizing: border-box; width: 112px; height: calc(112px + env(safe-area-inset-bottom)); padding: 0 10px calc(10px + env(safe-area-inset-bottom)) 0; font: inherit; line-height: 1.15; font-variant-numeric: tabular-nums; text-align: right; color: var(--accent-ink); background: var(--accent); border: 0; clip-path: polygon(100% 0, 100% 100%, 0 100%); cursor: pointer; filter: drop-shadow(0 0 4px rgba(0,0,0,.3)); }
+  .fbtn b { font-size: .9rem; }
+  .fbtn span { font-size: .78rem; font-weight: 700; }
+}
+.fsback { display: none; }   /* 板が全画面なので、下を暗くする幕は使わない */
+.fsheet { position: fixed; inset: 0; z-index: 32; display: flex; flex-direction: column; background: color-mix(in srgb, var(--panel) 72%, transparent); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }   /* 全画面。少し透かして、後ろの地図をぼかして見せる */
+.fsheet::before { content: ''; position: absolute; left: 0; top: 0; width: 96px; height: 96px; background: color-mix(in srgb, var(--accent) 28%, transparent); clip-path: polygon(0 0, 100% 0, 0 100%); pointer-events: none; }   /* 左上は、折った角の裏側として薄く */
+.fsh { position: relative; padding: calc(10px + env(safe-area-inset-top)) 12px 12px; font-size: .95rem; color: var(--ink); }
+.fsb { position: relative; z-index: 1; flex: 1 1 auto; overflow-y: auto; padding: 4px 14px calc(118px + env(safe-area-inset-bottom)); }
+.fsheet[hidden] { display: none; }
