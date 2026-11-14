@@ -475,8 +475,8 @@ body.xopen { overflow: hidden; }
 .xtx input { width: 100%; box-sizing: border-box; }
 /* 狭い画面：操作ボタンを小さく */
 /* スマホでは地図が低いので、2列にまとめる（＋－、全国・現在地、歯車、名前 小・大）。設定の枠は、ボタンの列の左いっぱいに出す */
-@media (max-width: 600px) { .ctrl { display: grid; grid-template-columns: auto auto; } .ctrl .cgap { margin-top: 0; } .msetp { top: 6px; left: 6px; right: 80px; width: auto; max-width: none; max-height: calc(100% - 12px); } .ctrl #mset { grid-column: 1 / -1; font-size: .64rem; } .ctrl #mset svg { width: 14px; height: 14px; } }
-@media (max-width: 600px) { .ctrl { gap: 3px; top: 6px; right: 6px; } .ctrl button { min-width: 32px; height: 28px; padding: 0 4px; font-size: .8rem; border-radius: 6px; background: color-mix(in srgb, var(--btn-bg) 88%, transparent); } .ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .64rem; } }
+/* スマホ：操作ボタンは縦1列。押しやすいように幅をそろえて大きめにする（2026-11-14。前は2列で小さく、押しづらかった） */
+@media (max-width: 600px) { .ctrl { gap: 4px; top: 6px; right: 6px; width: 54px; } .ctrl button { width: 100%; min-width: 0; height: 36px; padding: 0 2px; font-size: .95rem; border-radius: 7px; background: color-mix(in srgb, var(--btn-bg) 88%, transparent); } .ctrl .cgap { margin-top: 6px; } .ctrl #zloc, .ctrl #labm, .ctrl #labp { font-size: .68rem; } .ctrl #mset { flex-direction: column; gap: 0; font-size: .58rem; line-height: 1.1; } .ctrl #mset svg { width: 16px; height: 16px; } .msetp { top: 6px; left: 6px; right: 66px; width: auto; max-width: none; max-height: calc(100% - 12px); } .mcard { right: 66px; } }
 /* PCの広い画面：全幅で使い、地図を縦いっぱいに */
 @media (min-width: 1100px) {
   body { padding-inline: clamp(32px, 3.2vw, 64px); padding-block: 12px 40px; }
