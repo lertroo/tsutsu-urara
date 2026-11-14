@@ -388,6 +388,11 @@ button.fbadge:hover, button.fbadge:focus-visible { background: color-mix(in srgb
 .act { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: var(--accent); text-decoration: none; border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line)); border-radius: 999px; padding: 4px 12px; }
 .act:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
 .act .ic { width: 14px; height: 14px; }
+/* 名前の下のリンク（ウィキペディア・公式・地図）：文字の右に絵のアイコン。横いっぱいに並べる */
+.actions .act { flex: 1 1 auto; justify-content: center; gap: 5px; min-height: 38px; padding: 3px 8px; font-size: .85rem; color: var(--ink); background: var(--btn-bg); border: 2px solid color-mix(in srgb, var(--accent) 60%, var(--btn-line)); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.actions .act:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--btn-bg)); }
+.lki { width: 22px; height: 22px; flex: none; }
+#detail.brief .row.deco { display: none; }   /* 詳細「簡潔」：飾りの行を隠す（歯車のメニューで「すべて」にすると出る） */
 
 .tiles { display: flex; flex-wrap: wrap; gap: 4px; }
 .tile { font: inherit; font-size: 0.68rem; font-weight: 700; min-width: 2.9em; padding: 4px 5px; text-align: center; border-radius: 6px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; line-height: 1.2; }

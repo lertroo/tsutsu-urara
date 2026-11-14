@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261114f">
+<link rel="stylesheet" href="style.css?v=20261114i">
 
 <main class="app">
   <header>
@@ -1022,9 +1022,13 @@ function drawFarArrow() {
 }
 /* 詳細の部品。fRow の html は、呼ぶ側でエスケープしておく */
 const wikiUrl = wp => /^ja:/.test(wp || '') ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(wp.slice(3)) : /^Q\d+$/.test(wp || '') ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + wp : '';
-const fRow = (dt, html, num) => '<div class="row"><dt>' + dt + '</dt><dd' + (num ? ' class="num"' : '') + '>' + html + '</dd></div>';
+/* 詳細の「簡潔」（初めはこちら）で隠す行。何もなかったころに飾りで置いた行と、位置（地図のボタンで代わりになる）（2026-11-14）。
+   「すべて」では出す（位置は、どこを指したかの目安として見たい） */
+const DECO_DT = /^(開設|開園|竣工|面積|開設面積|種別|区分|登録状況|加盟|位置)/;
+const fRow = (dt, html, num) => '<div class="row' + (DECO_DT.test(dt) ? ' deco' : '') + '"><dt>' + dt + '</dt><dd' + (num ? ' class="num"' : '') + '>' + html + '</dd></div>';
 const fTxt = (dt, v, num) => v ? fRow(dt, esc(v), num) : '';
-const fLink = (dt, url, t) => url ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
+/* Wikipedia・公式サイトは、名前の下のリンク（W・公式）に出すので、行にはしない（2026-11-14） */
+const fLink = (dt, url, t) => url && !/^(Wikipedia|公式サイト)$|の公式サイト$/.test(dt) ? fRow(dt, '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + t + '</a>') : '';
 const fLL = (la, lo) => '北緯 ' + la.toFixed(3) + '、東経 ' + lo.toFixed(3);
 /* 開設の日付：データには「1965」「1937-03」「2004-07-13」の形が混ざっているので、「1965年」「1937年3月」「2004年7月13日」にそろえて出す（「1965年」のように書いてあるものは、そのまま） */
 /* 閉館・閉園などの言葉と、一覧・詳細に出す「2015年閉園」の形（2026-11-13 にそろえた）。xw がないときは種類で決める（道の駅は閉鎖、博物館・水族館は閉館、ほかは閉園） */
@@ -1496,7 +1500,8 @@ applyLegend();
 }
 /* 画面の表示設定を初期状態に戻す（行った記録・自分の地点・書き出しの設定は、そのまま） */
 $('prefreset').onclick = () => {
-  ['jp-fs', 'jp-theme', 'jp-font', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap', 'jp-tagnote'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  detAll = false; applyDetMode();
+  ['jp-fs', 'jp-theme', 'jp-font', 'jp-detail', 'jp-legend', 'jp-maph', 'jp-listh', 'jp-clul3', 'jp-labs', 'jp-bgmap', 'jp-tagnote'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
   tagNoteOff = [];
   tileSrc = ''; gTile.replaceChildren(); msetOpen(false); applyTileOn();
   fsPct = 100; theme = 'auto'; fontSys = false; applyPrefs();
@@ -1877,12 +1882,23 @@ function placeDetail() { const d = $('detail'); if (midMQ.matches) $('mid').prep
 if (midMQ.addEventListener) midMQ.addEventListener('change', placeDetail); else if (midMQ.addListener) midMQ.addListener(placeDetail);
 placeDetail();
 
-/* 詳細の操作リンク（地図アプリ） */
+/* 詳細の操作リンク：ウィキペディア・公式（公式サイト）・地図（地図アプリでその位置）を1行に並べる。文字の右にアイコン（icons/lk-*.png。作者が用意した絵） */
 function actionsHTML(it) {
-  if (typeof it.la !== 'number') return '';
-  const q = it.la.toFixed(5) + ',' + it.lo.toFixed(5);
-  return '<div class="actions"><a class="act" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + q + '">' + icon('map') + '地図アプリで開く</a></div>';
+  const ic = n => '<img class="lki" src="icons/lk-' + n + '.png" alt="" width="22" height="22">';
+  const a = (url, html, title) => '<a class="act" target="_blank" rel="noopener" href="' + esc(url) + '" title="' + title + '">' + html + '</a>';
+  const w = wikiUrl(it.wp), web = /^https?:\/\//.test(it.web || '') ? it.web : '';
+  const out = [];
+  if (w) out.push(a(w, (/^Q/.test(it.wp) ? 'ウィキデータ' : 'ウィキペディア') + ic('wiki'), /^Q/.test(it.wp) ? 'Wikidata を開く' : 'Wikipedia の記事を開く'));
+  if (web) out.push(a(web, '公式' + ic('web'), '公式サイトを開く'));
+  if (typeof it.la === 'number') out.push(a('https://www.google.com/maps/search/?api=1&query=' + it.la.toFixed(5) + ',' + it.lo.toFixed(5), '地図' + ic('map'), '地図アプリで開く'));
+  return out.length ? '<div class="actions">' + out.join('') + '</div>' : '';
 }
+/* 詳細の出し方：簡潔（飾りの行を隠す。初めはこちら）／すべて。この端末に保存。上の歯車のメニューに足す */
+let detAll = store.get('jp-detail') === 'all';
+function applyDetMode() { $('detail').classList.toggle('brief', !detAll); const b = $('detmode'); if (b) b.textContent = detAll ? 'すべて' : '簡潔'; }
+$('prefreset').closest('.pmrow').insertAdjacentHTML('beforebegin', '<div class="pmrow"><span class="pml">詳細</span><button type="button" id="detmode" aria-label="詳細の出し方の切り替え（簡潔／すべて）" title="簡潔：開設・面積・位置などの行を隠します">簡潔</button></div>');
+$('detmode').onclick = () => { detAll = !detAll; store.set('jp-detail', detAll ? 'all' : 'brief'); applyDetMode(); };
+applyDetMode();
 
 /* ---------- 近い順（現在地 / 地図で指定した基準点から） ---------- */
 const ORG_KEY = 'jp-origin-v1';
