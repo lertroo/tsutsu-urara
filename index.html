@@ -107,7 +107,7 @@
 <script src="data/ikenai.js?v=20261109a"></script>
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
-<script src="data/mura.js?v=20261114a"></script>
+<script src="data/mura.js?v=20261114b"></script>
 <script src="data/parks.js?v=20261113i"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
@@ -1094,7 +1094,7 @@ function detailHTML(it, k) {
       facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
   }
   if (k === 'mura') return dHead(badge('むら・まち・やま') + fbadge(it.ty, 'mura', ({ むら:'mura', まち:'machi', やま:'yama' })[it.ty]) + xBadge, it, pfs) +
-    facts(fIn, fTxt('別名', it.al), fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), fPos(it));
+    facts(fTxt('説明', it.rm), fIn, fTxt('別名', it.al), fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), fPos(it));
   if (k === 'koei') return dHead(fbadge(it.sh, 'koei', KO_SH_FT[it.sh]) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : '') + xBadge, it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
