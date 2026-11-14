@@ -107,6 +107,7 @@
 <script src="data/ikenai.js?v=20261109a"></script>
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
+<script src="data/mura.js?v=20261114a"></script>
 <script src="data/parks.js?v=20261113i"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
@@ -119,13 +120,13 @@
 <script src="data/hyakumeizan.js?v=20261111a"></script>
 <script src="data/aquariums.js?v=20261113c"></script>
 <script src="data/gardens.js?v=20261113v"></script>
-<script src="data/themeparks.js?v=20261113a"></script>
+<script src="data/themeparks.js?v=20261114a"></script>
 <script src="data/museums.js?v=20261113e"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
-<script src="site.js?v=20261113b"></script>
-<script src="core.js?v=20261113i"></script>
+<script src="site.js?v=20261114a"></script>
+<script src="core.js?v=20261114a"></script>
 <script src="xport.js?v=20261110g"></script>
 <script>
 
@@ -1092,6 +1093,8 @@ function detailHTML(it, k) {
     return dHead(badge('レアスポット') + badge(it.ky, 1), it, it.ps) +
       facts(fTxt('状況', it.rs), fTxt('所在', it.ps), ll ? fRow('位置（' + esc(rp) + '）', fLL(ll[0], ll[1]) + (typeof it.la === 'number' ? '' : '（地図の範囲外）'), 1) : '');
   }
+  if (k === 'mura') return dHead(badge('むら・まち・やま') + fbadge(it.ty, 'mura', ({ むら:'mura', まち:'machi', やま:'yama' })[it.ty]) + xBadge, it, pfs) +
+    facts(fIn, fTxt('別名', it.al), fTxt('旧称', it.o), nt, fTxt('開設', fmtYmd(it.sd), 1), fPos(it));
   if (k === 'koei') return dHead(fbadge(it.sh, 'koei', KO_SH_FT[it.sh]) + (it.kb ? badge(it.kb, 1) : '') + (it.st ? badge(it.st, 1) : '') + xBadge, it, pfs + (it.ci ? ' ' + it.ci : '')) +
     facts(fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
@@ -1229,6 +1232,7 @@ const ROW_SUB = {
   scenic: it => esc(it.ps) + ' / ' + esc(it.ty) + '・' + esc(it.cl),
   nature: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.pk || it.sl ? '・' + esc(it.pk || it.sl) : ''),
   shin: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ln.map(l => l.replace('新幹線', '')).join('・')) + noPos(it),
+  mura: it => esc(prefFull(it.pf)) + ' / ' + esc(it.ty) + (it.tag ? ' / ' + esc(it.tag) : '') + noPos(it),
   koei: it => esc(prefFull(it.pf)) + (it.ci ? ' ' + esc(it.ci) : '') + ' / ' + esc(it.sh) + (it.kb ? '・' + esc(it.kb) : '') + (it.st ? '・' + esc(it.st) : ''),
   ik: it => esc(it.ps) + ' / ' + esc(it.ky) + noPos(it),
   biwa: it => esc(prefFull(it.pf)) + ' / 日本最大の湖',
@@ -1692,6 +1696,7 @@ const ICON_P = {
   shin: '<path d="M5 18V9.5C5 6 8 4 12 4s7 2 7 5.5V18zM5 13.5h14M8.5 21l-1-3M15.5 21l1-3"/><circle cx="8.8" cy="16" r=".7"/><circle cx="15.2" cy="16" r=".7"/>',
   ik: '<rect x="5" y="11" width="14" height="9.5" rx="1.6"/><path d="M8 11V8a4 4 0 018 0v3"/>',
   edge: '<path d="M3.5 20.5L12 7l8.5 13.5z"/><path d="M12 7V2.8M12 2.8l3.6 1.4L12 5.6"/><path d="M2.5 13.5h3M18.5 13.5h3"/>',
+  mura: '<path d="M2.5 12.5L12 4l9.5 8.5"/><path d="M5 10.6V20h14v-9.4"/><path d="M10 20v-5h4v5"/><path d="M7.5 8.2l-2-2.6M16.5 8.2l2-2.6"/>',
   koei: '<path d="M5 21V4"/><path d="M5 4h14l-2.5 4 2.5 4H5"/><path d="M9 4v8M13 4v8M5 8h12"/>',
   biwa: '<path d="M12.5 3.5c-3 1.5-4 4-3.2 6.6.6 2-1.6 3.2-1.6 5.4 0 2.2 2 4.2 4.8 4.6 2.2-.6 3.2-2.4 2.6-4.4-.6-2 1.6-3.4 1-6C15.7 6 14.4 4.2 12.5 3.5z"/>',
   scenic: '<path d="M2.5 19l6-9 4 6 3-4 6 7z"/><circle cx="17.5" cy="6.5" r="2"/>',
