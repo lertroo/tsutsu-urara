@@ -253,6 +253,7 @@ h1 { margin: 0; }
   --coast: #8a9aa2;
   --halo: #fbf8ef;
   --stamp: #c8372d;
+  --want: #c98a00;
   --shadow: 0 1px 2px rgba(60, 50, 30, .06), 0 6px 18px rgba(60, 50, 30, .07);
   --font-brand: 'M PLUS Rounded 1c', 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', sans-serif;   /* 見出しの「つつうらら」とロゴのはんこだけ（2026-11-10。OGP の画像とそろえた） */
   --font-display: 'Zen Maru Gothic', 'BIZ UDPGothic', 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Sans CJK JP', sans-serif;
@@ -264,7 +265,7 @@ h1 { margin: 0; }
   :root:not([data-theme="light"]) {
     --bg: #12171d; --panel: #1a222b; --ink: #ebe7de; --muted: #9aa5ad; --line: #2c3742;
     --accent: #7db6e0; --accent-ink: #0b1c29; --sea: #0f1b25; --land: #232f38; --coast: #5d7480; --halo: #0f1b25;
-    --stamp: #ff7062; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    --stamp: #ff7062; --want: #f2c14e; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
     --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
     --btn-bg: #232d37; --btn-line: #4b5b69;
     color-scheme: dark;
@@ -273,7 +274,7 @@ h1 { margin: 0; }
 :root[data-theme="dark"] {
   --bg: #12171d; --panel: #1a222b; --ink: #ebe7de; --muted: #9aa5ad; --line: #2c3742;
   --accent: #7db6e0; --accent-ink: #0b1c29; --sea: #0f1b25; --land: #232f38; --coast: #5d7480; --halo: #0f1b25;
-  --stamp: #ff7062; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  --stamp: #ff7062; --want: #f2c14e; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
   --t-n: #ff7a6b; --t-k: #f0b04a; --t-s: #6cc0e0; --t-a: #9db3b9;
   --btn-bg: #232d37; --btn-line: #4b5b69;
   color-scheme: dark;
@@ -654,3 +655,12 @@ a.btn { display: inline-block; text-decoration: none; }
 .fsh { position: relative; padding: calc(10px + env(safe-area-inset-top)) 12px 12px; font-size: .95rem; color: var(--ink); }
 .fsb { position: relative; z-index: 1; flex: 1 1 auto; overflow-y: auto; padding: 4px 14px calc(118px + env(safe-area-inset-bottom)); }
 .fsheet[hidden] { display: none; }
+
+/* ===== 行きたい（2026-11-15）：地図は白抜きの輪、一覧は★、詳細は☆のボタン ===== */
+.want .mk { stroke: #fff; stroke-width: 3.2px; filter: drop-shadow(0 0 1.2px var(--want)) drop-shadow(0 0 .6px rgba(0, 0, 0, .7)); }
+.vis.want .mk { stroke: var(--stamp); stroke-width: 2.8px; }
+.wm { color: var(--want); font-size: 0.85rem; margin-right: 4px; vertical-align: 1px; }
+.chip.big.want { background: transparent; border: 1.5px solid var(--want); color: var(--want); }
+.chip.big.want:hover { color: var(--want); }
+.chip.big.want[aria-pressed="true"] { background: var(--want); color: #fff; }
+.legend i.lgw { border: 3px solid #fff; box-shadow: 0 0 0 1px var(--want), 0 0 2px rgba(0, 0, 0, .5); }

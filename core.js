@@ -232,10 +232,18 @@ function loadRec() {
         Object.keys(o).forEach(id0 => { const id = cid(ID_ALIAS[id0] || id0); if (ALL_IDS.has(id)) { const l = normList(o[id0]).concat(n[id] || []); if (l.length) n[id] = l.filter((d, i) => d === '' ? l.indexOf('') === i : l.indexOf(d) === i).sort(); } });
         j.data[p.id] = n;
       });
+      /* 行きたいの印（2026-11-15）：人ごとに { id: 印を付けた日 }。古い記録にはないので、空から始める */
+      const w0 = (j.want && typeof j.want === 'object') ? j.want : {}, w = {};
+      j.profiles.forEach(p => {
+        const o = (w0[p.id] && typeof w0[p.id] === 'object') ? w0[p.id] : {}, n = {};
+        Object.keys(o).forEach(id0 => { const id = cid(ID_ALIAS[id0] || id0), d = o[id0]; if (ALL_IDS.has(id) && DATE_RE.test(d) && !(n[id] && n[id] < d)) n[id] = d; });
+        w[p.id] = n;
+      });
+      j.want = w;
       return j;
     }
   } catch (e) {}
-  return { v:1, rev:0, cur:'p1', profiles:[{ id:'p1', name:'わたし' }], data:{ p1:{} } };
+  return { v:1, rev:0, cur:'p1', profiles:[{ id:'p1', name:'わたし' }], data:{ p1:{} }, want:{ p1:{} } };
 }
 let rec = loadRec();
 const storageOK = (() => { try { localStorage.setItem('jp-probe', '1'); localStorage.removeItem('jp-probe'); return true; } catch (e) { return false; } })();
@@ -243,6 +251,12 @@ function saveRec() { rec.rev = (rec.rev || 0) + 1; store.set(REC_KEY, JSON.strin
 function curData() { return rec.data[rec.cur]; }
 function curName() { return rec.profiles.find(p => p.id === rec.cur).name; }
 function isVisited(id) { id = cid(id); return has(curData(), id) && curData()[id].length > 0; }
+/* ===== 行きたい（2026-11-15）：印は1つ。行っていなければ「行きたい」、行っていれば「また行きたい」。印を付けた日も残す ===== */
+function curWant() { const w = rec.want || (rec.want = {}); return w[rec.cur] || (w[rec.cur] = {}); }
+function isWanted(id) { const w = rec.want && rec.want[rec.cur]; return !!w && has(w, cid(id)); }
+function wantDate(id) { return isWanted(id) ? rec.want[rec.cur][cid(id)] : ''; }
+function todayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function toggleWant(id) { const w = curWant(), k = cid(id); if (has(w, k)) delete w[k]; else w[k] = todayStr(); saveRec(); }
 
 
 /* ===== ファイルへの保存 =====

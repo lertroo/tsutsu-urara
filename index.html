@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261115b">
+<link rel="stylesheet" href="style.css?v=20261115c">
 
 <main class="app">
   <header>
@@ -128,7 +128,7 @@
 <script src="data/desc.js?v=20261115e"></script>
 <script src="data/webt.js?v=20261115d"></script>
 <script src="site.js?v=20261115a"></script>
-<script src="core.js?v=20261115a"></script>
+<script src="core.js?v=20261115b"></script>
 <script src="xport.js?v=20261110g"></script>
 <script>
 
@@ -573,7 +573,7 @@ function drawDots() {
   const shown = new Set(currentItems().map(x => x.id));
   if (!dotsStale) {
     gLab.innerHTML = '';
-    for (const id in dotEls) { const d = dotEls[id]; d.g.classList.toggle('dim', !shown.has(id)); d.g.classList.toggle('vis', isVisited(id)); }
+    for (const id in dotEls) { const d = dotEls[id]; d.g.classList.toggle('dim', !shown.has(id)); d.g.classList.toggle('vis', isVisited(id)); d.g.classList.toggle('want', isWanted(id)); }
     markSel(true); updateSizes();
     return;
   }
@@ -587,6 +587,7 @@ function drawDots() {
     const title = el('title', {}, g); title.textContent = k === 'stations' ? dn(it) : it.n;
     if (!shown.has(it.id)) g.classList.add('dim');
     if (isVisited(it.id)) g.classList.add('vis');
+    if (isWanted(it.id)) g.classList.add('want');
     dotEls[it.id] = { g, mk, it, xy, hr:10 };   /* hr：押したとみなす半径（地図の単位） */
   });
   selOn = null; markSel(true); updateSizes();
@@ -1257,7 +1258,7 @@ function renderList(keepCount) {
       if (n) {
         const li = document.createElement('li'); li.style.cssText = 'padding:14px 16px;color:var(--muted)';
         ul.classList.add('asking');
-        li.innerHTML = '<div>条件に合うものがありません。いまは「' + (v === 'yes' ? '行った' : '記録なし') + '」で絞り込んでいます（「記録：すべて」なら ' + n.toLocaleString() + ' 件）。</div><div class="noteb"><button type="button" class="btn" data-va="all">記録：すべて にする</button></div>';
+        li.innerHTML = '<div>条件に合うものがありません。いまは「' + (v === 'yes' ? '行った' : v === 'want' ? '行きたい' : '記録なし') + '」で絞り込んでいます（「記録：すべて」なら ' + n.toLocaleString() + ' 件）。</div><div class="noteb"><button type="button" class="btn" data-va="all">記録：すべて にする</button></div>';
         li.querySelector('[data-va=all]').onclick = () => { flt.vis = 'all'; refresh(); };
         ul.appendChild(li); return;
       }
@@ -1359,6 +1360,7 @@ function renderControls() {
   add('記録:すべて', 'all', 'vis');
   add('行った', 'yes', 'vis', nVis);
   add('記録なし', 'no', 'vis');
+  add('行きたい', 'want', 'vis', ALLX.filter(x => isWanted(x.id)).length);
   brk();
   {
     /* 種類を複数選べる */
@@ -1434,7 +1436,7 @@ document.addEventListener('click', e => {
 });
 function renderStat() { /* 「表示中 ○件、○都道府県に分布…」の一文は表示しない */ }
 function renderLegend() {
-  $('legend').innerHTML = KORDER.map(m => '<span><i style="background:' + KCOL[m] + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span>';
+  $('legend').innerHTML = KORDER.map(m => '<span><i style="background:' + KCOL[m] + '"></i>' + MODE_LABEL[m] + '</span>').join('') + '<span><i style="border:3px solid var(--stamp)"></i>行った</span><span><i class="lgw"></i>行きたい</span>';
 }
 
 /* ===== 選択 ===== */
@@ -1530,7 +1532,7 @@ function nearestPf(lo, la) {
 function delMySpot(id) {
   const i = MYS.findIndex(m => m.id === id); if (i < 0) return;
   MYS.splice(i, 1); ALL_IDS.delete(id);
-  rec.profiles.forEach(p => { delete rec.data[p.id][id]; });
+  rec.profiles.forEach(p => { delete rec.data[p.id][id]; if (rec.want && rec.want[p.id]) delete rec.want[p.id][id]; });
   saveRec(); saveMys(); rebuildAllx(); selId = null; refresh();
 }
 let myEl = null, pickBar = null;
@@ -1588,9 +1590,9 @@ function openMyForm(it) {
   myEl.hidden = false;
   g('my-n').focus();
 }
-function visOK(it) { return flt.vis === 'all' || (flt.vis === 'yes') === isVisited(it.id); }
+function visOK(it) { return flt.vis === 'all' || (flt.vis === 'want' ? isWanted(it.id) : (flt.vis === 'yes') === isVisited(it.id)); }
 function visList(id) { return isVisited(id) ? curData()[cid(id)] : []; }
-function visMark(id) { const n = visList(id).length; return n ? '<span class="vm" aria-label="行った' + n + '回">行' + (n > 1 ? '×' + n : '') + '</span>' : ''; }
+function visMark(id) { const n = visList(id).length; return (isWanted(id) ? '<span class="wm" aria-label="' + (n ? 'また行きたい' : '行きたい') + '">★</span>' : '') + (n ? '<span class="vm" aria-label="行った' + n + '回">行' + (n > 1 ? '×' + n : '') + '</span>' : ''); }
 function visBlock(it) {
   const list = visList(it.id);
   let h = '<div class="visbox"><div class="vhead"><b>' + (list.length ? '<span class="hanko">行</span>' : '') + (list.length ? '行った回数:' + list.length + '回' : '行った記録はありません') + '</b><span class="vwho">記録する人:' + esc(curName()) + '</span></div>';
@@ -1598,10 +1600,14 @@ function visBlock(it) {
     h += '<div class="vrow"><span class="vn">' + (i + 1) + '回目</span><input type="text" inputmode="numeric" autocomplete="off" class="vd" data-i="' + i + '" value="' + esc(d) + '" placeholder="2020/02/22" aria-label="' + (i + 1) + '回目の日付（打つか貼り付ける）"><span class="vcal"><span class="btn vcb" aria-hidden="true">📅</span><input type="date" class="vdp" data-i="' + i + '" value="' + esc(d) + '" aria-label="' + (i + 1) + '回目の日付をカレンダーで選ぶ"></span>' + (d ? '' : '<span class="vwho">日付不明</span>') + '<button type="button" class="btn warn vx" data-i="' + i + '" aria-label="' + (i + 1) + '回目を削除">削除</button></div>';
   });
   h += '<button type="button" id="vis-add" class="chip big">' + (list.length ? '＋ もう1回行った' : '行ったら記録する') + '</button>';
+  const wl = list.length ? 'また行きたい' : '行きたい', wd = wantDate(it.id);
+  h += '<button type="button" id="want-tg" class="chip big want" aria-pressed="' + !!wd + '">' + (wd ? '★ ' : '☆ ') + wl + '</button>';
+  if (wd) h += '<p class="vwho" style="margin:0">' + wl + 'の印を付けた日：' + fmtDate(wd) + '</p>';
   if (list.length) h += '<p class="vwho" style="margin:0">日付は初めは「不明」です。分かる回だけ、あとから入れられます。貼り付けもできます。</p>';
   return h + '</div>';
 }
 function bindVis(it) {
+  $('want-tg').onclick = () => { toggleWant(it.id); afterVisChange(); };
   $('vis-add').onclick = () => {
     const cd = curData(), k = cid(it.id), l = has(cd, k) ? cd[k] : (cd[k] = []);
     if (l.length >= 50) return;
