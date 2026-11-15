@@ -920,7 +920,7 @@ const WEBT = {
 "https://www.ayuchaya.jp/":"道の駅 白鷹ヤナ公園 あゆ茶屋",
 "https://www.azumino-koen.jp/":"国営アルプスあづみの公園",
 "https://www.bansuisou.org/":"萬翠荘(ばんすいそう)",
-"https://www.baranomachi.jp/":"かのやばら園 100万本のバラに抱かれ癒される… 鹿児島県鹿屋市",
+"https://www.baranomachi.jp/":"かのやばら園",
 "https://www.baranomachi.jp/about/kirishimagaokakouen.html":"霧島ヶ丘公園",
 "https://www.benikomachi.jp/":"道の駅くりもと 紅小町の郷",
 "https://www.benyland.com/":"八木山ベニーランド",
