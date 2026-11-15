@@ -73,7 +73,7 @@ const ZOOS = [
 {"id":"zo:高岡古城公園動物園","n":"高岡古城公園動物園","pf":"富山","lo":137.02217,"la":36.74732,"ar":null,"tg":"","nt":"","wp":"ja:高岡古城公園動物園","web":"https://www.takaokakojyozoo.jp/","sd":"","in":"高岡古城公園"},
 {"id":"zo:いしかわ動物園","n":"いしかわ動物園","pf":"石川","lo":136.54536,"la":36.43324,"ar":145908,"tg":"","nt":"","wp":"ja:いしかわ動物園","web":"https://www.ishikawazoo.jp/","sd":""},
 {"id":"zo:月うさぎの里","n":"月うさぎの里","pf":"石川","lo":136.275863,"la":36.294793,"ar":null,"tg":"","nt":"","wp":"","web":"https://www.tsukiusaginosato.com/","sd":"","tag":"ウサギ"},
-{"id":"zo:西山動物園","n":"西山動物園","pf":"福井","lo":136.1809,"la":35.95065,"ar":null,"tg":"","nt":"","wp":"ja:鯖江市西山動物園","web":"https://www.city.sabae.fukui.jp/nishiyama_zoo/","sd":""},
+{"id":"zo:西山動物園","n":"西山動物園","pf":"福井","lo":136.1809,"la":35.95065,"ar":null,"tg":"","nt":"","wp":"ja:鯖江市西山動物園","web":"https://www.city.sabae.fukui.jp/nishiyama_zoo/","sd":"","in":"西山公園"},
 {"id":"zo:甲府市遊亀公園附属動物園","n":"甲府市遊亀公園附属動物園","pf":"山梨","kg":1,"lo":138.57199,"la":35.65095,"ar":6817,"tg":"","nt":"2022年10月から一時閉園中で、2027年に再開の予定（Wikipedia の記述による）","wp":"ja:甲府市遊亀公園附属動物園","web":"https://www.city.kofu.lg.jp/zoo/index.html","sd":"","in":"甲府市遊亀公園"},
 {"id":"zo:小諸市動物園","n":"小諸市動物園","pf":"長野","lo":138.41822,"la":36.32584,"ar":6329,"tg":"","nt":"","wp":"ja:小諸市動物園","web":"https://www.city.komoro.lg.jp/komoro_zoo/index.html","sd":"1926"},
 {"id":"zo:茶臼山動物園","n":"茶臼山動物園","pf":"長野","lo":138.11538,"la":36.58541,"ar":42889,"tg":"","nt":"","wp":"ja:長野市茶臼山動物園","web":"https://www.chausuyama.com/","sd":""},
