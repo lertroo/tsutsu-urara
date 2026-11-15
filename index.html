@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261114i">
+<link rel="stylesheet" href="style.css?v=20261115b">
 
 <main class="app">
   <header>
@@ -112,20 +112,21 @@
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
 <script src="data/stations.js?v=20261111b"></script>
-<script src="data/zoos.js?v=20261115a"></script>
+<script src="data/zoos.js?v=20261115b"></script>
 <script src="data/capitals.js"></script>
 <script src="data/worldheritage.js"></script>
 <script src="data/scenic.js"></script>
 <script src="data/nature.js?v=20261111a"></script>
 <script src="data/hyakumeizan.js?v=20261111a"></script>
-<script src="data/aquariums.js?v=20261113c"></script>
-<script src="data/gardens.js?v=20261113v"></script>
+<script src="data/aquariums.js?v=20261115b"></script>
+<script src="data/gardens.js?v=20261115b"></script>
 <script src="data/themeparks.js?v=20261114a"></script>
-<script src="data/museums.js?v=20261113e"></script>
+<script src="data/museums.js?v=20261115b"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
 <script src="data/desc.js?v=20261115a"></script>
+<script src="data/webt.js?v=20261115b"></script>
 <script src="site.js?v=20261115a"></script>
 <script src="core.js?v=20261114a"></script>
 <script src="xport.js?v=20261110g"></script>
@@ -1895,9 +1896,11 @@ function actionsHTML(it) {
   const a = (url, html, title) => '<a class="act" target="_blank" rel="noopener" href="' + esc(url) + '" title="' + title + '">' + html + '</a>';
   const w = wikiUrl(it.wp), web = /^https?:\/\//.test(it.web || '') ? it.web : '';
   const out = [];
-  if (w) out.push(a(w, (/^Q/.test(it.wp) ? 'ウィキデータ' : 'ウィキペディア') + ic('wiki'), /^Q/.test(it.wp) ? 'Wikidata を開く' : 'Wikipedia の記事を開く'));
+  if (w) out.push(a(w, (/^Q/.test(it.wp) ? 'ウィキデータ' : 'Wikipedia') + ic('wiki'), /^Q/.test(it.wp) ? 'Wikidata を開く' : 'Wikipedia の記事を開く'));   /* 3つのボタンは同じ幅（style.css の .actions .act） */
   if (web) out.push(a(web, '公式' + ic('web'), '公式サイトを開く'));
   if (typeof it.la === 'number') out.push(a('https://www.google.com/maps/search/?api=1&query=' + it.la.toFixed(5) + ',' + it.lo.toFixed(5), '地図' + ic('map'), '地図アプリで開く'));
+  const wt = web && typeof WEBT === 'object' && WEBT[web];   /* 公式サイトの題名（data/webt.js）。ボタンの下に1行 */
+  if (wt) out.push('<a class="webt" target="_blank" rel="noopener" href="' + esc(web) + '" title="' + esc(wt) + '">公式：' + esc(wt) + '</a>');
   return out.length ? '<div class="actions">' + out.join('') + '</div>' : '';
 }
 /* 詳細の出し方：簡潔（飾りの行を隠す。初めはこちら）／すべて。この端末に保存。上の歯車のメニューに足す */

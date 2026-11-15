@@ -86,7 +86,7 @@ const BOTS = [
 {"id":"bt:豊橋総合動植物公園（のんほいパーク）","n":"豊橋総合動植物公園（のんほいパーク）","pf":"愛知","lo":137.43236,"la":34.7197,"ar":366354,"tg":"動物園","nt":"","wp":"ja:豊橋総合動植物公園","web":"http://www.nonhoi.jp/","sd":"","tag":"鉄道、ゆうえんち"},
 {"id":"bt:草津市立水生植物公園 みずの森","n":"草津市立水生植物公園 みずの森","pf":"滋賀","lo":135.94063,"la":35.07427,"ar":35972,"tg":"","nt":"","wp":"ja:草津市立水生植物公園みずの森","web":"https://www.seibu-la.co.jp/mizunomori/","sd":""},
 {"id":"bt:京都府立植物園","n":"京都府立植物園","pf":"京都","lo":135.76302,"la":35.04937,"ar":229969,"tg":"","nt":"","wp":"ja:京都府立植物園","web":"https://www.kyotobotanicalgardens.jp","sd":"1923-11-10"},
-{"id":"bt:京都薬用植物園","n":"京都薬用植物園","pf":"京都","lo":135.80146,"la":35.04829,"ar":18453,"tg":"","nt":"","wp":"ja:京都薬用植物園","web":"https://www.takeda.co.jp/kyoto/","sd":"1933-03-29"},
+{"id":"bt:京都薬用植物園","n":"京都薬用植物園","pf":"京都","lo":135.80146,"la":35.04829,"ar":18453,"tg":"","nt":"","wp":"ja:京都薬用植物園","web":"https://www.takeda.com/jp/about/local-locations/botanical-garden/","sd":"1933-03-29"},
 {"id":"bt:大本花明山植物園","n":"大本花明山植物園","pf":"京都","lo":135.582174,"la":35.013757,"ar":null,"tg":"","nt":"","wp":"","web":"https://oomoto.or.jp/wp/kameyamasyokubutuen/","sd":""},
 {"id":"bt:宇治市植物公園","n":"宇治市植物公園","pf":"京都","lo":135.79516,"la":34.87136,"ar":63036,"tg":"","nt":"","wp":"ja:宇治市植物公園","web":"https://uji-citypark.jp/botanical/","sd":""},
 {"id":"bt:山科植物資料館","n":"山科植物資料館","pf":"京都","lo":135.81854,"la":34.971519,"ar":null,"tg":"","nt":"","wp":"ja:山科植物資料館","web":"https://yamashina-botanical.com/","sd":""},
