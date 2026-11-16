@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261116k">
+<link rel="stylesheet" href="style.css?v=20261116l">
 
 <main class="app">
   <header>
@@ -79,10 +79,10 @@ const kindTag = k => '<span class="akind" style="--kc:' + KCOL[k] + '"><i></i>' 
 const nameTag = n => '<span class="aname">' + esc(n) + '</span>';
 /* 記事・公式サイトのボタンと、説明（data/desc.js）。ページを移らずに、別のタブで開く（2026-11-16） */
 const wikiUrl = wp => /^ja:/.test(wp || '') ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(wp.slice(3)) : /^Q\d+$/.test(wp || '') ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + wp : '';
-const lkBtn = (u, t) => u ? '<a class="albtn" href="' + esc(u) + '" target="_blank" rel="noopener">' + t + '</a>' : '';
+const lkBtn = (u, t, c, tt) => u ? '<a class="albtn' + (c ? ' ' + c : '') + '" href="' + esc(u) + '" target="_blank" rel="noopener"' + (tt ? ' title="' + tt + '" aria-label="' + tt + '"' : '') + '>' + t + '</a>' : '';
 function linkTags(it) {
   const w = wikiUrl(it.wp), web = /^https?:\/\//.test(it.web || '') ? it.web : '';
-  return w || web ? '<span class="alinks">' + lkBtn(w, 'Wikipedia') + lkBtn(web, '公式') + '</span>' : '';
+  return w || web ? '<span class="alinks">' + lkBtn(w, 'W', 'wp', 'Wikipedia') + lkBtn(web, '公式') + '</span>' : '';
 }
 const descTag = it => { const d = typeof DESC === 'object' && (DESC[it.id] || DESC[cid(it.id)]); return d ? '<p class="adesc">' + esc(d) + '</p>' : ''; };
 const rowOpen = it => '<div class="arow" data-id="' + esc(cid(it.id)) + '">';
