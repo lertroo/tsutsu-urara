@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261116c">
+<link rel="stylesheet" href="style.css?v=20261116g">
 
 <main class="app">
   <header>
@@ -127,7 +127,7 @@
 <script src="data/hitokoto.js?v=20261110a"></script>
 <script src="data/desc.js?v=20261115g"></script>
 <script src="data/webt.js?v=20261115h"></script>
-<script src="site.js?v=20261115a"></script>
+<script src="site.js?v=20261116b"></script>
 <script src="core.js?v=20261115c"></script>
 <script src="xport.js?v=20261110g"></script>
 <script>
@@ -2060,7 +2060,7 @@ posOrigin();
 const kindOn = x => kindsOf(x).some(k => flt.kinds.has(k));
 
 buildTabs();
-/* ほかのページへ移るときに、地図の範囲・選んだ施設・絞り込み・検索・画面の位置を覚えておく（このタブを閉じるまで） */
+/* ほかのページへ移るときに、地図の範囲・選んだ施設・絞り込み・検索を覚えておく（このタブを閉じるまで。画面の位置 y も書くが、戻すときには使わない） */
 const MAPST_KEY = 'jp-mapstate';
 addEventListener('pagehide', () => {
   try { sessionStorage.setItem(MAPST_KEY, JSON.stringify({ vb, selId, mapView, y:window.scrollY, flt:{ kinds:[...flt.kinds], type:flt.type, region:flt.region, q:flt.q, vis:flt.vis, pfk:flt.pfk } })); } catch (e) {}
@@ -2076,7 +2076,7 @@ function restoreMapState(st) {
   const v = st.vb;
   if (v && v.w > 0 && v.h > 0) { const cx = v.x + v.w / 2, cy = v.y + v.h / 2, h = v.w * ASPECT; vb = { x:cx - v.w / 2, y:cy - h / 2, w:v.w, h }; applyVB(); }
   if (st.selId && currentItems().some(x => x.id === st.selId)) select(st.selId);
-  if (st.y > 0) requestAnimationFrame(() => window.scrollTo(0, st.y));
+  /* 画面の位置（st.y）は戻さない（2026-11-16。下のタブで、ページの途中からほかのページへ移るようになったため。戻ると中途半端な位置になる）。いつもページの上から */
 }
 /* 初めの表示は、INIT_KINDS（100名城）だけを選んだ状態。#種類 で開いたときは、その種類だけ。
    どれでもないときは、このタブで前に見ていた状態に戻す（ほかのページから戻ったとき） */

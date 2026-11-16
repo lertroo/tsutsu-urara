@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261116c">
+<link rel="stylesheet" href="style.css?v=20261116g">
 
 <main class="app">
   <header>
@@ -36,6 +36,7 @@
     <section class="panel">
       <div class="who"><label for="who">記録する人</label><select id="who"></select></div>
     </section>
+    <section class="panel amap" aria-label="行った所の地図"><svg id="amap" viewBox="120 0 680 880" role="img" aria-label="行った所の地図"></svg><p class="amapl"><span><i class="lv1"></i>行った都道府県</span><span><i class="lv2"></i>2か所以上</span><span><i class="lv3"></i>5か所以上</span><span><i class="dot"></i>行った所</span></p></section>
     <section class="panel" id="dash"></section>
   </div>
 </main>
@@ -62,7 +63,7 @@
 <script src="data/museums.js?v=20261115b"></script>
 <script src="data/towers.js"></script>
 <script src="data/lakes.js"></script>
-<script src="site.js?v=20261115a"></script>
+<script src="site.js?v=20261116b"></script>
 <script src="core.js?v=20261115c"></script>
 <script>
 /* あしあと：行った所の記録を、文字の一覧で見るページ。並べ方は「日付順・種類別・都道府県別」を切り替える */
@@ -112,12 +113,28 @@ function renderDash() {
 
 function renderList() {
   const V = visited().filter(hit);
+  renderMap(V);
   let h = '';
   if (!V.length) h = '';
   else if (view === 'date') h = listByDate(V);
   else if (view === 'kind') h = listByKind();
   else h = listByPref();
   $('alist').innerHTML = h || '<p class="dhint">' + (query ? '「' + esc(query) + '」に合う記録はありません。' : 'まだ足あとはありません。地図のページで施設を選んで「行ったら記録する」を押すと、ここに並びます。') + '</p>';
+}
+
+/* 行った所の地図：県は行った数で塗り（地図のページの「県を塗る」と同じ段階）、行った所に種類の色の点。絞り込みの文字があれば、合う所だけ点を出す */
+function renderMap(V) {
+  const cnt = {};
+  visitedAll().forEach(x => { const k = PREF_KEY[x.pf]; if (k) cnt[k] = (cnt[k] || 0) + 1; });
+  let h = '';
+  Object.keys(GEO_PREFS).forEach(k => { const n = cnt[k] || 0; h += '<path class="ap' + (n ? ' lv' + (n >= 5 ? 3 : n >= 2 ? 2 : 1) : '') + '" d="' + GEO_PREFS[k] + '"><title>' + esc(k) + (n ? '：' + n + 'か所' : '') + '</title></path>'; });
+  if (typeof LAKES !== 'undefined') LAKES.forEach(l => { h += '<path class="alake" d="' + l.d + '"/>'; });
+  const s = 9;
+  V.filter(v => typeof v.it.la === 'number').forEach(v => {
+    const [x, y] = proj(v.it.lo, v.it.la);
+    h += '<rect class="adot" x="' + (x - s / 2).toFixed(1) + '" y="' + (y - s / 2).toFixed(1) + '" width="' + s + '" height="' + s + '" style="--kc:' + KCOL[v.ks[0]] + '"><title>' + esc(nameOf(v.it)) + '</title></rect>';
+  });
+  $('amap').innerHTML = h;
 }
 
 /* 日付順：年ごとに、新しい順。日付が分からない回は最後にまとめる */

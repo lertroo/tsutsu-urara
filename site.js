@@ -91,3 +91,71 @@ $('prefreset').onclick = () => {
   fontSys = false; fsPct = 100; theme = 'auto'; applyPrefs();
   const b = $('prefreset'), t0 = b.textContent; b.textContent = '戻しました'; setTimeout(() => { b.textContent = t0; }, 1500);
 };
+/* ===== スマホの下のタブ（2026-11-16）=====
+   1列の画面（919px 以下）では、上のタブの代わりに、画面の下にタブの帯を出す。地図・あしあと・出力・保存・その他（更新履歴・このサイト）と、
+   地図のページだけ右端に「種類」（右下の三角の代わり。押すと絞り込みの板が開く）。スマホを横にしたとき（高さが低いとき）は、帯を左の縦の列にする。
+   どちらを出すかは style.css が決める。ここでは、上のタブ（.ptabs）のリンクから帯を作るだけ */
+{
+  const tabs = document.querySelector('header .ptabs');
+  if (tabs) {
+    const IC = {
+      'index.html': '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+      'ashiato.html': '<path fill="currentColor" stroke="none" d="M8 10.5c1.7 0 3 2 3 4.5S9.7 19.5 8 19.5 5 17.5 5 15s1.3-4.5 3-4.5zM16 4.5c1.7 0 3 2 3 4.5s-1.3 4.5-3 4.5-3-2-3-4.5 1.3-4.5 3-4.5z"/>',
+      'kiroku.html': '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/>',
+      more: '<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>',
+      kind: '<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+    };
+    const svg = d => '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+    const links = [...tabs.querySelectorAll('a')].map(a => ({ href: a.getAttribute('href'), text: a.textContent, cur: a.getAttribute('aria-current') === 'page' }));
+    const main = links.filter(l => IC[l.href]), more = links.filter(l => !IC[l.href]);
+    const nav = document.createElement('nav');
+    nav.className = 'bnav'; nav.setAttribute('aria-label', 'ページ');
+    let h = main.map(l => '<a href="' + esc(l.href) + '"' + (l.cur ? ' aria-current="page"' : '') + '>' + svg(IC[l.href]) + '<span>' + esc(l.text) + '</span></a>').join('');
+    if (more.length) h += '<button type="button" class="bmorebtn' + (more.some(l => l.cur) ? ' cur' : '') + '" aria-expanded="false" aria-controls="bmore">' + svg(IC.more) + '<span>その他</span></button>';
+    if ($('fbtn')) h += '<button type="button" class="bkind" id="bkind" aria-controls="fsheet" aria-expanded="false">' + svg(IC.kind) + '<span id="bkindl">種類</span></button>';
+    nav.innerHTML = h;
+    document.body.appendChild(nav);
+    if (more.length) {
+      const m = document.createElement('div');
+      m.className = 'bmore'; m.id = 'bmore'; m.hidden = true;
+      m.innerHTML = more.map(l => '<a href="' + esc(l.href) + '"' + (l.cur ? ' aria-current="page"' : '') + '>' + esc(l.text) + '</a>').join('');
+      document.body.appendChild(m);
+      const b = nav.querySelector('.bmorebtn');
+      /* 「その他」のすぐ上（横の縦の列のときは、すぐ右）に出す */
+      const show = on => {
+        m.hidden = !on; b.setAttribute('aria-expanded', String(on));
+        if (!on) return;
+        const r = b.getBoundingClientRect(), nr = nav.getBoundingClientRect(), side = nr.height > nr.width;
+        m.style.left = side ? (nr.right + 6) + 'px' : Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, r.left + r.width / 2 - m.offsetWidth / 2)) + 'px';
+        m.style.top = side ? Math.max(8, Math.min(innerHeight - m.offsetHeight - 8, r.top)) + 'px' : (nr.top - m.offsetHeight - 6) + 'px';
+      };
+      b.onclick = e => { e.stopPropagation(); show(m.hidden); };
+      document.addEventListener('click', e => { if (!m.hidden && !e.target.closest('#bmore')) show(false); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !m.hidden) { show(false); b.focus(); } });
+    }
+    /* 「種類」は、右下の三角（#fbtn）と同じ働き。三角の文字（種類 ○/○・タグ・閉じる）を写す */
+    const fb = $('fbtn'), bk = $('bkind');
+    if (fb && bk) {
+      bk.onclick = () => fb.click();
+      const sync = () => { $('bkindl').textContent = fb.textContent.replace(/^種類/, '種類 ').replace(/タグ/, '・タグ'); bk.setAttribute('aria-expanded', fb.getAttribute('aria-expanded') || 'false'); bk.classList.toggle('on', fb.getAttribute('aria-expanded') === 'true'); };
+      new MutationObserver(sync).observe(fb, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['aria-expanded'] });
+      sync();
+    }
+  }
+}
+/* ===== ページを開いたら、いちばん上から（2026-11-16）=====
+   下のタブでページの途中から移ると、ブラウザやアーティファクトの表示枠が、前の送り位置のまま新しいページを開くことがあったため。
+   戻る・進むで来たとき（back_forward）と、#… がページの中の場所を指しているときは、触らない */
+{
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  let nt = '';
+  try { nt = (performance.getEntriesByType('navigation')[0] || {}).type || ''; } catch (e) {}
+  let anchor = null;
+  try { anchor = location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null; } catch (e) {}
+  if (nt !== 'back_forward' && !anchor) {
+    const top = () => { if (window.scrollY) window.scrollTo(0, 0); };
+    top();
+    addEventListener('DOMContentLoaded', top, { once: true });
+    addEventListener('load', () => { top(); setTimeout(top, 60); }, { once: true });
+  }
+}
