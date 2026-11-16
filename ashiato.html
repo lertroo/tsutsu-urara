@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261116h">
+<link rel="stylesheet" href="style.css?v=20261116k">
 
 <main class="app">
   <header>
@@ -36,7 +36,7 @@
     <section class="panel">
       <div class="who"><label for="who">記録する人</label><select id="who"></select></div>
     </section>
-    <section class="panel amap" aria-label="行った所の地図"><svg id="amap" viewBox="120 0 680 880" role="img" aria-label="行った所の地図"></svg><p class="amapl"><span><i class="lv1"></i>行った都道府県</span><span><i class="lv2"></i>2か所以上</span><span><i class="lv3"></i>5か所以上</span><span><i class="dot"></i>行った所</span></p></section>
+    <section class="panel amap" aria-label="行った所の地図"><svg id="amap" viewBox="120 0 680 880" role="img" aria-label="行った所の地図"></svg><p class="amapl"><span><i class="lv1"></i>行った都道府県</span><span><i class="lv2"></i>2か所以上</span><span><i class="lv3"></i>5か所以上</span><span><i class="dot"></i>行った所（種類の色）</span></p></section>
     <section class="panel" id="dash"></section>
   </div>
 </main>
@@ -63,6 +63,7 @@
 <script src="data/museums.js?v=20261115b"></script>
 <script src="data/towers.js"></script>
 <script src="data/lakes.js"></script>
+<script src="data/desc.js?v=20261116a"></script>
 <script src="site.js?v=20261116b"></script>
 <script src="core.js?v=20261115c"></script>
 <script>
@@ -76,6 +77,15 @@ const md = d => d.slice(5).replace('-', '/');   /* 2026-10-20 → 10/20 */
 const lastDate = ds => ds.filter(Boolean).pop() || '';
 const kindTag = k => '<span class="akind" style="--kc:' + KCOL[k] + '"><i></i>' + esc(MODE_LABEL[k]) + '</span>';
 const nameTag = n => '<span class="aname">' + esc(n) + '</span>';
+/* 記事・公式サイトのボタンと、説明（data/desc.js）。ページを移らずに、別のタブで開く（2026-11-16） */
+const wikiUrl = wp => /^ja:/.test(wp || '') ? 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(wp.slice(3)) : /^Q\d+$/.test(wp || '') ? 'https://www.wikidata.org/wiki/Special:GoToLinkedPage/jawiki/' + wp : '';
+const lkBtn = (u, t) => u ? '<a class="albtn" href="' + esc(u) + '" target="_blank" rel="noopener">' + t + '</a>' : '';
+function linkTags(it) {
+  const w = wikiUrl(it.wp), web = /^https?:\/\//.test(it.web || '') ? it.web : '';
+  return w || web ? '<span class="alinks">' + lkBtn(w, 'Wikipedia') + lkBtn(web, '公式') + '</span>' : '';
+}
+const descTag = it => { const d = typeof DESC === 'object' && (DESC[it.id] || DESC[cid(it.id)]); return d ? '<p class="adesc">' + esc(d) + '</p>' : ''; };
+const rowOpen = it => '<div class="arow" data-id="' + esc(cid(it.id)) + '">';
 const cntTag = n => n > 1 ? '<span class="acnt">' + n + '回</span>' : '';
 
 /* いまの人の、行った所（双子は本来の側にまとめてある）と、行った日のリスト */
@@ -132,10 +142,27 @@ function renderMap(V) {
   const s = 9;
   V.filter(v => typeof v.it.la === 'number').forEach(v => {
     const [x, y] = proj(v.it.lo, v.it.la);
-    h += '<rect class="adot" x="' + (x - s / 2).toFixed(1) + '" y="' + (y - s / 2).toFixed(1) + '" width="' + s + '" height="' + s + '" style="--kc:' + KCOL[v.ks[0]] + '"><title>' + esc(nameOf(v.it)) + '</title></rect>';
+    h += '<rect class="adot" data-id="' + esc(cid(v.it.id)) + '" x="' + (x - s / 2).toFixed(1) + '" y="' + (y - s / 2).toFixed(1) + '" width="' + s + '" height="' + s + '" style="--kc:' + KCOL[v.ks[0]] + '"><title>' + esc(nameOf(v.it)) + '</title></rect>';
   });
   $('amap').innerHTML = h;
+  /* 凡例の「行った所」は、いま地図に出ている種類の色を並べる */
+  const ks = KORDER.filter(k => V.some(v => v.ks[0] === k)).slice(0, 6).map(k => KCOL[k]);
+  const lg = document.querySelector('.amapl i.dot');
+  if (lg) lg.style.background = ks.length > 1 ? 'linear-gradient(90deg,' + ks.map((c, i) => c + ' ' + (i * 100 / ks.length).toFixed(1) + '% ' + ((i + 1) * 100 / ks.length).toFixed(1) + '%').join(',') + ')' : (ks[0] || '');
 }
+/* 一覧の行にマウスを載せると、右の地図でその点を目立たせる（パソコンのマウスだけ。2026-11-16） */
+let hlDot = null;
+function hlOff() { if (hlDot) hlDot.classList.remove('on'); hlDot = null; $('amap').classList.remove('hl'); }
+$('dash').addEventListener('mouseover', e => {
+  const r = e.target.closest('.arow[data-id]');
+  const d = r && [...$('amap').querySelectorAll('.adot')].find(x => x.dataset.id === r.dataset.id);
+  if (d === hlDot) return;
+  hlOff();
+  if (!d) return;
+  d.parentNode.appendChild(d);   /* いちばん上に描く */
+  d.classList.add('on'); $('amap').classList.add('hl'); hlDot = d;
+});
+$('dash').addEventListener('mouseleave', hlOff);
 
 /* 日付順：年ごとに、新しい順。日付が分からない回は最後にまとめる */
 function listByDate(V) {
@@ -149,8 +176,8 @@ function listByDate(V) {
   grp.forEach((es, y) => {
     h += '<section class="agrp"><h3 class="agh">' + y + '<span>' + es.length + '回</span></h3><div class="arows">';
     es.forEach(({ v, d }) => {
-      h += '<div class="arow"><time>' + (d ? md(d) : '—') + '</time>' + nameTag(nameOf(v.it))
-        + '<span class="ameta">' + v.ks.map(kindTag).join('') + '<span class="apf">' + esc(pfsText(v)) + '</span>' + cntTag(v.ds.length) + '</span></div>';
+      h += rowOpen(v.it) + '<time>' + (d ? md(d) : '—') + '</time>' + nameTag(nameOf(v.it))
+        + '<span class="ameta">' + v.ks.map(kindTag).join('') + '<span class="apf">' + esc(pfsText(v)) + '</span>' + cntTag(v.ds.length) + '</span>' + linkTags(v.it) + descTag(v.it) + '</div>';
     });
     h += '</div></section>';
   });
@@ -158,9 +185,9 @@ function listByDate(V) {
 }
 
 /* 行った所の行（種類別・都道府県別で使う）。最後に行った日を右に出す */
-function placeRow(n, ds, meta) {
+function placeRow(it, n, ds, meta) {
   const ld = lastDate(ds);
-  return '<div class="arow">' + nameTag(n) + '<span class="ameta">' + meta + cntTag(ds.length) + '</span><time>' + (ld ? fmtDate(ld) : '日付不明') + '</time></div>';
+  return rowOpen(it) + nameTag(n) + '<span class="ameta">' + meta + cntTag(ds.length) + '</span>' + linkTags(it) + '<time>' + (ld ? fmtDate(ld) : '日付不明') + '</time>' + descTag(it) + '</div>';
 }
 const prefRank = p => { const i = PREF_ORDER.indexOf(p); return i < 0 ? 99 : i; };
 
@@ -175,7 +202,7 @@ function listByKind() {
     if (!show.length) return;
     show.sort((a, b) => prefRank(a.pf) - prefRank(b.pf) || a.n.localeCompare(b.n, 'ja'));
     h += '<section class="agrp"><h3 class="agh"><span class="akind" style="--kc:' + KCOL[k] + '"><i></i></span>' + esc(MODE_LABEL[k]) + '<span>' + vis.length + ' / ' + all.length + '</span></h3><div class="arows">';
-    show.forEach(o => { h += placeRow(k === 'stations' ? dn(o) : o.n, cd[cid(o.id)], '<span class="apf">' + esc(prefFull(o.pf)) + '</span>'); });
+    show.forEach(o => { h += placeRow(o, k === 'stations' ? dn(o) : o.n, cd[cid(o.id)], '<span class="apf">' + esc(prefFull(o.pf)) + '</span>'); });
     h += '</div></section>';
   });
   return h;
@@ -202,7 +229,7 @@ function listByPref() {
       if (!vis.length) return;
       vis.sort((a, b) => KORDER.indexOf(KIND.get(a.id)) - KORDER.indexOf(KIND.get(b.id)) || a.n.localeCompare(b.n, 'ja'));
       hr += '<details class="apref" id="pf-' + esc(p) + '" open><summary><b>' + esc(prefFull(p)) + '</b><span>' + vis.length + ' / ' + all.length + '</span></summary><div class="arows">';
-      vis.forEach(x => { hr += placeRow(nameOf(x), cd[cid(x.id)], kindsOf(x).map(kindTag).join('')); });
+      vis.forEach(x => { hr += placeRow(x, nameOf(x), cd[cid(x.id)], kindsOf(x).map(kindTag).join('')); });
       hr += '</div></details>';
     });
     if (hr) h += '<section class="agrp"><h3 class="agh">' + esc(r) + '</h3>' + hr + '</section>';

@@ -511,17 +511,17 @@ body.xopen { overflow: hidden; }
 .page { max-width: 880px; margin-inline: auto; display: flex; flex-direction: column; gap: 12px; }
 /* 広い画面（1100px 以上）：画面の幅を使い切る（2026-11-16）。
    このサイト：枠を上から下へ詰めて列に流す（段組み。枠は1枚 520px 以上）。出力・保存：枠を横に並べる（3枚なら3列）。
-   更新履歴：新しい日が左から右へ並ぶ格子。あしあと：左に一覧、右に行った所の地図（地図は画面に残る） */
+   更新履歴：新しい日が左から右へ並ぶ格子。あしあと：左に行った所の地図、右に一覧（地図は画面に残る） */
 @media (min-width: 1100px) {
   .page:not(.clog):not(:has(#dash)):not(:has(> .rec)) { max-width: none; display: block; columns: 520px; column-gap: 16px; }
   .page:not(.clog):not(:has(#dash)):not(:has(> .rec)) > * { break-inside: avoid; margin: 0 0 12px; }
   .page:has(> .rec) { max-width: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 12px 16px; align-items: start; }
   .page.clog { max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); gap: 12px 16px; align-items: start; }
   .page.clog > :not(.day) { grid-column: 1 / -1; }
-  .page:has(#dash) { max-width: none; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .75fr); grid-template-rows: auto 1fr; gap: 12px 16px; align-items: start; }
-  .page:has(#dash) > .panel:first-child { grid-column: 1; grid-row: 1; }
-  .page:has(#dash) > #dash { grid-column: 1; grid-row: 2; }
-  .page:has(#dash) > .amap { grid-column: 2; grid-row: 1 / span 2; position: sticky; top: 12px; }
+  .page:has(#dash) { max-width: none; display: grid; grid-template-columns: minmax(360px, .75fr) minmax(0, 1fr); grid-template-rows: auto 1fr; gap: 12px 16px; align-items: start; }
+  .page:has(#dash) > .panel:first-child { grid-column: 2; grid-row: 1; }
+  .page:has(#dash) > #dash { grid-column: 2; grid-row: 2; }
+  .page:has(#dash) > .amap { grid-column: 1; grid-row: 1 / span 2; position: sticky; top: 12px; }
   .page .amap svg { max-height: calc(100vh - 90px); }
 }
 /* あしあと：行った所の地図（2026-11-16）。県は行った数で塗り、行った所に点 */
@@ -532,11 +532,20 @@ body.xopen { overflow: hidden; }
 #amap .ap.lv2 { fill: color-mix(in srgb, var(--accent) 55%, var(--land)); }
 #amap .ap.lv3 { fill: color-mix(in srgb, var(--accent) 82%, var(--land)); }
 #amap .alake { fill: var(--sea); }
-#amap .adot { fill: var(--kc); stroke: var(--stamp); stroke-width: 1.6px; vector-effect: non-scaling-stroke; }
+#amap .adot { fill: var(--kc); stroke: none; }
 .amapl { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; font-size: .75rem; color: var(--muted); }
-.amapl i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; border-radius: var(--r); border: 1px solid var(--accent); }
-.amapl i.lv1 { background: color-mix(in srgb, var(--accent) 30%, transparent); } .amapl i.lv2 { background: color-mix(in srgb, var(--accent) 55%, transparent); } .amapl i.lv3 { background: color-mix(in srgb, var(--accent) 82%, transparent); }
-.amapl i.dot { border: 1.5px solid var(--stamp); background: var(--muted); }
+.amapl i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; border-radius: var(--r); border: 1px solid var(--coast); }
+/* 凡例の色は、地図の塗り（陸の色に混ぜる）と同じにする */
+.amapl i.lv1 { background: color-mix(in srgb, var(--accent) 30%, var(--land)); } .amapl i.lv2 { background: color-mix(in srgb, var(--accent) 55%, var(--land)); } .amapl i.lv3 { background: color-mix(in srgb, var(--accent) 82%, var(--land)); }
+.amapl i.dot { border: 0; width: 18px; background: var(--muted); }
+/* 一覧の行に載せたときの点 */
+#amap .adot { transition: opacity .15s; transform-box: fill-box; transform-origin: center; }
+#amap.hl .adot { opacity: .3; }
+#amap.hl .adot.on { opacity: 1; transform: scale(1.8); stroke: var(--ink); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+.alinks { display: inline-flex; gap: 4px; }
+.albtn { font-size: .7rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--line); border-radius: var(--r); color: var(--accent); background: var(--panel); text-decoration: none; white-space: nowrap; }
+.albtn:hover { border-color: var(--accent); }
+.adesc { flex: 1 0 100%; margin: 0; font-size: .74rem; line-height: 1.5; color: var(--muted); }
 }
 .page > .panel { padding: 14px 16px; }
 .page h2 { font-family: var(--font-display); font-size: 1.15rem; margin: 0 0 8px; }
