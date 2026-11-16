@@ -224,6 +224,7 @@ h1 { margin: 0; }
 .vwho { font-size: 0.78rem; color: var(--muted); }
 .rec summary { cursor: pointer; font-weight: 700; }
 .rec .line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rec .line + .line { margin-top: 8px; }
 .rec .line label { font-size: 0.82rem; color: var(--muted); }
 .rec .line input[type=text] { flex: 1 1 140px; }
 .rec textarea { width: 100%; box-sizing: border-box; resize: vertical; font-size: max(16px, 0.85rem); }
@@ -514,7 +515,7 @@ body.xopen { overflow: hidden; }
 @media (min-width: 1100px) {
   .page:not(.clog):not(:has(#dash)):not(:has(> .rec)) { max-width: none; display: block; columns: 520px; column-gap: 16px; }
   .page:not(.clog):not(:has(#dash)):not(:has(> .rec)) > * { break-inside: avoid; margin: 0 0 12px; }
-  .page:has(> .rec) { max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 12px 16px; align-items: start; }
+  .page:has(> .rec) { max-width: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 12px 16px; align-items: start; }
   .page.clog { max-width: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(520px, 1fr)); gap: 12px 16px; align-items: start; }
   .page.clog > :not(.day) { grid-column: 1 / -1; }
   .page:has(#dash) { max-width: none; display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, .75fr); grid-template-rows: auto 1fr; gap: 12px 16px; align-items: start; }
