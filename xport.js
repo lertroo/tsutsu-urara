@@ -59,6 +59,7 @@ const XFONT = (px, w) => (w || 400) + ' ' + px + 'px "BIZ UDPGothic","Hiragino S
 /* ロゴ・タイトル・大きな数字は、画面の見出し（--font-display）と同じ丸ゴシック */
 const XHEAD = (px, w) => (w || 400) + ' ' + px + 'px "Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN","Yu Gothic","Noto Sans CJK JP",sans-serif';
 const XBRAND = (px, w) => (w || 800) + ' ' + px + 'px "M PLUS Rounded 1c","Zen Maru Gothic","BIZ UDPGothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif';   /* はんこと「つつうらら」だけ（サイトの見出し・ロゴと同じ。読み込むのは7字だけなので、ほかの字は Zen Maru Gothic になる） */
+/* 角の丸み：サイトの --r（3px）に合わせて、小さくする（画像は画面のおよそ2倍の大きさなので、大きい枠で6、小さい印で3。2026-11-16） */
 function xRR(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
 function xFit(c, s, maxW) { if (c.measureText(s).width <= maxW) return s; let t = s; while (t.length > 1 && c.measureText(t + '…').width > maxW) t = t.slice(0, -1); return t + '…'; }
 function xDraw(cv, D) {
@@ -68,7 +69,7 @@ function xDraw(cv, D) {
   c.textBaseline = 'alphabetic';
   // 見出し
   c.save(); c.translate(pad + 38, pad + 38); c.rotate(-0.07);
-  c.strokeStyle = P.stamp; c.lineWidth = 4; xRR(c, -38, -38, 76, 76, 12); c.stroke();
+  c.strokeStyle = P.stamp; c.lineWidth = 4; xRR(c, -38, -38, 76, 76, 6); c.stroke();
   c.fillStyle = P.stamp; c.font = XBRAND(30, 800); c.textAlign = 'center';
   ['津', '々', '浦', 'ラ'].forEach((ch, i) => { c.fillStyle = i === 3 ? P.accent : P.stamp; c.fillText(ch, (i % 2 ? 1 : -1) * 17, (i < 2 ? -3 : 31) - 4 + (i < 2 ? 0 : 0)); });
   c.restore();
@@ -106,7 +107,7 @@ function xDraw(cv, D) {
     const rows = Math.min(Math.ceil(ks.length / cols), Math.floor((maxH - hh - 8 - bh - 16) / rowH));
     c.fillStyle = P.muted; c.font = XFONT(26, 700); c.fillText(D.nv + 'か所の内訳', x, y + 24);
     const by = y + hh + 4, sum = ks.reduce((t, k) => t + D.kc[k], 0) || 1;
-    c.save(); xRR(c, x, by, w, bh, bh / 2); c.clip();
+    c.save(); xRR(c, x, by, w, bh, Math.min(4, bh / 2)); c.clip();
     c.fillStyle = P.line; c.fillRect(x, by, w, bh);
     let cx = x; const gap = 3;
     ks.forEach((k, i) => { const sw = w * D.kc[k] / sum; c.fillStyle = KCOL[k]; c.fillRect(cx, by, Math.max(3, sw - (i < ks.length - 1 ? gap : 0)), bh); cx += sw; });
@@ -122,7 +123,7 @@ function xDraw(cv, D) {
     }
     shown.forEach((k, i) => {
       const col = Math.floor(i / rows), r = i % rows, lx = x + col * (ew + 24), ry = ly + r * rowH;
-      c.fillStyle = KCOL[k]; xRR(c, lx, ry + 8, 22, 22, 5); c.fill();
+      c.fillStyle = KCOL[k]; xRR(c, lx, ry + 8, 22, 22, 3); c.fill();
       const cntTxt = String(D.kc[k]);   /* 割合（%）は出さない。全体のうちの何%（コンプリート率）に読まれるため。割合は上の帯で見せる */
       c.textAlign = 'right'; c.font = XFONT(30, 700); c.fillStyle = P.ink; c.fillText(cntTxt, lx + ew, ry + 30);
       const pw = c.measureText(cntTxt).width; c.textAlign = 'left';
@@ -138,7 +139,7 @@ function xDraw(cv, D) {
     D.recs.slice(0, n).forEach((r, i) => {
       const ry = y + 50 + i * 52; let tx = x;
       if (XS.dates) { c.font = XFONT(26, 400); c.fillStyle = P.muted; c.fillText(r.d ? fmtDate(r.d) : '日付なし', x, ry + 30); tx = x + 190; }
-      c.fillStyle = KCOL[r.k]; xRR(c, tx, ry + 12, 18, 18, 4); c.fill();
+      c.fillStyle = KCOL[r.k]; xRR(c, tx, ry + 12, 18, 18, 3); c.fill();
       c.fillStyle = P.ink; c.font = XFONT(30, 700); c.fillText(xFit(c, KIND.get(r.it.id) === 'stations' ? dn(r.it) : r.it.n, x + w - tx - 30), tx + 30, ry + 31);
     });
     return 50 + n * 52;
@@ -150,7 +151,7 @@ function xDraw(cv, D) {
     const mx = Math.max.apply(null, yk.map(k => D.ys[k])), gap = 18, bw = Math.min(90, (w - gap * (yk.length - 1)) / yk.length), base = y + 160;
     yk.forEach((k, i) => {
       const bx = x + i * (bw + gap), h = Math.max(8, D.ys[k] / mx * 80);
-      c.fillStyle = P.stamp; xRR(c, bx, base - h, bw, h, 6); c.fill();
+      c.fillStyle = P.stamp; xRR(c, bx, base - h, bw, h, Math.min(3, h / 2)); c.fill();
       c.textAlign = 'center'; c.fillStyle = P.ink; c.font = XFONT(26, 700); c.fillText(String(D.ys[k]), bx + bw / 2, base - h - 8);
       c.fillStyle = P.muted; c.font = XFONT(24, 400); c.fillText(k, bx + bw / 2, base + 30); c.textAlign = 'left';
     });
@@ -158,7 +159,7 @@ function xDraw(cv, D) {
   };
   const drawMap = (x, y, w) => {
     const sc = w / 680, h = 880 * sc;
-    c.save(); xRR(c, x, y, w, h, 18); c.clip();
+    c.save(); xRR(c, x, y, w, h, 6); c.clip();
     c.fillStyle = P.sea; c.fillRect(x, y, w, h);
     c.translate(x, y); c.scale(sc, sc); c.translate(-120, 0);
     c.lineJoin = 'round'; c.lineWidth = 1.1 / sc * 1.0;
@@ -168,7 +169,7 @@ function xDraw(cv, D) {
     });
     if (XS.dots) D.vis.forEach(v => { if (typeof v.it.la !== 'number') return; const [px, py] = proj(v.it.lo, v.it.la); c.beginPath(); c.arc(px, py, 6 / sc * 1.1 * 0.8, 0, 7); c.fillStyle = KCOL[v.k]; c.fill(); c.lineWidth = 1.6 / sc; c.strokeStyle = P.panel; c.stroke(); });
     c.restore();
-    c.strokeStyle = P.line; c.lineWidth = 2; xRR(c, x, y, w, h, 18); c.stroke();
+    c.strokeStyle = P.line; c.lineWidth = 2; xRR(c, x, y, w, h, 6); c.stroke();
     return h;
   };
   const hasA = T.count || T.share, wantRecent = T.recent && XS.names && D.recs.length, wantYears = T.years && XS.dates && yearList().length;

@@ -145,9 +145,12 @@ $('prefreset').onclick = () => {
 }
 /* ===== ページを開いたら、いちばん上から（2026-11-16）=====
    下のタブでページの途中から移ると、ブラウザやアーティファクトの表示枠が、前の送り位置のまま新しいページを開くことがあったため。
-   戻る・進むで来たとき（back_forward）と、#… がページの中の場所を指しているときは、触らない */
+   #… がページの中の場所を指しているときは、触らない。
+   ブラウザに任せると前の位置へ戻してしまうので、戻すのはこちらでする（manual）。「戻る・進む」で来たときだけ、そのページを離れたときの位置へ戻す */
 {
   try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  const SY_KEY = 'jp-sy:' + location.pathname;
+  addEventListener('pagehide', () => { try { sessionStorage.setItem(SY_KEY, String(Math.round(window.scrollY))); } catch (e) {} });
   let nt = '';
   try { nt = (performance.getEntriesByType('navigation')[0] || {}).type || ''; } catch (e) {}
   let anchor = null;
@@ -157,5 +160,9 @@ $('prefreset').onclick = () => {
     top();
     addEventListener('DOMContentLoaded', top, { once: true });
     addEventListener('load', () => { top(); setTimeout(top, 60); }, { once: true });
+  } else if (nt === 'back_forward') {
+    let y = 0; try { y = parseInt(sessionStorage.getItem(SY_KEY), 10) || 0; } catch (e) {}
+    const back = () => window.scrollTo(0, y);
+    if (y > 0) addEventListener('load', () => { back(); setTimeout(back, 60); }, { once: true });
   }
 }

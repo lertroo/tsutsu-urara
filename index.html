@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261116l">
+<link rel="stylesheet" href="style.css?v=20261116o">
 
 <main class="app">
   <header>
@@ -127,9 +127,9 @@
 <script src="data/hitokoto.js?v=20261110a"></script>
 <script src="data/desc.js?v=20261116a"></script>
 <script src="data/webt.js?v=20261115h"></script>
-<script src="site.js?v=20261116b"></script>
+<script src="site.js?v=20261116c"></script>
 <script src="core.js?v=20261115c"></script>
-<script src="xport.js?v=20261110g"></script>
+<script src="xport.js?v=20261116a"></script>
 <script>
 
 /* ===== 状態 ===== */
@@ -1337,7 +1337,7 @@ function fsShow(on) {
   refresh();
   if (on) $('fsb').scrollTop = 0;
 }
-/* 右下の三角（ドッグイヤー）：閉じているときは開く、開いているときは閉じる */
+/* 板の開閉（押すのは、下のタブの「種類」。site.js が #fbtn を押す） */
 $('fbtn').onclick = () => fsShow(!fsOpen);
 $('fsback').onclick = () => fsShow(false);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && fsOpen) fsShow(false); });
@@ -2060,12 +2060,12 @@ posOrigin();
 const kindOn = x => kindsOf(x).some(k => flt.kinds.has(k));
 
 buildTabs();
-/* ほかのページへ移るときに、地図の範囲・選んだ施設・絞り込み・検索を覚えておく（このタブを閉じるまで。画面の位置 y も書くが、戻すときには使わない） */
+/* ほかのページへ移るときに、地図の範囲・選んだ施設・絞り込み・検索を覚えておく（このタブを閉じるまで） */
 const MAPST_KEY = 'jp-mapstate';
 /* 選んだ種類と細かい絞り込み（type・vis）は、タブを閉じても残す（2026-11-16）。次に開いたとき、前回の種類で出す。検索・地方・県・地図の範囲は残さない */
 const MAPFLT_KEY = 'jp-mapflt';
 function saveMapState() {
-  try { sessionStorage.setItem(MAPST_KEY, JSON.stringify({ vb, selId, mapView, y:window.scrollY, flt:{ kinds:[...flt.kinds], type:flt.type, region:flt.region, q:flt.q, vis:flt.vis, pfk:flt.pfk } })); } catch (e) {}
+  try { sessionStorage.setItem(MAPST_KEY, JSON.stringify({ vb, selId, mapView, flt:{ kinds:[...flt.kinds], type:flt.type, region:flt.region, q:flt.q, vis:flt.vis, pfk:flt.pfk } })); } catch (e) {}
   try { localStorage.setItem(MAPFLT_KEY, JSON.stringify({ kinds:[...flt.kinds], type:flt.type, vis:flt.vis })); } catch (e) {}
 }
 addEventListener('pagehide', saveMapState);
@@ -2081,7 +2081,7 @@ function restoreMapState(st) {
   const v = st.vb;
   if (v && v.w > 0 && v.h > 0) { const cx = v.x + v.w / 2, cy = v.y + v.h / 2, h = v.w * ASPECT; vb = { x:cx - v.w / 2, y:cy - h / 2, w:v.w, h }; applyVB(); }
   if (st.selId && currentItems().some(x => x.id === st.selId)) select(st.selId);
-  /* 画面の位置（st.y）は戻さない（2026-11-16。下のタブで、ページの途中からほかのページへ移るようになったため。戻ると中途半端な位置になる）。いつもページの上から */
+  /* 画面の位置は戻さない（2026-11-16。下のタブで、ページの途中からほかのページへ移るようになったため）。ブラウザの「戻る」で来たときだけ、site.js が戻す */
 }
 /* 初めの表示：#種類 で開いたときは、その種類だけ。このタブで前に見ていた状態があれば、それに戻す（ほかのページから戻ったとき）。
    なければ、前回に選んでいた種類と細かい絞り込み（MAPFLT_KEY）。それもなければ（初めて来た人）、INIT_KINDS（100名城）だけ */
