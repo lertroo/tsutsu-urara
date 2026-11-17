@@ -114,7 +114,7 @@
 <script src="data/stations.js?v=20261115a"></script>
 <script src="data/zoos.js?v=20261115b"></script>
 <script src="data/capitals.js"></script>
-<script src="data/worldheritage.js"></script>
+<script src="data/worldheritage.js?v=20261117c"></script>
 <script src="data/scenic.js"></script>
 <script src="data/nature.js?v=20261111a"></script>
 <script src="data/hyakumeizan.js?v=20261111a"></script>
@@ -125,8 +125,8 @@
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
-<script src="data/desc.js?v=20261116a"></script>
-<script src="data/webt.js?v=20261115h"></script>
+<script src="data/desc.js?v=20261117a"></script>
+<script src="data/webt.js?v=20261117b"></script>
 <script src="site.js?v=20261117c"></script>
 <script src="core.js?v=20261115c"></script>
 <script src="xport.js?v=20261116a"></script>
@@ -1102,7 +1102,7 @@ function detailHTML(it, k) {
     facts(fTxt('主催', it.sp), fTxt('備考', it.rm), wiki, web, fPos(it));
   if (k === 'biwa') return dHead(badge('琵琶湖'), it, '滋賀県') + facts(fTxt('概要', '日本最大の湖（面積 約669 km²）'), fTxt('所在', '滋賀県'), fPos(it, '湖の中心'));
   if (k === 'whs') return dHead(badge('世界遺産（' + it.ty + '）'), it, it.ps) +
-    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, fPos(it, rp));
+    facts(fTxt('正式名称', it.of), fRow('登録', esc(it.yr) + '年（' + esc(it.ty) + '遺産）', 1), fTxt('所在', it.ps), wiki, web, fPos(it, rp));
   if (k === 'my') return dHead(badge('マイスポット') + (it.k ? badge(it.k, 1) : ''), it, pfs) +
     facts(it.memo ? '<div class="row"><dt>メモ</dt><dd style="white-space:pre-wrap">' + esc(it.memo) + '</dd></div>' : '', fRow('位置', '北緯 ' + it.la.toFixed(4) + '、東経 ' + it.lo.toFixed(4), 1)) +
     '<div class="xact" style="margin-top:8px"><button type="button" class="btn" id="my-edit">編集</button><button type="button" class="btn" id="my-del">削除</button></div>';
