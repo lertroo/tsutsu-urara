@@ -1,7 +1,7 @@
 /* ===== Tsutsu-Urara：全ページで共通の上部（文字の大きさ・表示モード・データ更新の日付）=====
    どのページも、本文の最後でこのファイルを読む。地図のページなどは、このあと core.js も読む。 */
 /* データ更新の日付。changelog.html に新しい日付の欄を足したら、ここも同じ日付にする */
-const DATA_DATE = '2026年11月15日';
+const DATA_DATE = '2026年11月17日';
 
 const $ = id => document.getElementById(id);
 
@@ -101,7 +101,7 @@ $('prefreset').onclick = () => {
     /* 絵は、作者のドット絵（icons/bn-*.png。28×28。2026-11-16 に試しに入れた）。
        1ドットが画面の点の整数倍になる大きさで出す（ドットの太さがばらつかないように）。画面の点の比（devicePixelRatio）に合わせて、28px にいちばん近い大きさを選ぶ。縁取りの太さも1ドットぶん */
     const IC = { 'index.html': 'bn-map', 'ashiato.html': 'bn-ashiato', 'kiroku.html': 'bn-kiroku', 'changelog.html': 'bn-changelog', 'about.html': 'bn-about', more: 'bn-more', kind: 'bn-kind' };
-    const ICV = '20261116b';   /* 絵を描き直したら新しい値にする（古い絵がキャッシュに残らないように） */
+    const ICV = '20261117a';   /* 絵を描き直したら新しい値にする（古い絵がキャッシュに残らないように） */
     const MAIN = ['index.html', 'ashiato.html', 'kiroku.html'];   /* 地図のページで、「その他」に入れないもの */
     const dpr = window.devicePixelRatio || 1, k = Math.max(1, Math.round(dpr));
     document.documentElement.style.setProperty('--bi', (28 * k / dpr).toFixed(3) + 'px');
