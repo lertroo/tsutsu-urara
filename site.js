@@ -98,19 +98,25 @@ $('prefreset').onclick = () => {
 {
   const tabs = document.querySelector('header .ptabs');
   if (tabs) {
-    const IC = {
-      'index.html': '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
-      'ashiato.html': '<path fill="currentColor" stroke="none" d="M8 10.5c1.7 0 3 2 3 4.5S9.7 19.5 8 19.5 5 17.5 5 15s1.3-4.5 3-4.5zM16 4.5c1.7 0 3 2 3 4.5s-1.3 4.5-3 4.5-3-2-3-4.5 1.3-4.5 3-4.5z"/>',
-      'kiroku.html': '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/>',
-      more: '<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>',
-      kind: '<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
-    };
-    const svg = d => '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+    /* 絵は、作者のドット絵（icons/bn-*.png。28×28。2026-11-16 に試しに入れた）。
+       1ドットが画面の点の整数倍になる大きさで出す（ドットの太さがばらつかないように）。画面の点の比（devicePixelRatio）に合わせて、28px にいちばん近い大きさを選ぶ。縁取りの太さも1ドットぶん */
+    const IC = { 'index.html': 'bn-map', 'ashiato.html': 'bn-ashiato', 'kiroku.html': 'bn-kiroku', 'changelog.html': 'bn-changelog', 'about.html': 'bn-about', more: 'bn-more', kind: 'bn-kind' };
+    const ICV = '20261116b';   /* 絵を描き直したら新しい値にする（古い絵がキャッシュに残らないように） */
+    const MAIN = ['index.html', 'ashiato.html', 'kiroku.html'];   /* 地図のページで、「その他」に入れないもの */
+    const dpr = window.devicePixelRatio || 1, k = Math.max(1, Math.round(dpr));
+    document.documentElement.style.setProperty('--bi', (28 * k / dpr).toFixed(3) + 'px');
+    /* 縁取りのずらし幅。ちょうど1ドットだと、計算の誤差で右・下の影が0点に切り捨てられて、左上にしか出なかった（2026-11-17）。右・下は少し多め、左・上は少し少なめにして、どちらも1ドットに収める */
+    document.documentElement.style.setProperty('--bo', ((k + .03) / dpr).toFixed(4) + 'px');
+    document.documentElement.style.setProperty('--bn', (-(k - .03) / dpr).toFixed(4) + 'px');
+    const ico = href => IC[href] ? '<img src="icons/' + IC[href] + '.png?v=' + ICV + '" width="28" height="28" alt="" aria-hidden="true">' : '';
+    const svg = n => '<img src="icons/' + n + '.png?v=' + ICV + '" width="28" height="28" alt="" aria-hidden="true">';
     const links = [...tabs.querySelectorAll('a')].map(a => ({ href: a.getAttribute('href'), text: a.textContent, cur: a.getAttribute('aria-current') === 'page' }));
-    const main = links.filter(l => IC[l.href]), more = links.filter(l => !IC[l.href]);
+    /* 地図のページは「その他」と「種類」。ほかのページは、更新履歴・このサイトも並べて5つにする（どのページでも、地図・あしあと・出力・保存の位置が動かないように。2026-11-16） */
+    const kindPage = !!$('fbtn');
+    const main = kindPage ? links.filter(l => MAIN.includes(l.href)) : links, more = kindPage ? links.filter(l => !MAIN.includes(l.href)) : [];
     const nav = document.createElement('nav');
     nav.className = 'bnav'; nav.setAttribute('aria-label', 'ページ');
-    let h = main.map(l => '<a href="' + esc(l.href) + '"' + (l.cur ? ' aria-current="page"' : '') + '>' + svg(IC[l.href]) + '<span>' + esc(l.text) + '</span></a>').join('');
+    let h = main.map((l, i) => '<a href="' + esc(l.href) + '"' + (!kindPage && i === main.length - 1 ? ' class="bwide"' : '') + (l.cur ? ' aria-current="page"' : '') + '>' + ico(l.href) + '<span>' + esc(l.text) + '</span></a>').join('');
     if (more.length) h += '<button type="button" class="bmorebtn' + (more.some(l => l.cur) ? ' cur' : '') + '" aria-expanded="false" aria-controls="bmore">' + svg(IC.more) + '<span>その他</span></button>';
     if ($('fbtn')) h += '<button type="button" class="bkind" id="bkind" aria-controls="fsheet" aria-expanded="false">' + svg(IC.kind) + '<span id="bkindl">種類</span></button>';
     nav.innerHTML = h;
