@@ -1052,6 +1052,7 @@ const WEBT = {
 "https://saga-museum.jp/nagoya/":"佐賀県立 名護屋城博物館",
 "https://saga-museum.jp/sagajou/":"佐賀県立 佐賀城本丸歴史館",
 "https://sagamigawa-fureai.com/":"相模川ふれあい科学館 アクアリウムさがみはら",
+"https://saitama-midorinomori.jp/":"カネパッケージ緑の森博物館",
 "https://saitama-rekimin.spec.ed.jp/":"埼玉県立歴史と民俗の博物館",
 "https://saito-muse.pref.miyazaki.jp/web/index.html":"宮崎県立西都原考古博物館",
 "https://sakashokan.com/":"岩手県第１号の道の駅 南部杜氏の里",
