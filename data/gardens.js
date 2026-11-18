@@ -62,7 +62,7 @@ const BOTS = [
 {"id":"bt:富山県中央植物園","n":"富山県中央植物園","pf":"富山","lo":137.18195,"la":36.65966,"ar":234658,"tg":"","nt":"","wp":"ja:富山県中央植物園","web":"https://www.bgtym.org/","sd":""},
 {"id":"bt:氷見市海浜植物園","n":"氷見市海浜植物園","pf":"富山","lo":137.00452,"la":36.83725,"ar":null,"tg":"","nt":"","wp":"ja:氷見市海浜植物園","web":"https://www.himi-kaihin.com/","sd":""},
 {"id":"bt:薬用植物指導センター","n":"薬用植物指導センター","pf":"富山","lo":137.38817,"la":36.71706,"ar":null,"tg":"","nt":"","wp":"ja:薬用植物指導センター","web":"https://www.pref.toyama.jp/1285/kurashi/kenkou/iryou/center/index.html","sd":""},
-{"id":"bt:チューリップ四季彩館","n":"チューリップ四季彩館","pf":"富山","lo":136.965024,"la":36.641128,"ar":null,"tg":"","nt":"","wp":"ja:チューリップ四季彩館","web":"https://www.tulipfair.or.jp/","sd":""},
+{"id":"bt:チューリップ四季彩館","n":"チューリップ四季彩館","pf":"富山","lo":136.965024,"la":36.641128,"ar":null,"tg":"","nt":"","wp":"ja:チューリップ四季彩館","web":"https://www.tulipfair.or.jp/","sd":"","in":"砺波チューリップ公園"},
 {"id":"bt:富山県花総合センター","n":"富山県花総合センター","pf":"富山","lo":136.968441,"la":36.638963,"ar":null,"tg":"","nt":"2026年度末（2027年3月末）で廃止すると富山県が発表（Wikipedia の記述による）","wp":"ja:富山県花総合センター","web":"https://elega.tulipfair.or.jp/","sd":"","al":"エレガガーデン"},
 {"id":"bt:金沢大学医薬保健学域薬学類･創薬科学類附属薬用植物園","n":"金沢大学医薬保健学域薬学類・創薬科学類附属薬用植物園","pf":"石川","lo":136.70188,"la":36.54038,"ar":23288,"tg":"","nt":"","wp":"ja:金沢大学薬用植物園","web":"https://yakugaku.w3.kanazawa-u.ac.jp/~yakusou/2index.html","sd":""},
 {"id":"bt:七尾フラワーパーク・のと蘭ノ国","n":"七尾フラワーパーク・のと蘭ノ国","pf":"石川","lo":136.928512,"la":37.033849,"ar":null,"tg":"","nt":"","wp":"ja:のと蘭ノ国","web":"https://www.notorannokuni.com/","sd":""},
