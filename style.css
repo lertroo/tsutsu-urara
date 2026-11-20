@@ -67,6 +67,7 @@ h1 { margin: 0; }
 .chkok input { width: 18px; height: 18px; accent-color: var(--accent); }
 .chkgo { flex: 1; display: block; font: inherit; color: var(--ink); background: none; border: 0; padding: 0; text-align: left; cursor: pointer; text-decoration: none; }
 .chkgo b { margin-right: 6px; }
+.chkcp { margin-left: 6px; padding: 0 6px; border-radius: 4px; font-size: 0.75rem; color: var(--bg, #fff); background: var(--accent); vertical-align: 1px; }
 .chkn { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
 .chkt em { font-style: normal; color: var(--stamp); }
 .chkbody { flex: 1; min-width: 0; }

@@ -14,7 +14,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="style.css?v=20261117b">
+<link rel="stylesheet" href="style.css?v=20261120a">
 
 <main class="app">
   <header>
@@ -108,7 +108,7 @@
 <script src="data/edges.js?v=20261109a"></script>
 <script src="data/koei.js"></script>
 <script src="data/mura.js?v=20261115a"></script>
-<script src="data/parks.js?v=20261119h"></script>
+<script src="data/parks.js?v=20261120h"></script>
 <script src="data/castles.js"></script>
 <script src="data/airports.js?v=20261111c"></script>
 <script src="data/stations.js?v=20261115a"></script>
@@ -121,13 +121,13 @@
 <script src="data/aquariums.js?v=20261117a"></script>
 <script src="data/gardens.js?v=20261117a"></script>
 <script src="data/themeparks.js?v=20261117a"></script>
-<script src="data/museums.js?v=20261118a"></script>
+<script src="data/museums.js?v=20261120a"></script>
 <script src="data/towers.js"></script>
 <script src="data/photos.js"></script>
 <script src="data/hitokoto.js?v=20261110a"></script>
 <script src="data/desc.js?v=20261119b"></script>
-<script src="data/webt.js?v=20261119g"></script>
-<script src="site.js?v=20261118a"></script>
+<script src="data/webt.js?v=20261120c"></script>
+<script src="site.js?v=20261120a"></script>
 <script src="core.js?v=20261115c"></script>
 <script src="xport.js?v=20261116a"></script>
 <script>
@@ -2138,11 +2138,19 @@ function renderCheck() {
     }).join('') + '</ol>';
     box.innerHTML = h; box.hidden = false;
   };
+  /* 文字をクリップボードに写す。アーティファクトの枠の中では navigator.clipboard が断られることがあるので、そのときは隠した欄から写す */
+  const chkCopy = (s, b) => {
+    const done = () => { const t = document.createElement('span'); t.className = 'chkcp'; t.textContent = 'コピーしました'; b.appendChild(t); setTimeout(() => t.remove(), 1200); };
+    const old = () => { const ta = document.createElement('textarea'); ta.value = s; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (err) {} ta.remove(); if (ok) done(); };
+    try { if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(s).then(done, old); return; } } catch (err) {}
+    old();
+  };
   box.onclick = e => {
     if (e.target.closest('.chkt')) { open = !open; try { localStorage.setItem('jp-chk-open', open ? '1' : '0'); } catch (err) {} draw(); return; }
     const ng = e.target.closest('button.chkng');
     if (ng) { const k = ng.dataset.k; if (st.ng[k]) { delete st.ng[k]; delete st.memo[k]; } else { st.ng[k] = 1; delete st.ok[k]; } push(); draw(); if (st.ng[k]) { const f = [...box.querySelectorAll('.chkmemo')].find(x => x.dataset.k === k); if (f) f.focus(); } return; }
     const b = e.target.closest('button.chkgo'); if (!b) return;
+    chkCopy(itemName(C.items[+b.dataset.i]).name, b);   /* 施設名をクリップボードへ（地図などで探しやすいように。2026-11-20） */
     const id = ID_ALIAS[C.items[+b.dataset.i].id] || C.items[+b.dataset.i].id;
     if (!currentItems().some(x => x.id === id)) resetAll(false, true, [KIND.get(id)]);   /* 一覧に出ていないときは、その種類だけを出し直す */
     select(id, true);
