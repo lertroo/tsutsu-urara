@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>つつうらら は引っ越しました</title>
 <meta name="robots" content="noindex">
+<script>
+  (() => {
+    if (location.hostname !== 'lertroo.github.io' || !navigator.sendBeacon) return;
+    try {
+      navigator.sendBeacon('https://access-log.toroloo.workers.dev/hit', JSON.stringify({
+        site: 'tsutsu-urara-old', path: location.pathname, query: location.search, title: document.title,
+        ref: document.referrer, lang: navigator.language,
+        screen: screen.width + 'x' + screen.height, viewport: innerWidth + 'x' + innerHeight,
+        tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }));
+    } catch {}
+  })();
+</script>
 <link rel="canonical" href="https://tsutsu-urara.toroloo.workers.dev/">
 <style>
   :root { --bg:#f2eee4; --ink:#2b2a27; --sub:#6b665c; --line:#d8d1c0; --accent:#c2562e; --card:#fbf9f4; }
@@ -19,6 +32,7 @@
   .card h2 { font-size:17px; margin:0 0 6px; }
   .card p { margin:0 0 12px; }
   button { font:inherit; padding:8px 14px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; margin:0 8px 8px 0; }
+  .foot { color:var(--sub); font-size:13px; margin-top:40px; }
   .msg { color:var(--sub); font-size:14px; min-height:1.5em; margin:4px 0 0; }
 </style>
 </head>
@@ -39,6 +53,7 @@
     <h2>このブラウザに記録はありません</h2>
     <p>新しい住所を開いて、そのまま使ってください。</p>
   </section>
+  <p class="foot">このページは、アクセスの日時・IPアドレス・おおよその地域・ブラウザの種類などを記録しています。</p>
 </main>
 <script>
 /* 旧サイト（lertroo.github.io/tsutsu-urara）に残す、移転の案内と記録の書き出し（2026-11-27）。
