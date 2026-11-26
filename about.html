@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>つつうらら は引っ越しました</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://tsutsu-urara.toroloo.workers.dev/">
+<style>
+  :root { --bg:#f2eee4; --ink:#2b2a27; --sub:#6b665c; --line:#d8d1c0; --accent:#c2562e; --card:#fbf9f4; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12171d; --ink:#e7e3da; --sub:#a39d91; --line:#2e3640; --accent:#e58a5f; --card:#1a2129; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.75 -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif; }
+  main { max-width:560px; margin:0 auto; padding:48px 16px 64px; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .lead { color:var(--sub); margin:0 0 28px; }
+  .go { display:block; text-align:center; background:var(--accent); color:#fff; text-decoration:none; font-weight:700; padding:14px 16px; border-radius:6px; word-break:break-all; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:16px; margin-top:28px; }
+  .card h2 { font-size:17px; margin:0 0 6px; }
+  .card p { margin:0 0 12px; }
+  button { font:inherit; padding:8px 14px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--ink); cursor:pointer; margin:0 8px 8px 0; }
+  .msg { color:var(--sub); font-size:14px; min-height:1.5em; margin:4px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>つつうらら は引っ越しました</h1>
+  <p class="lead">新しい住所で、これまでどおり使えます。ブックマークやホーム画面のアイコンは、新しい住所で作り直してください。</p>
+  <a class="go" href="https://tsutsu-urara.toroloo.workers.dev/">https://tsutsu-urara.toroloo.workers.dev/</a>
+
+  <section class="card" id="rec" hidden>
+    <h2>このブラウザに残っている記録</h2>
+    <p id="count"></p>
+    <p>「行った」の記録は、ブラウザの中に住所ごとに保存されているので、新しい住所には自動では移りません。ここで保存のファイルを作り、新しい住所の「出力・保存」の「読み込み」で入れてください。</p>
+    <button type="button" id="save">保存のファイルを作る</button><button type="button" id="copy">クリップボードにコピー</button>
+    <p class="msg" id="msg"></p>
+  </section>
+  <section class="card" id="none" hidden>
+    <h2>このブラウザに記録はありません</h2>
+    <p>新しい住所を開いて、そのまま使ってください。</p>
+  </section>
+</main>
+<script>
+/* 旧サイト（lertroo.github.io/tsutsu-urara）に残す、移転の案内と記録の書き出し（2026-11-27）。
+   形は、新しいサイトの「出力・保存」の書き出し（kiroku.html の exportText）と同じ。新しいサイトの読み込みで、そのまま入る。外へは何も送らない */
+(() => {
+  const get = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  const parse = s => { try { return JSON.parse(s); } catch (e) { return null; } };
+  const rec = parse(get('jp-records-v1')), mys = parse(get('jp-myspots-v1')), sync = parse(get('jp-sync-state'));
+  const profs = rec && Array.isArray(rec.profiles) ? rec.profiles : [];
+  const spots = Array.isArray(mys) ? mys : [];
+  let nv = 0, nw = 0;
+  profs.forEach(p => { nv += Object.keys((rec.data || {})[p.id] || {}).length; nw += Object.keys((rec.want || {})[p.id] || {}).length; });
+  const $ = id => document.getElementById(id);
+  if (!nv && !nw && !spots.length) { $('none').hidden = false; return; }
+  $('rec').hidden = false;
+  $('count').textContent = '行った ' + nv + ' 件' + (nw ? '・行きたい ' + nw + ' 件' : '') + (spots.length ? '・マイスポット ' + spots.length + ' か所' : '') + '（' + profs.length + ' 人分）';
+  const text = () => JSON.stringify({
+    app:'castle-park-records', v:2, exportedAt:new Date().toISOString(),
+    spots:spots.map(m => ({ id:m.id, n:m.n, k:m.k, memo:m.memo, pf:m.pf, lo:m.lo, la:m.la })),
+    profiles:profs.map(p => ({ name:p.name, visits:(rec.data || {})[p.id] || {}, wants:(rec.want || {})[p.id] || {} })),
+    sync:sync && typeof sync === 'object' ? sync : {}
+  }, null, 1);
+  const say = t => { $('msg').textContent = t; };
+  $('save').onclick = () => {
+    try {
+      const url = URL.createObjectURL(new Blob([text()], { type:'application/json' })), a = document.createElement('a');
+      a.href = url; a.download = 'tsutsu-urara-' + new Date().toLocaleDateString('sv-SE') + '.json';
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+      say('保存しました。新しい住所の「出力・保存」で読み込んでください。');
+    } catch (e) { say('保存できませんでした。「クリップボードにコピー」を使ってください。'); }
+  };
+  $('copy').onclick = () => {
+    navigator.clipboard.writeText(text()).then(() => say('コピーしました。新しい住所の「出力・保存」の読み込みの欄に貼りつけてください。'), () => say('コピーできませんでした。'));
+  };
+})();
+</script>
+</body>
+</html>
